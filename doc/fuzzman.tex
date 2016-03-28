@@ -1,0 +1,2468 @@
+%
+% fuzzman.tex
+%
+% This file is part of fuzz2000
+% Copyright (c) 1982--2006 J. M. Spivey
+% All rights reserved
+%
+% Redistribution and use in source and binary forms, with or without
+% modification, are permitted provided that the following conditions are met:
+%
+% 1. Redistributions of source code must retain the above copyright notice,
+%    this list of conditions and the following disclaimer.
+% 2. Redistributions in binary form must reproduce the above copyright notice,
+%    this list of conditions and the following disclaimer in the documentation
+%    and/or other materials provided with the distribution.
+% 3. The name of the author may not be used to endorse or promote products
+%    derived from this software without specific prior written permission.
+%
+% THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+% IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+% OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+% IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+% SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+% PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+% OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+% WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+% OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+% ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+% 
+% $Id: fuzzman.tex,v 1.3 2007-02-16 12:45:13 mike Exp $
+%
+
+\documentstyle[fuzz209,zrmref]{a5man}
+\makeindex
+\input{hacks}
+\manualtrue
+
+\def\frac#1/#2{\leavevmode\kern.1em
+  \raise.5ex\hbox{\the\scriptfont0 #1}\kern-.1em
+  /\kern-.15em\lower.25ex\hbox{\the\scriptfont0 #2}}
+
+\font\logo=logo10
+\def\METAFONT{\hbox{\logo METAFONT}}
+
+\begin{document}
+\markboth{The \protect\fuzz\ manual}{}
+
+%% Folio 1: Title page
+\thispagestyle{empty}
+\font\mytwfvit=cmti10 scaled\magstep5
+\vbox to36pt{\vfill
+  {\center\huge\sf The {\mytwfvit f\kern0.1em}{\sc uzz} Manual\par}}
+\vskip24pt
+{\center\Large\sf Mike Spivey\par}
+\vskip24pt
+{\center\Large\sf Second Edition\par}
+\vfill
+{\flushright The Spivey Partnership\par}
+\bigskip
+{\flushright 10 Warneford Road\\
+  Oxford\ \ {\small OX4 1LU}\\England\par}
+\clearpage
+\thispagestyle{empty}
+\cleardoublepage
+
+%% Table of contents
+\tableofcontents
+
+%% Licence conditions
+%% deleted!
+\vfill
+\noindent Manual and software copyright \copyright\
+J. M. Spivey 1988, 1992, 2000
+\clearpage
+\thispagestyle{empty}
+\cleardoublepage
+
+\chapter{Introduction}
+
+\fuzz\ is a collection of tools that help you to format and print Z
+specifications and check them for compliance with the Z scope and
+type rules. One part of the package is a style option for the
+\LaTeX\ type-setting system that defines extra \LaTeX\ commands for
+laying out Z specifications, and a font that contains Z's special
+symbols.  The other part is a program for analysing and checking
+specifications that are written using these commands.
+
+Chapter~\ref{example} of this document is a quick introduction to
+\fuzz\ and its features, based on a small example specification.
+Chapter~\ref{tex} describes in more detail how to enter your
+specification as an input file for \LaTeX\ using the {\tt fuzz} style
+option.  Chapters~\ref{tc} to~\ref{mess} describe the \fuzz\
+type checker and the messages and reports it can produce.
+Chapter~\ref{syntax} is a syntax summary for the Z language as
+recognized by the type checker.
+
+In writing this document, I have assumed that you have some basic
+knowledge about \LaTeX\ and Z. For information about \LaTeX\ and the
+underlying \TeX\ program, you should consult the manuals
+\begin{quote}
+        Leslie Lamport, {\em \LaTeX{\rm :} A Document Preparation
+        System\/},\break
+        Addison Wesley, 1985.
+
+        Donald E.~Knuth, {\em The \TeX book}, Addison Wesley, 1984.
+\end{quote}
+For information about Z, and a description of the scope and type rules
+used by the \fuzz\ type checker, you should consult
+\begin{quote}
+        J. M.~Spivey, {\em The Z Notation: A Reference Manual\/},
+        Second edition, Prentice-Hall International, 1992,
+\end{quote}
+which is referred to in this document by the abbreviation \ZRM.
+
+This manual describes versions of the \fuzz\ package numbered 2.0
+or higher; the language supported is that described in the second
+edition of the \ZRM.
+The \verb/fuzz/ style option is compatible with version
+2.99 of \TeX\ and version 2.09 of \LaTeX\ and \SliTeX.
+
+Release 2 of \fuzz\ differs from release 1 in supporting the
+additional language constructs added in the second edition of
+the~\ZRM, including
+\begin{itemize}
+\item renaming of schema components.
+\item a $\bf let$ construct for local definitions in expressions and
+        predicates. 
+\item conditional $\bf if\;then\;else$ expressions.
+\item piping of operation schemas ($\pipe$).
+\end{itemize}
+In addition, there is an extended mathematical tool-kit and font of
+special symbols, and it is now possible to use \SliTeX\ to make
+slides of Z specifications.  Finally, there are improvements in the
+type inference algorithm that the \fuzz\ type-checker uses to
+calculate the types it displays in error messages and reports.
+
+\chapter{First Steps}\label{example}
+
+The \fuzz\ distribution includes a small example specification in
+the file \verb/example.tex/.  Here it is, with the lines
+numbered for easy reference:
+\begin{numverb}
+\documentstyle[fuzz]{article}
+\begin{document}
+\noindent Let $PERSON$ be the set of all people:
+\begin{zed}
+        [PERSON].
+\end{zed}
+A `club' has a set of members and a president, who is 
+one of the members:
+\begin{schema}{Club}
+        members: \power PERSON \\
+        president: PERSON
+\where
+        president \subseteq members
+\end{schema}
+To enroll somebody in the club, we just add them
+to the set of members:
+\begin{schema}{Enrol}
+        \Delta Club \\
+        new?: PERSON
+\where
+        members' = members \cup new? \\
+        president' = president
+\end{schema}
+The president doesn't change when a new member
+is enrolled.
+\end{document}
+\end{numverb}
+\vskip-\lastskip\vfill\eject\noindent %PAGE
+This file looks like any other \LaTeX\ manuscript, except that it
+includes the style option \verb/fuzz/ (line 1), and it contains three
+embedded pieces of Z text, written using the style option's
+environments and macros.
+
+The first piece of Z text (lines 4--6) is the declaration of a
+basic type $PERSON$. The second and third pieces (lines 9--14 and
+17--23) are two schemas: the state space of a very simple membership
+register for a club, and an operation that enrolls a new member.
+
+You might like to make a copy of the file and format it with \LaTeX\
+by issuing the command:
+\begin{quote}
+        \verb/latex example/
+\end{quote}
+Now send the results to a printer. The output should look something
+like this:
+\begin{quote}
+\small
+Let $PERSON$ be the set of all people:
+\begin{zed}
+        [PERSON].
+\end{zed}
+A `club' has a set of members and a president, who is one of
+the members:
+\begin{schema}{Club}
+        members: \power PERSON \\
+        president: PERSON
+\where
+        president \subseteq members
+\end{schema}
+To enroll somebody in the club, we just add them to the set of
+members:
+\begin{schema}{Enrol}
+        \Delta Club \\
+        new?: PERSON
+\where
+        members' = members \cup new? \\
+        president' = president
+\end{schema}
+The president doesn't change when a new member is enrolled.
+\end{quote}
+As you can see, the \verb/zed/ environment produces an ordinary
+mathematical display, and the schema environment produces a schema box.
+
+The specification contains a couple of mistakes that can be
+found using the \fuzz\ type checker.  So let's run the type checker
+on the specification and see what error messages it gives.  You
+can run the type checker like this:
+\begin{quote}
+        \verb/fuzz example.tex/
+\end{quote}
+The input to the type checker is exactly the same file that you used
+as input to \LaTeX.  But instead of printing the document, \fuzz\
+scans it, extracts the pieces of text that make up the
+formal specification, and checks that they conform to the rules of
+the Z language.  Here are the error messages it produces:
+\begin{verbatim}
+"example.tex", line 13: Type mismatch in left argument
+        of infix relation
+> Predicate: president \subseteq members
+> Arg type:  PERSON
+> Expected:  P ?
+
+"example.tex", line 21: Right argument of operator \cup 
+        has wrong type
+> Expression: members \cup new?
+> Arg type:   PERSON
+> Expected:   P PERSON
+\end{verbatim}
+The first error is in the predicate
+\[ president \subseteq members. \]
+It is supposed to say that the president of the club must be a
+member, but the subset relation $\subseteq$ has been used instead of
+the membership sign~$\in$.  This is wrong because $president$ is not
+a set but a simple element of $PERSON$.  The type checker says that
+the left argument of $\subseteq$ must be a set (with type $\power
+\hbox{?}$ for some type $\hbox{?}$), but it has found an expression
+of type $PERSON$ instead.
+The correct thing would be to use the membership sign $\in$ instead
+of $\subseteq$, so use your favourite editor to change line 13 of
+the file so that it reads
+\begin{quote}
+        \verb/president \in members/
+\end{quote}
+The second error is in the expression
+\[ members \cup new?. \]
+This is supposed to be the set $members$
+extended with an additional member $new?$, but it is wrong because
+$new?$ is just a $PERSON$, and the union operator $\cup$ expects a
+{\em set\/} of elements of $PERSON$.  The type checker knows from
+the standard library that $\cup$ expects sets as its arguments, and
+it has determined by looking at the left argument $members$ that
+this use of $\cup$ is for sets drawn from $PERSON$, but it finds as
+the right argument a simple element of $PERSON$.  You should change
+line 21 so that it reads
+\begin{quote}
+        \verb/members' = members \cup \{new?\} \\/
+\end{quote}
+In the corrected expression, $new?$ is made into a singleton set
+before taking the union with $members$, like this:
+$members \cup \{new?\}$.
+After you have made these changes, the type checker should report no
+errors when it checks the document.
+
+In addition to checking for errors, the type checker can produce a
+report listing the names defined in your specification and their
+types.  You can get this list by giving the command
+\begin{quote}
+        \verb/fuzz -t example.tex/
+\end{quote}
+Here is the output:
+\begin{verbatim}
+Given PERSON
+
+Schema Club
+    members: P PERSON
+    president: PERSON
+End
+
+Schema \Delta Club
+    members: P PERSON
+    president: PERSON
+    members': P PERSON
+    president': PERSON
+End
+\end{verbatim}\vskip-\lastskip\break %PAGE
+\begin{verbatim}
+Schema Enrol
+    members: P PERSON
+    president: PERSON
+    members': P PERSON
+    president': PERSON
+    new?: PERSON
+End
+\end{verbatim}
+This output shows that $PERSON$ has been declared as a
+basic type, and that three schemas $Club$, $\Delta Club$ and
+$Enrol$ have been defined. The definition of $\Delta Club$ was
+inserted by the type checker because $\Delta Club$ is used in
+$Enrol$ but was given no explicit definition in the specification.
+For each schema, the signature is shown after all the inclusions
+have been expanded, so you can see that $Enrol$ has five variables
+in all.
+
+There is another, much longer, example specification included in the
+distribution under the name \verb/tut.tex/; it is essentially the
+same as the first chapter of the \ZRM. This file contains examples
+of many of the Z constructs, and you may like to look at it as you
+read the rest of this manual. The file also shows how the
+\fuzz\ style option can be used to print small pieces of program
+text.
+
+\chapter{Printing Specifications}\label{tex}
+
+Every \LaTeX\ document begins with a \verb/\documentstyle/
+command. If the document contains a Z specification, this command
+should include the style option \verb/fuzz/, like
+this:\index{|fuzz| style option}
+\begin{quote}
+        \verb/\documentstyle[12pt,fuzz]{article}/
+\end{quote}
+The \verb/fuzz/ style option can be used with any of the standard
+\LaTeX\ styles, and it can appear either before or after the type-size
+option if one is used. It can be combined with most of the standard
+style options, but it should not be combined with \verb/fleqn/,
+because it already makes provision for setting mathematics flush
+left. The \verb/fuzz/ style option can be used with
+\SliTeX\index{\SliTeX} to make slides, but only in black and white
+at present.
+
+The \verb/fuzz/ style option provides a number of \LaTeX\
+environments for making Z boxes of various kinds, and for other
+unboxed elements of Z like basic type definitions.  It also
+provides many commands that print the fancy symbols of Z using the
+special font supplied in the package.  Finally, it provides some
+environments that print things, like equational proofs, that are not
+properly part of Z but often appear in specification documents.
+
+Section~\ref{boxes} describes the environments that are used for
+printing the various boxes and unboxed elements used in Z
+specifications; these environments are the ones recognized and
+analysed by the \fuzz\ type checker.  Section~\ref{symtabs}
+explains how to obtain the symbols that go inside the boxes, and
+Section~\ref{finepts} gives some hints on getting the best-looking
+layout from \LaTeX\ and the \verb/fuzz/ style option.
+Section~\ref{bitsnbobs} explains the environments for printing
+miscellaneous displayed formulas.  The chapter closes with a
+list (Section~\ref{params}) of the parameters you may adjust to
+customize the layout of your specification.
+
+If you want it, the fancy logo `\fuzz' is made by the command
+\verb/\fuzz/, which works like the \verb/\LaTeX/ command for
+printing \LaTeX's own logo.
+
+\section{Making boxes}\label{boxes}
+
+The Z reference manual lists 
+\ifmanual 
+  in Sections~\ref{s:spec} and~\ref{s:gendefs} the 
+\fi
+various kinds of `paragraph' that may
+appear as one of the top-level units of a Z specification.  The
+\verb/fuzz/ style option provides a \LaTeX\ environment for each
+kind of paragraph that comes in a box, and another environment called
+\verb/zed/ for the unboxed paragraphs.
+
+\paragraph{Schema definitions%
+        \ifmanual\ \rm (\ZRM\ Section~\protect\ref{ss:schemadef})\fi}%
+	\index{schema definition: vertical}
+To print a schema, just use the \verb/schema/ environment. Here is
+an example, showing first the input, then the output from
+\LaTeX:\index{|schema| environment}
+\begin{demo}
+\begin{schema}{BirthdayBook}
+    known: \power NAME \\
+    birthday: NAME \pfun DATE
+\where
+    known = \dom birthday
+\end{schema}
+\gives
+\begin{schema}{BirthdayBook}
+    known: \power NAME \\
+    birthday: NAME \pfun DATE
+\where
+    known = \dom birthday
+\end{schema}
+\end{demo}
+The name of the schema appears as an argument to the environment,
+and (as in all kinds of box) the horizontal dividing line between
+declarations and predicates is indicated by
+\verb/\where/\index{|\where|}.
+Successive lines in the declaration and predicate parts are
+separated by the command \verb/\\/\index{|\\| (newline)}.  As usual in
+\LaTeX, the actual layout of the input is ignored, and it is only
+the explicit command \verb/\\/ that marks the end of a line in the
+output.  The Z symbols `$\power$', `$\pfun$' and
+`$\dom$' have been entered as the commands \verb/\power/,
+\verb/\pfun/ and \verb/\dom/: for a complete list of these commands,
+see Section~\ref{symtabs}.
+
+Like the \verb/displaymath/ environment of \LaTeX, the \verb/schema/
+environment (and the others we shall come to in a moment) can appear
+in the middle of a paragraph of text, and ordinarily should have no blank
+lines either before or after it. Blank lines before the environment
+are ignored, but blank lines afterwards cause the following text to
+begin a new paragraph.
+
+For a schema without a predicate part, the command \verb/\where/ is
+simply omitted, as in the following example:
+\begin{demo}
+\begin{schema}{Document}[CHAR]
+    left, right: \seq CHAR
+\end{schema}
+\gives
+\begin{schema}{Document}[CHAR]
+    left, right: \seq CHAR
+\end{schema}
+\end{demo}
+This example also shows how to print the generic schemas described in
+\ifmanual 
+  Section~\ref{ss:genschema} of 
+\fi 
+the \ZRM.  The formal generic
+parameters\index{generic parameter} are an optional argument of the
+\verb/schema/ environment.
+For compatibility with previous versions of %
+\fuzz\index{upward compatibility}, you can also say
+\verb/\begin{schema}{Document[CHAR]}/,
+making the formal parameters part of the \verb/schema/ environment's
+first argument.  The printed effect is the same, and the
+type checker recognizes both forms.
+
+If a schema or other box contains more than one predicate below the
+line, it often looks better to add a small vertical space between them.
+This can be done with the command \verb/\also/\index{|\also|}:
+\begin{demo}
+\begin{schema}{AddPhone}
+    \Delta PhoneDB \\
+    name?: NAME \\
+    number?: PHONE
+\where
+    name? \notin known
+\also
+    phone' = phone \oplus \{name? \mapsto number?\}
+\end{schema}
+\gives
+\begin{schema}{AddPhone}
+    \Delta PhoneDB \\
+    name?: NAME \\
+    number?: PHONE
+\where
+    name? \notin known
+\also
+    phone' = phone \oplus \{name? \mapsto number?\}
+\end{schema}
+\end{demo}
+
+\paragraph{Axiomatic descriptions%
+        \ifmanual\ \rm (\ZRM\ Section~\protect\ref{ss:axdef})\fi}%
+	\index{axiomatic description}
+These are printed with the \verb/axdef/ environment%
+\index{|\axdef| environment}\footnote{The
+environment should really be called \verb/axdesc/ and not
+\verb/axdef/, but that's too hard to pronounce.}.  Here is an
+example:
+\begin{demo}
+\begin{axdef}
+    square: \nat \fun \nat
+\where
+    \forall n: \nat @ \\
+\t1     square(n) = n * n
+\end{axdef}
+\gives
+\begin{axdef}
+    square: \nat \fun \nat
+\where
+    \forall n: \nat @ \\
+\t1     square(n) = n * n
+\end{axdef}
+\end{demo}
+Incidentally, this example illustrates that predicates and
+declarations can be split between lines before or after any infix
+symbol (such as $@$ here).  The strange hint \verb/\t1/\index{|\t|}
+makes the corresponding line in the output have one helping of
+indentation.  As things get more nested, you can say \verb/\t2/,
+\verb/\t3/, and so on; these commands are ignored by the type
+checker, so you are free to use them as you like to improve the look
+of your specification.  The \verb/\t/ command usurps the name used by
+\LaTeX\ for a tie-after accent\index{tie-after accent (\tie{oo})},
+as in `\tie{oo}', so the \verb/fuzz/ style option renames the accent
+as~\verb/\tie/.
+
+Like schemas, axiomatic descriptions may omit the horizontal
+dividing line and the predicates below it, leaving only the
+declaration of some variables, as in the following example:
+\begin{demo}
+\begin{axdef}
+    n\_disks: \nat
+\end{axdef}
+\gives
+\begin{axdef}
+    n\_disks: \nat
+\end{axdef}
+\end{demo}
+
+\paragraph{Generic definitions%
+        \ifmanual\ \rm (\ZRM\ Section~\protect\ref{ss:genconst})\fi}%
+	\index{generic definition}
+These are printed with the \verb/gendef/ environment:%
+\index{|gendef| environment}
+\begin{demo}
+\begin{gendef}[X,Y]
+    fst: X \cross Y \fun X
+\where
+    \forall x: X; y: Y @ \\
+\t1     fst(x,y) = x
+\end{gendef}
+\gives
+\begin{gendef}[X,Y]
+    fst: X \cross Y \fun X
+\where
+    \forall x: X; y: Y @ \\
+\t1     fst(x,y) = x
+\end{gendef}
+\end{demo} 
+In this environment, the formal generic parameters%
+\index{generic parameter} are an optional argument.  Omitting this
+argument results in a box with a solid double bar at the top, which
+can be used for uniquely defined constants that have no parameters.
+
+\paragraph{Unboxed paragraphs}
+Some Z paragraphs do not appear in boxes, and for these the
+\verb/zed/ environment\index{|zed| environment} is used.  They may
+be basic type definitions\index{basic type definition}%
+\ifmanual\ (ZRM section~\ref{ss:basictype})\fi,
+predicates written as global constraints\index{constraint}%
+\ifmanual\ (Section~\ref{ss:constraint})\fi,
+`horizontal' schema definitions\index{schema definition: horizontal}%
+\ifmanual\ (Section~\ref{ss:schemadef})\fi,
+abbreviation definitions\index{abbreviation definition}%
+\ifmanual\ (Sections~\ref{ss:abbrev} and~\ref{ss:genconst})\fi,
+or free type definitions\index{free type definition}%
+\ifmanual\ (Section~\ref{s:freetype})\fi.
+Here are a few examples:
+\begin{demo}
+\begin{zed}
+    [NAME, DATE]
+\also
+    REPORT ::= ok | unknown \ldata NAME \rdata
+\also
+    \exists n: NAME @ \\
+\t1     birthday(n) \in December.
+\end{zed}
+\gives
+\begin{zed}
+    [NAME, DATE]
+\also
+    REPORT ::= ok | unknown \ldata NAME \rdata
+\also
+    \exists n: NAME @ \\
+\t1     birthday(n) \in December.
+\end{zed}
+\end{demo}
+As the example illustrates, a full stop%
+\index{full stop: allowed before |\end|} or comma is allowed just
+before the closing \verb/\end/ command of any of the Z environments,
+if that suits your taste (or is forced on you by a publisher's house
+rules).  This punctuation is ignored by the type checker.
+
+For large free type definitions\index{free type definition}, the
+\verb/syntax/ environment 
+provides a useful alternative to the \verb/zed/ environment, as the
+following example suggests:\index{|syntax| environment}
+\begin{demo}
+\begin{syntax}
+    OP  & ::= & plus | minus | times | divide
+\also
+    EXP & ::= & const \ldata \nat \rdata \\
+        &  |  & binop \ldata OP \cross EXP 
+                                   \cross EXP \rdata
+\end{syntax}
+\gives
+\begin{syntax}
+    OP  & ::= & plus | minus | times | divide
+\also
+    EXP & ::= & const \ldata \nat \rdata \\
+        &  |  & binop \ldata OP \cross EXP \cross EXP \rdata
+\end{syntax}
+\end{demo}
+Just as in the \verb/eqnarray/ environment of \LaTeX, the fields are
+separated by \verb/&/ characters%
+\index{|&| (alignment tab): ignored by type checker}; these are
+ignored by the type checker. 
+
+\section{Inside the boxes}\label{symtabs}
+
+The first thing to notice about the text inside the boxes is that
+multi-character identifiers\index{multi-character identifier} look
+better than they do with ordinary
+\LaTeX: instead of $\mit effective\ specifications$, you get
+$effective\ specifications$.  The letters are not spread
+apart, and ligatures like $ff$ and $fi$ are used.  This improvement is
+achieved by an adjustment to the way \TeX\ treats letters in
+mathematical formulas, and no special commands are needed in the
+input file. 
+
+Embedded underscore characters in identifiers can be printed with the
+\verb/\_/ command\index{|\_| (underscore)}%
+\index{underscore: in identifier}, so that \verb/not\_known/ prints
+as $not\_known$.  The same command can be 
+used for the dummy arguments\index{dummy argument (|\_|)} that
+surround infix operators when they
+appear on their own; for example, \verb/\_ + \_/ prints as $\_ +
+\_~$.  Occasionally, the \verb/\_/ command makes an odd-looking
+space in an identifier, as in $DISK\_POOL$, where the large
+`overhang' of the italic $K$ has pushed the underline too far away.
+This is an unfortunate consequence of \TeX's rules for setting
+mathematical formulas, but it can be avoided by typing
+\verb/"DISK\_POOL"/ instead (using double quote marks).  In Z text,
+this produces a better-looking $"DISK\_POOL"$; the quote marks are
+completely ignored by the \fuzz\ type checker.
+
+\looseness=1
+So much for the identifiers in Z specifications; what about the
+mathematical symbols?  As in ordinary \LaTeX, they are typed using
+\LaTeX\ commands with (hopefully) mnemonic names.  Many Z symbols
+have the same name that they are given by \LaTeX, but some are given
+a shorter name that is more suggestive of their use in Z.  The
+\verb/fuzz/ style option also adjusts the way that many of the
+symbols interact with \TeX's rules for spacing in
+formulas\index{spacing rules of \TeX}, so that
+they will look better in Z \hbox{specifications}.
+
+A few symbols have two names, reflecting two different uses for the
+symbol in Z:
+\begin{itemize}
+\item The symbol $\semi$ is called 
+\verb/\semi/\index{|\semi|: vs.\ |\comp|}\index{|\semi| ($\semi$)!}
+when it is used as an operation on schemas, and 
+\verb/\comp/\index{|\comp|: vs.\ |\semi|}\index{|\comp| ($\comp$)!}
+when it is used for composition of relations.
+\item The symbol $\hide$ is called
+\verb/\hide/\index{|\hide|: vs.\ |\setminus|}\index{|\hide| ($\hide$)!}
+as the hiding operator of the schema calculus, and 
+\verb/\setminus/\index{|\setminus|: vs.\ |\hide|}%
+\index{|\setminus| ($\setminus$)!} as the set difference operator. 
+\item The symbol $\project$ is called
+\verb/\project/\index{|\project|: vs.\ |\filter|}%
+\index{|\project| ($\project$)!} as the schema projection operator, and 
+\verb/\filter/\index{|\filter|: vs.\ |\project|}%
+\index{|\filter| ($\filter$)!} as the filtering operator on sequences.
+\end{itemize}
+Although the printed appearance of
+each of these pairs of symbols is the same, the type checker
+recognizes each member of the pair only in the appropriate
+\hbox{context}.
+
+The rest of this section contains lists of the commands defined in
+the \verb/fuzz/ style option for printing the mathematical symbols
+of Z\index{standard symbols+}.  The lists are organized according to
+the class of symbol, with all relation signs in one list, all binary
+operators in another, and so on.  This classification of standard
+symbols is known to the \fuzz\ type checker, which uses the
+information in parsing pieces of Z text. The symbols are also listed
+according to subject on the Z reference card, part of the \fuzz\
+package, with all the symbols connected with sets listed together,
+and so~on.
+
+Some of the symbols listed here look like words in a special
+font:\index{font: significance to type-checker}
+for example, \verb/\dom/ yields the word `$\dom$' in roman type,
+\verb/\IF/ yields `$\bf if$' in bold-face type, and \verb/\prefix/
+yields `$\prefix$' in sans-serif type.  As far as the type checker is
+concerned, these symbols are completely different from plain
+identifiers like $dom$, $if$, and~$prefix$.
+
+\paragraph{Language elements}
+Some symbols are basic elements of the Z language.  Here are the
+mnemonics for them:\index{basic symbols}
+\begin{symtab}
+        \power & \verb/\power/ \\
+        \cross & \verb/\cross/ \\
+        = & \verb/=/ \\
+        \in & \verb/\in/ \\
+        | & \verb/|/ or \verb/\mid/ \\
+        @ & \verb/@/ or \verb/\spot/ \\
+        \theta & \verb/\theta/ \\
+        \lambda & \verb/\lambda/ \\
+        \mu & \verb/\mu/ \\
+        \LET & \verb/\LET/ \\
+        \Delta & \verb/\Delta/ \\
+        \Xi & \verb/\Xi/ \\
+        \defs & \verb/\defs/ \\
+        \rlap{$\bf if\;then\;else$} \cr
+                & \verb/\IF \THEN \ELSE/ \\
+\end{symtab}
+The commands \verb/|/ and \verb/@/ produce the vertical bar and spot
+that appear in formulas like
+\[ \forall x: \nat | x > 0 @ x \geq 1. \] 
+They are typed as single characters, but like the other commands for
+mathematical symbols, they may only be used in math mode.  For
+upward compatibility, the commands \verb/\mid/ and \verb/\spot/ are
+also provided.\index{upward compatibility}
+
+The symbol $\bind$ that the \ZRM\ uses to write down bindings isn't
+really part of Z, but it has a mnemonic anyway:
+\begin{symtab}
+        \bind & \verb/\bind/
+\end{symtab}
+
+\paragraph{Connectives and quantifiers}
+Here are the commands for operators of propositional and predicate
+logic and the schema calculus:\index{logical symbols}
+\begin{symtab}
+        \lnot & \verb/\lnot/ \\
+        \land & \verb/\land/ \\
+        \lor & \verb/\lor/ \\
+        \implies & \verb/\implies/ \\
+        \iff & \verb/\iff/ \\
+        \forall & \verb/\forall/ \\
+        \exists & \verb/\exists/ \\
+        \exists_1 & \verb/\exists_1/ \\
+        \hide & \verb/\hide/ \\
+        \project & \verb/\project/ \\
+        \pre & \verb/\pre/ \\
+        \semi & \verb/\semi/
+\end{symtab}
+
+\paragraph{Fancy brackets}
+Next come commands for the various sorts of fancy
+brackets:\index{bracket symbols}
+\begin{symtab}
+        \{\;\} & \verb/\{  \}/ \\
+        \langle\;\rangle & \verb/\langle  \rangle/ \\
+        \lbag\;\rbag & \verb/\lbag  \rbag/ \\
+        \ldata\;\rdata & \verb/\ldata  \rdata/ \\
+        \limg\;\rimg & \verb/\limg  \rimg/
+\end{symtab} 
+In addition to the brackets used in specifications, there are the
+special brackets used in the \ZRM\ to write down schema types. Like
+$\bind$, they aren't part of Z, but they are sometimes useful in
+writing {\em about\/} a \hbox{specification:}
+\begin{symtab}
+        \lblot\;\rblot & \verb/\lblot \rblot/
+\end{symtab}
+
+Those are all the symbols `built-in' to the Z language; now for the
+symbols that are defined as part of the mathematical tool-kit. 
+
+\paragraph{Constants and functions}
+Some symbols name ordinary mathematical constants and
+functions:\index{constant symbols}
+\begin{symtab}
+        \emptyset & \verb/\emptyset/ \\
+        \bigcup & \verb/\bigcup/ \\
+        \bigcap & \verb/\bigcap/ \\
+        \dom & \verb/\dom/ \\
+        \ran & \verb/\ran/ \\
+        \nat & \verb/\nat/ \\
+        \num & \verb/\num/ \\
+        \nat_1 & \verb/\nat_1/ \\
+        \# & \verb/\#/ \\
+        \dcat & \verb/\dcat/
+\end{symtab} 
+The control sequence \verb/\empty/ was used in place of
+\verb/\emptyset/ in previous versions of the \verb/fuzz/ style
+option, but this caused problems because it clashes with a macro of
+plain \TeX.\index{|\empty|: vs.\ |\emptyset| ($\emptyset$)}%
+\index{|\empty| ($\emptyset$)!}
+If an existing document uses \verb/\empty/, you can
+still print it by adding the definition
+\begin{quote}
+        \verb/\renewcommand{\empty}{\emptyset}/
+\end{quote}
+in the document preamble (or by changing the name with an editor).
+Both names are recognized by the \fuzz\ type checker.
+
+\paragraph{Infix function symbols}
+Next, here are the infix function symbols (class {\sf In-Fun}), each shown
+with its priority, which is a number from 1 to 6, with 6 giving the
+tightest binding:\index{operator symbol+}
+\begin{symtab}
+        \mapsto & \verb/\mapsto/\quad\hfill 1 \\
+        \upto & \verb/\upto/\quad\hfill 2 \\
+        + & \verb/+/\quad\hfill 3 \\
+        - & \verb/-/\quad\hfill 3 \\
+        \cup & \verb/\cup/\quad\hfill 3 \\
+        \setminus & \verb/\setminus/\quad\hfill 3 \\
+        \cat & \verb/\cat/\quad\hfill 3 \\
+        \uplus & \verb/\uplus/\quad\hfill 3 \\
+        \uminus & \verb/\uminus/\quad\hfill 3 \\
+        * & \verb/*/\quad\hfill 4 \\
+        \div & \verb/\div/\quad\hfill 4 \\
+        \mod & \verb/\mod/\quad\hfill 4 \\
+        \cap & \verb/\cap/\quad\hfill 4 \\
+        \extract & \verb/\extract/\quad\hfill 4 \\
+        \filter & \verb/\filter/\quad\hfill 4 \\
+        \comp & \verb/\comp/\quad\hfill 4 \\
+        \circ & \verb/\circ/\quad\hfill 4 \\
+        \otimes & \verb/\otimes/\quad\hfill 4 \\
+        \oplus & \verb/\oplus/\quad\hfill 5 \\
+        \bcount & \verb/\bcount/\quad\hfill 5 \\
+        \dres & \verb/\dres/\quad\hfill 6 \\
+        \rres & \verb/\rres/\quad\hfill 6 \\
+        \ndres & \verb/\ndres/\quad\hfill 6 \\
+        \nrres & \verb/\nrres/\quad\hfill 6
+\end{symtab}
+The priority of operators means nothing to \LaTeX, but it is used
+by the \fuzz\ type checker when it analyses expressions.
+
+\paragraph{Postfix function symbols}
+The standard postfix function symbols (class {\sf Post-Fun}) produce
+different kinds of superscripts:
+\begin{symtab}
+        \inv & \verb/\inv/ \\
+        \star & \verb/\star/ \\
+        \plus & \verb/\plus/ \\
+        {}^{n} & \verb/^{n}/
+\end{symtab}
+For example, \verb/R \star/ is printed as $R \star$, and
+\verb/R^{n}/ is printed as $R^{n}$\index{superscript}%
+\index{|^| (superscript)}.  The type checker regards this second
+formula as equivalent to $iter~n~R$, as explained 
+\ifmanual 
+  on page~\pageref{p:iter} of 
+\else 
+  in 
+\fi 
+the \ZRM; the braces are {\em not\/} optional, even when the
+superscript is a single digit.  For upward compatibility, the form
+\verb/R \bsup n \esup/ is also recognized by both the style option
+and the type checker.%
+\index{upward compatibility}\index{operator symbol-}
+
+\paragraph{Infix relation symbols}
+The infix relation symbols have class {\sf In-Rel}:%
+\index{relation symbols+}
+\begin{symtab}
+        \neq & \verb/\neq/ \\
+        \notin & \verb/\notin/ \\
+        \subseteq & \verb/\subseteq/ \\
+        \subset & \verb/\subset/ \\
+        < & \verb/</ \\
+        \leq & \verb/\leq/ \\
+        \geq & \verb/\geq/ \\
+        > & \verb/>/ \\
+\changewidth
+        \prefix & \verb/\prefix/ \\
+        \suffix & \verb/\suffix/ \\
+        \inseq & \verb/\inseq/ \\
+        \inbag & \verb/\inbag/ \\
+        \subbageq & \verb/\subbageq/ \\
+        \partition & \verb/\partition/ \\
+        \inrel{R} & \verb/\inrel{R}/ \\
+\end{symtab}
+Besides the fixed infix relation symbols, an ordinary identifier
+may be used as an infix relation if it is
+underlined;\index{underlined relation symbol} to get
+$x \inrel{R} y$, the input is \verb/x \inrel{R} y/.\index{|\inrel|}
+
+\paragraph{Prefix relation symbols}
+There is only one standard prefix relation symbol (class {\sf
+Pre-Rel}):\index{relation symbols-}
+\begin{symtab}
+        \disjoint & \verb/\disjoint/
+\end{symtab}
+
+\paragraph{Infix generic symbols}
+The infix generic symbols are assigned the class {\sf In-Gen}.  The
+standard ones are all more-or-less fancy arrows, including the
+famous `dead fish'.  The arrows used by \fuzz\ are a little bigger
+than the ones that come with \LaTeX:%
+\index{generic symbols+}\index{arrows}
+\begin{symtab}
+        \rel & \verb/\rel/ \\
+        \pfun & \verb/\pfun/ \\
+        \fun & \verb/\fun/ \\
+        \pinj & \verb/\pinj/ \\
+        \inj & \verb/\inj/ \\
+        \psurj & \verb/\psurj/ \\
+        \surj & \verb/\surj/ \\
+        \bij & \verb/\bij/ \\
+        \ffun & \verb/\ffun/ \\
+        \finj & \verb/\finj/
+\end{symtab}
+
+\paragraph{Prefix generic symbols}
+Prefix generic symbols are assigned class {\sf Pre-Gen} by the
+type checker. Here is the standard list:\index{generic symbols-}
+\begin{symtab}
+        \power_1 & \verb/\power_1/ \\
+        \id & \verb/\id/ \\
+        \finset & \verb/\finset/ \\
+        \finset_1 & \verb/\finset_1/ \\
+        \seq & \verb/\seq/ \\
+        \seq_1 & \verb/\seq_1/ \\
+        \iseq & \verb/\iseq/ \\
+        \bag & \verb/\bag/
+\end{symtab}
+
+As far as \LaTeX\ is concerned, the infix function and generic
+symbols are defined to be binary operators, so they are separated
+from their arguments by a medium space%
+\index{spacing rules of \TeX+}.  The infix relation symbols are
+defined as relation symbols, so that \LaTeX\ inserts thick spaces
+around them.  The prefix generic symbols and most of the ordinary
+symbols that denote functions are defined as operator symbols, so
+\LaTeX\ inserts a thin space between the symbol and its argument.
+The spacing rules of \TeX\ work well enough that most Z
+specifications can be printed without the need for manual adjustment
+of spacing, but the next section points out some places where human
+assistance is needed.\index{standard symbols-}
+
+\section{Fine points}\label{finepts}
+
+In math mode, which is used for type-setting the contents of Z boxes, 
+\LaTeX\ ignores all space characters in the input file. The spaces which
+appear between elements of a mathematical formula are determined by
+\LaTeX\ itself, working from information about the symbols in the
+formula. Although (as described above) this information has been
+adjusted in the \fuzz\ style option to make Z texts look as balanced
+as possible, there are one or two situations in which \LaTeX\ needs a
+little help.
+
+Special care is needed when function application is indicated by
+juxtaposing two identifiers, as in the expression
+$rev~words$,\index{function: separated from argument by |~|} which
+should be typed as \verb/rev~words/.%
+\index{|~| (thin space): between function and argument} Typing just 
+\verb/rev words/ results in the output $rev words$, since \LaTeX\
+ignores the space separating the two identifiers.  The \verb/fuzz/
+style option extends the definition of \verb/~/ so that in a formula
+it inserts the same amount of space as the \LaTeX\
+\verb/\,/ command.  The type checker completely ignores both the
+\verb/~/ character and the \LaTeX\ spacing commands%
+\index{space commands: ignored by type checker}, except that it
+issues a warning if it finds that one is missing between
+two identifiers.  It is not necessary to separate 
+symbols like \verb/\dom/ and \verb/\ran/ from their arguments with a
+\verb/~/, because \LaTeX\ inserts the right amount of space
+automatically. For example, the input \verb/\dom f/ produces 
+`$\dom f$'.
+
+It is good style also to insert small spaces inside the braces of a
+set comprehension, as in this example:%
+\index{|~| (thin space): in set comprehension}
+\begin{demo}
+\{~x: \nat | x \leq 10 @ x * x~\}
+\gives*
+\[\{~x: \nat | x \leq 10 @ x * x~\}\]
+\end{demo}
+This helps to distinguish it visually from a set display, which should
+not have the space:
+\begin{demo}
+\{1, 2, 3\}
+\gives*
+\[\{1, 2, 3\}\]
+\end{demo}
+Of course, the space symbol \verb/~/ is ignored by the type checker,
+which distinguishes set displays from comprehensions by looking at
+their contents, so the use of \verb/~/ is purely a matter of
+aesthetics.  It also looks better if you add small spaces inside the
+square brackets of `horizontal' schema texts.
+
+\LaTeX\ also needs help when a binary operator appears at the end of a
+line, as in the following example:%
+\index{empty operand (|{}|)}\index{|{}| (empty operand)}
+\begin{demo}
+\begin{zed}
+    directory' = directory \cup {} \\
+\t3                 \{new\_name? \mapsto new\_number?\}
+\end{zed}
+\gives
+\begin{zed}
+    directory' = directory \cup {} \\
+\t3                 \{new\_name? \mapsto new\_number?\}
+\end{zed}
+\end{demo}
+\LaTeX\ will not recognize \verb/\cup/ as a binary operator and insert
+the correct space unless it is surrounded by two operands, so the
+empty operand \verb/{}/ has been inserted: this is ignored by the
+type checker. This problem affects only binary operators; relation
+signs do not need to be surrounded by arguments to be recognized by
+\LaTeX\index{spacing rules of \TeX-}.
+
+\section{Bits and pieces}\label{bitsnbobs}
+
+Specification documents often contain mathematical text which does not
+form part of the formal specification proper. This section describes some
+environments for setting various kinds of informal mathematics; they are
+provided for convenience, and they are all ignored by the
+type checker. Besides these environments for making displays, run-in
+mathematics can be set with the usual \verb/math/ environment, or with
+the commands \verb/$ ... $/ or \hbox{\verb/\( ... \)/}. All the Z
+symbols listed in Section~\ref{symtabs} can be used with these
+commands.
+
+The simplest displays are produced by the commands
+\verb/\[ ... \]/.\index{|\[ ... \]|} This form acts just
+like \verb/\begin{zed} ... \end{zed}/, except that the contents are
+ignored by the type checker; it can be used to state informal
+theorems about a specification, or to quote a piece of mathematical
+text for discussion. The \verb/\[ ... \]/ commands generalize the
+standard \LaTeX\ ones, because the displayed material can be several
+lines.  Note, however, that the contents are set in text style
+rather than display style.  Here is an example:
+\begin{demo}
+\[
+    \exists PhoneDB @ \\
+\t1     known = \emptyset
+\]       
+\gives
+\[
+    \exists PhoneDB @ \\
+\t1     known = \emptyset
+\]       
+\end{demo}
+
+\def\schemastar{{\tt schema*}}
+Sometimes it is nice to expand a complicated schema expression and
+display the results in a schema box with no name.  Such boxes can be
+printed using the \verb/schema*/ environment, like
+this:\index{\schemastar\ environment}
+\begin{demo}
+\begin{schema*}
+        x, y: \nat
+\where
+        x > y
+\end{schema*}
+\gives
+\begin{schema*}
+        x, y: \nat
+\where
+        x > y
+\end{schema*}
+\end{demo}
+Like all these environments, the \verb/schema*/ environment is
+ignored by the type checker, and contributes nothing to the picture
+of the formal specification it is building.
+
+Another kind of mathematical display is provided by the \verb/argue/
+environment\index{|argue| environment}.  This is like the \verb/zed/
+environment, but the separation between lines is increased a little,
+and page breaks may occur between lines.  The intended use is for
+arguments like this:
+\begin{demo}
+\begin{argue}
+    S \dres (T \dres R) \\
+\t1     = \id S \comp \id T \comp R \\
+\t1     = \id (S \cap T) \comp R & law about $\id$ \\
+\t1     = (S \cap T) \dres R.
+\end{argue}
+\gives
+\begin{argue}
+    S \dres (T \dres R) \\
+\t1     = \id S \comp \id T \comp R \\
+\t1     = \id (S \cap T) \comp R & law about $\id$ \\
+\t1     = (S \cap T) \dres R.
+\end{argue}
+\end{demo}
+When the left-hand side is long, I find this style better than the
+\LaTeX\ \verb/eqnarray/ style, which wastes a lot of space. 
+Each line can have an optional second field, delimited by an
+\verb/&/ character: it can be used for a hint why the expression is
+considered equal to the previous line.
+
+Finally, there is the \verb/infrule/ environment, used for inference
+rules:\index{|infrule| environment}
+\begin{demo}
+\begin{infrule}
+    \Gamma \vdash P
+\derive[x \notin freevars(\Gamma)]
+    \Gamma \vdash \forall x @ P
+\end{infrule}
+\gives
+\begin{infrule}
+    \Gamma \vdash P
+\derive[x \notin freevars(\Gamma)]
+    \Gamma \vdash \forall x \spot P
+\end{infrule}
+\end{demo}
+The horizontal line is generated by \verb/\derive/; the optional
+argument is a side-condition of the rule.
+
+\section{Style parameters}\label{params}
+
+A few style parameters affect the way Z text is set out; they can be
+changed at any time if your taste doesn't match mine.%
+\index{style parameters}
+
+\begin{description}
+\item[\tt\string\zedindent]\index{|\zedindent|} The indentation for
+        mathematical text.  By default, this is the same as
+        \verb|\leftmargini|, the indentation used for list
+        environments.
+\item[\tt\string\zedleftsep]\index{|\zedleftsep|} The space between
+        the vertical line on the left of schemas, etc., and the
+        maths inside. The default is 1~em.
+\item[\tt\string\zedtab]\index{|\zedtab|} The unit of indentation
+        used by \verb|\t|. The default is 2~em.
+\item[\tt\string\zedbar]\index{|\zedbar|} The length of the
+        horizontal bar in the middle of a schema. The default is
+        6~em.
+\item[\tt\string\zedskip]\index{|\zedskip|} The vertical space
+        inserted by \verb/\also/. By default, this is the same as
+        that inserted by \verb/\medskip/.
+\item[\tt\string\zedsize]\index{|\zedsize|} A size-changing command
+        used for Z text.  It may be redefined by a command such as
+        \verb/\renewcommand{\zedsize}{\small}/.  The default is for
+        Z text to be the same size as surrounding prose.
+\end{description}
+
+\chapter{Checking Specifications}\label{tc}
+
+The \fuzz\ type checker can be run with the command
+\begin{quote}
+        \tt fuzz \lopt-aqstv\ropt\ \lopt-p {\it prelude\/}\ropt\ 
+                \lopt {\it file\/} \dots\ropt
+\end{quote}
+It reads the input files, which are Z specifications written as
+described in Chapter~\ref{tex}, extracts the pieces of formal text,
+and produces messages on the standard error stream describing any
+errors it finds.  If no input files are listed on the command line,
+\fuzz\ reads the standard input stream instead.  Various optional
+flags can be given to make \fuzz\ output additional information or
+to modify the processing it performs.
+
+Before reading the input files, the type checker reads a prelude
+file\index{prelude file} that contains, amongst other things, the
+definitions from the mathematical tool-kit%
+\index{mathematical tool-kit} in Chapter~\ref{c:library} of the
+\ZRM.  This prelude is a 
+text file, and apart from a few special commands it has the same
+form as any other input file.
+
+Next, \fuzz\ reads the input files in sequence, keeping
+the definitions from each file as it processes the next one, so that
+specifications in several files can be analysed, with each file
+using notation introduced by the ones before it.  The \LaTeX\
+commands \verb/\input{...}/\index{|\input|: ignored by type checker}
+and \verb/\include{...}/\index{|\include|: ignored by type checker}
+are completely 
+ignored by \fuzz, but much the same effect can be obtained by
+listing the files on the command line.  
+
+The following flags can be given on the command line to modify the
+processing \fuzz\ performs:\index{flags: on command line+}
+\begin{list}{}{\def\makelabel#1{\tt #1\hfil}}
+\item[-a]\index{|-a| flag} Disable the system of type
+        abbreviations\index{type abbreviation}
+        that is normally used for printing types in reports and error
+        messages.  Further details of the system of type
+        abbreviations are in Section~\ref{abbrev}.
+
+\item[-p{\it\ file\/}]\index{|-p| flag} Use {\it file\/} in place of
+        the standard prelude\index{prelude file}.  This flag is
+        useful if there are local extensions to the mathematical
+        library; you can append them to a copy of the usual prelude
+        file, and use \verb/-p/ to have \fuzz\ read the extended
+        prelude in place of the usual one.
+
+\item[-q]\index{|-q| flag} Allow implicit quantifiers%
+        \index{implicit quantifiers}.  Any undeclared identifier that
+        appears in the 
+        predicate part of a schema, axiomatic description, or
+        generic definition is treated as if it were declared by a
+        universal quantifier surrounding the predicate, with a type
+        inferred from the context.
+
+\item[-d]\index{|-d| flag} Dependency analysis%
+	\index{dependency analysis}.  The paragraphs of Z text are
+	topologically sorted before checking, so that (with a few
+	restrictions), the paragraphs can appear in the document in
+	an order that best suits exposition.
+
+\item[-s]\index{|-s| flag} Syntax check only. This flag overrides
+        the \verb/-t/ flag, and can be used with the \verb/-v/ flag
+        to extract the paragraphs of specification from the input
+        files without checking them for type errors.
+
+\item[-t]\index{|-t| flag}\index{reports} Display on the standard
+        output the types of all names defined globally in the
+        specification.  See Section~\ref{reports} for more details.
+
+\item[-v]\index{|-v| flag} Display each paragraph of Z text on the
+        standard output as it is extracted from the input files. See
+        Section~\ref{reports} for more details.
+
+\item[-l]\index{|-l| flag} Echo each paragraph of Z text in a
+ 	Lisp-like syntax.
+\end{list}
+
+If no \verb/-p/\index{|-p| flag} flag is present, the type checker
+looks for the prelude file\index{prelude file: search rules} in an
+implementation-dependent way.  In UNIX versions of \fuzz, if there
+is an environment variable called \verb/FUZZLIB/%
+\index{|FUZZLIB|: environment variable}, its value is used as the
+location of the 
+prelude file; otherwise, the type checker looks in a place
+determined when \fuzz\ is installed.  In the IBM PC version, the
+type checker looks in all the directories on the search path for a
+file named \verb/fuzzlib/, and uses that as the prelude
+file.\index{flags: on command line-}
+
+\section{Definition before use}
+
+\Fuzz\ checks the input specification for conformance with the
+language rules of Z described in the \ZRM. 
+These rules require that each identifier or schema name is declared or
+defined before it 
+is first used\index{definition before use+}. 
+\Fuzz\ relaxes this condition if the \verb/-d/ flag is specified on
+the command line, by reading the whole specification, then re-ordering
+the paragraphs of Z material so that they appear in an order that is
+acceptable according to the rules.
+It is still necessary that the specification can be re-ordered in this
+way, so it is not permitted (for example) to have two paragraphs, each
+of which refers to definitions made in the other.
+
+Another kind of exception to the principle of definition before use is
+made for the symbols $\Delta$ and $\Xi$\index{|\Delta| ($\Delta$)}%
+\index{|\Xi| ($\Xi$)}. These
+may appear only as the first character of a schema name such as
+$\Delta State$ (typed as \verb/\Delta State/). If no schema with
+this name has been defined before the first use of the name, the
+standard definition is inserted by the type checker%
+\index{default definition: of $\Delta$ and $\Xi$}: see, for example,
+the small 
+specification in Chapter~\ref{example}. This convention allows both
+the style where $\Delta State$ is an abbreviation for $State \land
+State'$, and the style where it may be defined explicitly to be
+something else.  Of course, if the definition is left implicit, then
+$State: Exp $ must be defined as a schema {\em before\/} the first use of
+$\Delta State$.
+
+Normally, it is an error for a Z specification to use any identifier
+that has not been declared; but some specifications are made much
+shorter by the convention that undeclared variables are
+universally quantified in the largest surrounding
+predicate\index{implicit quantifiers}.  This
+allows definitions like this:
+\begin{axdef}
+        double: \nat \fun \nat
+\where
+        double(x) = 2 * x
+\end{axdef}
+which would otherwise need a universal quantifier for $x$.  The
+\verb/-q/ flag\index{|-q| flag} is provided so that specifications
+using this informal convention can still be checked for other
+errors.\index{definition before use-}
+
+\section{Reports}\label{reports}
+
+In addition\index{reports+} to checking a specification for errors,
+the type checker can produce two kinds of reports about the formal
+text it finds.  One report is activated by the \verb/-v/
+flag\index{|-v| flag}, and contains an {\sc ascii} representation of
+each Z paragraph; the other is activated by \verb/-t/%
+\index{|-t| flag}, and lists the type of every name that is globally
+defined by 
+the specification.  For example, the schema 
+%% \begin{zed} [NAME, PHONE] \end{zed}
+\begin{schema}{PhoneDB}
+    known: \power NAME \\
+    phone: NAME \pfun PHONE
+\where
+    known = \dom phone
+\end{schema}
+is represented like this in the \verb/-v/ report:
+\begin{verbatim}
+schema PhoneDB
+    known: P NAME
+    phone: NAME -+> PHONE
+where
+    known = dom phone
+end
+\end{verbatim}
+This output attempts to show the internal form of the
+schema in a readable way.  The schema box is represented by the
+keywords \verb/schema/, \verb/where/ and \verb/end/, and 
+symbols like $\pfun$ are built up from {\sc ascii} characters.
+The \verb/-t/ flag generates a report like this from the $PhoneDB$
+schema:
+\begin{verbatim}
+Schema PhoneDB
+    known: P NAME
+    phone: NAME -+> PHONE
+End
+\end{verbatim}
+\Fuzz\ discards the predicate part of the schema after checking it
+for errors, because it contains no information that is needed to
+check the rest of the specification; so the predicate part does not
+appear in the \verb/-t/ report either.  On the other hand, all
+inclusions of one schema in another are expanded before the report
+is produced, so you can see exactly what components each schema has.
+Like the types displayed in error messages, the types shown in
+\verb/-t/ reports use the system of type abbreviations described in
+Section~\ref{abbrev} to make them shorter and more readable.  If you
+want to see the `real' types, you can use the \verb/-a/ flag in
+combination with \verb/-t/.  In the example, the type of $phone$
+would then be shown as
+\[ \power(NAME \cross PHONE) \]
+instead of 
+\[ NAME \pfun PHONE. \]
+An axiomatic description like this:
+\begin{axdef}
+        u, v: \nat
+\where
+        2 * u + v < 10
+\end{axdef}
+gives a report like this with the \verb/-v/ flag:
+\begin{verbatim}
+axdef
+    u, v: NN
+where
+    (2 * u) + v < 10
+end
+\end{verbatim}
+One thing that makes the \verb/-v/ reports particularly useful is
+that extra parentheses are used to clarify the binding power of
+operators, as in the expression \verb/(2 * u) - v/ here.  We all
+know that multiplication binds more tightly than addition, but if
+\fuzz\ reports an error in your specification that you 
+just can't find, sometimes the \verb/-v/ report will reveal that an
+expression is begin parsed in an unexpected way.
+
+The \verb/-t/ flag shows separately each global definition which
+\fuzz\ stores as it checks the specification: for our example, the
+output is
+\begin{verbatim}
+Var u: NN
+
+Var v: NN
+\end{verbatim}
+This shows that two global variables, $u$ and $v$, have been
+introduced, and both have type $\nat$. Again, the predicate relating
+$u$ and $v$ has been checked for errors and discarded.
+
+The types of generic constants are shown under \verb/-t/ with
+numeric markers in place of the formal generic parameters.  For
+example, the definition
+\begin{gendef}[X, Y]
+        fst: X \cross Y \fun X \\
+        snd: X \cross Y \fun Y
+\where
+        \forall x: X; y: Y @ \\
+\t1             fst(x,y) = x \land \\
+\t1             snd(x,y) = y
+\end{gendef}
+produces this output under \verb/-t/:
+\begin{verbatim}
+Genconst fst[2] : @1 x @2 -+> @1
+
+Genconst snd[2] : @1 x @2 -+> @2
+\end{verbatim}
+Here, the \verb/[2]/ means that $fst$ and $snd$ each have two generic
+parameters, and the markers \verb/@1/ and \verb/@2/ represent the
+first and the second parameters respectively.  This form of output
+is also used for generic constants defined with
+$==$.\index{reports-}
+
+\chapter{Advanced Features}\label{advanced}
+
+%\looseness=1 %PAGE
+For simple specifications, the features described in
+Chapter~\ref{tc} are enough.  But more complex specifications may
+need additional features of the type checker: they may add to Z's
+standard list of infix operators, they may introduce new
+mathematical concepts that can be reflected in the way \fuzz\
+computes types for expressions, or they may be presented in an
+informal way that requires slight adjustments to the strict
+principle of definition before use.  All these features of
+the type checker are activated by {\em directives}, special
+comments that are processed by the type checker, but are ignored by
+\LaTeX\ when it formats the specification for printing.
+
+\section{Directives}\label{directives}
+
+All the directives\index{directives+} that activate special features
+of \fuzz\ start with the characters \verb/%%/, so \LaTeX\ sees them
+as comments, and they have no effect on the printed version of the
+specification.  Several of them introduce infix function or relation
+symbols, and so on; others introduce new type abbreviations or mark
+text to be ignored in type-checking.  A special directive allows
+text to be included for type-checking but ignored by \LaTeX. Each
+directive must appear at the beginning of a line in the input file,
+and it continues to the end of that~line. Any other \TeX\
+comment\index{comment: ignored by type checker} --
+beginning with only one \verb/%/ or not appearing at the start of a
+line -- is ignored by the type checker.
+
+Here is a list of all the directives, with a brief explanation of
+their meanings. In this list, $symbols$ stands for a sequence of
+one or more identifiers or special symbols, separated by spaces.
+\begin{list}{}{\def\makelabel#1{\tt #1\hfil}%
+        \def\\{\leavevmode\hfil\break}}
+\item[\%\%inop $symbols$ $n$]\index{|%%inop| directive}\\
+        The symbols are introduced as infix function symbols with
+        priority $n$, a digit in the range 1 up to 6.
+\item[\%\%postop $symbols$]\index{|%%postop| directive}\\
+        The symbols are introduced as postfix function symbols. 
+\item[\%\%inrel $symbols$]\index{|%%inrel| directive}\\
+        The symbols are introduced as infix relation symbols.
+\item[\%\%prerel $symbols$]\index{|%%prerel| directive}\\
+        The symbols are introduced as prefix relation symbols.
+\item[\%\%ingen $symbols$]\index{|%%ingen| directive}\\
+        The symbols are introduced as infix generic symbols.
+\item[\%\%pregen $symbols$]\index{|%%pregen| directive}\\
+        The symbols are introduced as prefix generic symbols.
+\item[\%\%type $symbols$]\index{|%%type| directive}\\
+        Each of the symbols must have a previous global definition as a
+        variable or generic constant with a set type, or as a
+        schema; they are made into type abbreviations.  The
+        definitions of the symbols must be monotonic, as described
+        in Section~\ref{abbrev}.
+\item[\%\%tame $symbols$]\index{|%%tame| directive}\\
+        Each of the symbols must have a previous global definition 
+        as a generic function; they 
+        are marked as tame functions in the sense explained in
+        Section~\ref{abbrev}.   
+\item[\%\%unchecked]\index{|%%unchecked| directive}\\
+        The immediately following Z environment is completely
+        ignored by the type checker.
+\item[\%\% $text$]\index{|%%| directive}\\
+        The string $text$ is processed by the type checker, but
+        ignored in printing the specification.
+\end{list}
+The directives which introduce infix function symbols, etc., override
+any previous directive for the same symbol.  There are a few other
+directives not listed here that are used in the standard prelude to
+set up the type checker's symbol tables.  They may not be used in
+ordinary specification documents.\index{directives-}
+ 
+\section{User-defined operators}\label{userops}
+
+Specifications\index{operator symbol: user-defined+} that use Z's
+tool-kit of mathematical symbols are made easier to read by the fact
+that many of these symbols are defined as infix operators of one
+kind or another.  The \ZRM\ lists the standard operator symbols on
+page~\pageref{p:stdsym}, but does not prescribe any way of adding to
+this list.  With \fuzz, the standard set of operators may be
+extended using the directives listed in Section~\ref{directives}.
+
+There are three stages in adding a new operator symbol to a
+specification.  The first is to write a definition that tells
+\LaTeX\ how to print the symbol, choosing a command name to
+represent the symbol in the input file.  The second stage is to
+announce to \fuzz\ (using one of the directives) that the symbol is
+to be used as an infix operator of a specified kind; this
+announcement is often best complemented by an explanation for the
+human reader of the relative binding power of the operator.  The
+third stage in adding a new infix symbol is to write its
+mathematical definition in Z.
+
+To understand this procedure, it may help to think of three
+potential `audiences' for the specification document: \LaTeX, the
+\fuzz\ type checker, and the human reader.  The specification is
+written as an input file for \LaTeX\, using a certain command to
+represent the symbol.  To format the specification, the \LaTeX\
+program must know what printed symbol to associate with the
+command.  This association is set up in the first stage of
+introducing the symbol, by defining the \LaTeX\ command with
+\verb/\newcommand/.
+
+\looseness=-1
+The type checker does not need to know how the symbol is to appear
+on the page, and it ignores the \LaTeX\ definition that contains
+this information.  But it does need to know whether it is an infix
+function symbol, a prefix generic symbol, and so on.  This
+information is given by a directive in the second stage; this
+directive is seen by \LaTeX\ as a comment, so it does not affect the
+printed appearance of the specification.
+
+Human readers want to be told how to read formulas that use the
+symbol, information that is best conveyed by a small example given
+in stage 2.  They also want to see its definition, given in
+stage 3.  The fact that the definition for \LaTeX\ in stage 1 and
+the directive for \fuzz\ in stage 2 are invisible in the printed
+text allows the specification author to explain the significance of
+the new symbol appropriately.
+
+Here is an example which shows how to introduce a new infix function
+symbol. Let's define $\diamond$ to be an operator which takes two
+sequences and concatenates the reverse of the first with the
+second.  Luckily, there is already a \LaTeX\ command \verb/\diamond/
+for $\diamond$, so we don't need to bother with the first stage.
+For the second stage, we announce in a directive that
+\verb/\diamond/ is an infix function symbol, choosing its priority
+to be 3:\index{|%%inop| directive}
+\begin{quote}
+        \verb/%%inop \diamond 3/
+\end{quote}
+It is important to announce \verb/\diamond/ as an infix symbol {\em
+before\/} giving its definition, or the type checker will not be
+able to parse the definition correctly. The new symbol should be
+introduced for the human reader with a suitable English sentence. In this
+case, one might say ``The symbol $\diamond$ will be used as an infix
+function symbol; it has the same binding power as $\cat$.''
+Personally, I like to avoid using numeric priorities to explain the
+binding power of infix symbols: if you exploit relative binding
+powers, it's a good idea to give an example, such as ``The
+expression $a \filter S \diamond b$ should be read as $(a \filter S)
+\diamond b$.''
+
+Now for the third stage: we define the operator with a generic
+definition like this:\index{|gendef| environment}
+\begin{demo}
+\begin{gendef}[X]
+    \_ \diamond \_: \seq X \cross \seq X \fun \seq X
+\where
+    \forall a, b: \seq X @ \\
+\t1     a \diamond b = (rev~a) \cat b
+\end{gendef}
+\gives
+\begin{gendef}[X]
+    \_ \diamond \_: \seq X \cross \seq X \fun \seq X
+\where
+    \forall a, b: \seq X @ \\
+\t1     a \diamond b = (rev~a) \cat b
+\end{gendef}
+\end{demo}
+The `quoted' name $\_ \diamond \_$ is used in the declaration,
+because $\diamond$ is now an infix operator. After defining
+$\diamond$, we can begin to use it in expressions, like this:
+\begin{demo}
+\begin{zed}
+    \langle 1, 2, 3 \rangle 
+    \diamond \langle 4, 5, 6 \rangle
+        = \langle 3, 2, 1, 4, 5, 6 \rangle.
+\end{zed}
+\gives
+\begin{zed}
+    \langle 1, 2, 3 \rangle \diamond \langle 4, 5, 6 \rangle
+        = \langle 3, 2, 1, 4, 5, 6 \rangle.
+\end{zed}
+\end{demo}
+
+\def\subseq{\mathrel{\sf subseq}} 
+As another example, let's define $\subseq$ as the relation which
+holds between two sequences when the all the elements of the first
+one also appear in the second one in the same order.  The first
+stage is to define a \LaTeX\ command \verb/\subseq/ which produces
+the relation symbol $\subseq$ in the right style of type. This is
+achieved by
+\begin{quote}
+        \verb/\newcommand{\subseq}{\mathrel{\sf subseq}}/
+\end{quote}
+\looseness=1
+The \TeX\ primitive \verb/\mathrel/ is not documented in the \LaTeX\
+manual, but it causes its argument to be considered as a relation
+symbol in mathematical formulas, so that the right amount of space
+will be inserted around it. There is also \verb/\mathbin/ for binary
+operators, and others for brackets, prefix operators like `$\dom$'
+and so on: see the {\TeX}book, page~155.  The font-changing command
+\verb/\sf/ causes the word `{\sf subseq}' to appear in sans-serif
+type, like the standard infix relation symbols in the~\ZRM.
+
+The second stage is to announce to the type checker that \verb/\subseq/
+is to be used as an infix relation symbol:\index{|%%inrel| directive}
+\begin{quote}
+        \verb/%%inrel \subseq/
+\end{quote} 
+Both \LaTeX\ and the type checker now know all they need
+about our new symbol, and we can proceed to the third stage, giving
+its mathematical definition:\vadjust{\break}
+\begin{demo}
+\begin{gendef}[X]
+    \_ \subseq \_: \seq X \rel \seq X
+\where
+    \forall a, b: \seq X @ \\
+\t1     a \subseq b \iff (\exists S: 
+            \power \nat_1 @ a = S \extract b)
+\end{gendef}
+\gives
+\begin{gendef}[X]
+    \_ \subseq \_: \seq X \rel \seq X
+\where
+    \forall a, b: \seq X @ \\
+\t1     a \subseq b \iff (\exists S: 
+            \power \nat_1 @ a = S \extract b)
+\end{gendef}
+\end{demo}
+The symbol `$\subseq$' can now be used in formulas:%
+\index{operator symbol: user-defined-}
+\begin{demo}
+\begin{zed}
+    \langle 2, 4 \rangle 
+        \subseq \langle 1, 2, 3, 4 \rangle.
+\end{zed}
+\gives
+\begin{zed}
+    \langle 2, 4 \rangle 
+        \subseq \langle 1, 2, 3, 4 \rangle.
+\end{zed}
+\end{demo}
+
+The technique of defining a new \LaTeX\ command for an infix
+operator can also be used with schemas%
+\index{schema name: containing special characters}.  This is useful
+because some
+styles of specification encourage schema names like $\Phi State$
+that do not conform to \fuzz's syntax for schema names (see
+page~\pageref{lexis}).  The trick
+is to define a new \LaTeX\ command like this:
+\begin{verbatim}
+\newcommand{\PhiState}{\Phi State}
+\end{verbatim}
+then define the schema like this:
+\begin{verbatim}
+\begin{schema}{\PhiState} ...
+\end{verbatim}
+After these definitions, the command \verb/\PhiState/ prints as
+$\Phi State$, and is recognized as a schema name by the type checker.
+
+\newpage
+\section{Type abbreviations}\label{abbrev}
+
+The \fuzz\ type checker\index{type abbreviations+} separates its
+work into two parts: computing the types of all the expressions
+which appear in a specification, and matching types with each other
+where they must agree. \Fuzz\ uses the type system described in the
+\ZRM\ for comparing types, but it uses a richer type system when
+computing the types of expressions. This makes for better error
+messages, because types in the richer system are shorter and easier
+to understand.  Because the type system used for matching types is
+exactly that described in the \ZRM, none of the power or
+expressiveness of Z is lost.
+
+The \ZRM's type system has only three type constructors: power set
+$\power$, Cartesian product $\cross$, and schema type
+$\lblot\ldots\rblot$. In this system, even simple expressions can
+have rather complicated types: for example, $\dom[X,Y]$ has the type
+\[
+        \power(\power(X \cross Y) \cross \power X).
+\]
+This is rather difficult to read, and the fact that $\dom$ is a
+function has been lost.  For the same expression, \fuzz\ computes the
+type
+\[
+        (X \rel Y) \pfun \power X,
+\]
+which is shorter, and closer to the `type' given to $\dom$ in its
+declaration. This has been achieved by using the {\em type
+abbreviations\/} `$\rel$' and `$\pfun$'. 
+
+We can recover the real type of $\dom[X,Y]$ by expanding the
+abbreviations\index{type abbreviations: expansion}, replacing both
+$A \rel B$ and $A \pfun B$ by $\power(A \cross B)$. The value of $A
+\rel B$ is actually equal to this set, but $A \pfun B$ is a proper
+subset of $\power(A \cross B)$, so the type we obtain by expansion
+is larger as a set than the unexpanded type. This means that
+information has been lost in the expansion, but it is safe to assume
+that any object in the original, abbreviated type is also in the
+larger, expanded type.
+
+The algorithm used by \fuzz\ to check that types agree across
+equality and membership signs and in function applications is
+equivalent to expanding all abbreviations and checking for an exact
+match, so you are still free to exploit the way notions like
+function and sequence are defined in Z: where convenient, you can
+use the fact that functions are sets of ordered pairs, and sequences
+are functions defined on a segment of the integers.
+
+Here is a list of the type abbreviations defined in the standard
+prelude:
+\begin{syntax}
+        \nat & \subseteq & \num \\
+        X \rel Y & = & \power(X \cross Y) \\
+        X \pfun Y & \subseteq & \power(X \cross Y) \\
+        X \ffun Y & \subseteq & \power(X \cross Y) \\
+        \finset X & \subseteq & \power X \\
+        \seq X & \subseteq & \power(\nat \cross X) \\
+        \bag X & \subseteq & \power(X \cross \nat)
+\end{syntax}
+A notable absence from this list is the total function arrow
+$\fun$.  It is omitted because it is not {\em
+monotonic\/}\index{monotonicity: of type abbreviations} like the
+others\index{total functions ($\fun$): not monotonic}: if $S
+\subseteq T$, then it is not generally true that $(S \fun V)
+\subseteq (T \fun V)$.  For example, the set $even \fun \num$
+contains the functions from numbers to numbers that are
+defined exactly when the argument is in the set $even$; one of its
+members is the function $half$ that takes an even argument and
+halves it.  This set is not a subset of $\num \fun \num$, which
+contains only functions that are defined on the whole of $\num$; in
+fact, the two sets of functions are disjoint.
+
+It is important that abbreviations are monotonic, because otherwise
+the method \fuzz\ uses to calculate types may conclude that an
+expression has a certain type, when in fact the value of the
+expression is not a member of the type.  The property of being a
+total function is simply not one that can be expressed in the type
+system.
+
+The way that the type checker uses the two-level type system is
+illustrated by the predicate
+\[ phone' = phone \oplus \{name? \mapsto number?\}. \]
+The type checker calculates the types in this equation as shown in
+the following listing, where each line shows a sub-expression and
+its type:
+\begingroup\interzedlinepenalty=\interdisplaylinepenalty
+%%unchecked
+\begin{syntax}
+        phone & : & NAME \pfun PHONE \\
+        name? & : & NAME \\
+        number? & : & PHONE \\
+        name? \mapsto number? & : & NAME \cross PHONE \\
+        \{name? \mapsto number?\} & : & \power(NAME \cross PHONE) \\
+        \_ \oplus \_ & : & (X \rel Y) \cross (X \rel Y) 
+                                                \pfun (X \rel Y)
+\end{syntax}
+\endgroup
+So far, so good.  Now the type checker finds that the operator
+$\oplus$, which expects two relations as its arguments, is being
+applied to arguments that are a partial function and a set of
+ordered pairs.  This is allowed, for although they are
+superficially different, all three types
+\[
+        NAME \rel PHONE \\
+        NAME \pfun PHONE \\
+        \power(NAME \cross PHONE) 
+\]
+can be changed into the third one by expanding abbreviations.  So
+the type checker ascribes to the right-hand side the type $NAME \rel
+PHONE$, the result type of $\oplus$ with $NAME$ substituted for the
+generic parameter $X$ and $PHONE$ substituted for $Y$.
+The left-hand side of the equation has type $NAME \pfun PHONE$.
+Again, this is superficially different from the type ascribed to the
+right-hand side, but they have a common expansion, so the equation
+is accepted.
+
+New type abbreviations can be introduced using the
+\verb/%%type/\index{|%%type| directive}
+directive (see Section~\ref{directives}). Any symbol defined globally
+in the specification as having a set type can be marked as a type
+abbreviation, but it is up to the user to check that the requirement
+is satisfied that it be monotonic, because there is no way to check this
+mechanically. If a type abbreviation is not monotonic, no spurious
+error messages will be produced, but the types displayed in error
+messages may be misleading.
+
+Another concept related to type abbreviations is that of a {\em
+tame\/} function\index{tame functions+}.  An example is the
+concatenation operator $\cat$%
+\index{concatenation ($\cat$): as tame function} on sequences.  The
+enriched type 
+system gives this operator the type
+\[ \seq X \cross \seq X \pfun \seq X, \] 
+and allows the type checker to deduce unaided that applying this
+operator to two sequences $s$ and $t$ of the same type $\seq X$
+yields another {\em sequence\/} $s \cat t$, and not simply an
+element of the expanded type $\power(\num \cross X)$.  But there
+are other relevant properties of $\cat$ that cannot be deduced from
+its enriched type.  One such property is that concatenating two elements of
+$\seq \nat$ gives another element of $\seq \nat$, and not simply an
+element of the type $\seq \num$.  This is a consequence of the fact
+that $\cat$ is tame, meaning that for any set $S$, if $s$ and $t$
+are in $\seq S$, so is $s \cat t$.  Another application of the
+tameness of $\cat$ is the observation that concatenating two
+sequences of sequences gives another sequence of {\em sequences},
+and not just a sequence of relations.
+
+Almost all the generic functions defined in the standard library are
+tame, but one that is not tame is the reflexive--transitive
+closure operator $\_\star$%
+\index{reflexive--transitive closure ($\_\star$): not a tame function}.
+Even though $succ$ is in $\nat \rel 
+\nat$ according to its \ZRM\ definition, $succ\star$ is not in $\nat
+\rel \nat$ but is in $\num \rel \num$.
+
+In order to allow the type checker to deduce reasonable types for
+expressions involving tame functions, while treating non-tame
+functions correctly, there is a directive
+\verb/%%tame/\index{|%%tame| directive} for announcing that a
+generic function is tame for the types with which it was declared
+(for details, see Section~\ref{directives}).  Like the \verb/%%type/
+directive, it is used extensively in the standard prelude, but is
+less commonly used in ordinary specification documents.  In checking
+a function application, the type checker treats it as a special case
+if the function being applied is known to be tame.  If the function
+being applied is not a generic function symbol with implicit
+parameters that has been announced as tame, the type checker uses a
+more conservative method of calculating the type.%
+\index{type abbreviations-}\index{tame functions-}
+
+\section{Invisible and unchecked paragraphs}\label{unchecked}
+
+The \verb/%%unchecked/\index{|%%unchecked| directive} directive
+causes the next use of a Z environment -- one of \verb/zed/,
+\verb/axdef/, \verb/schema/ or \verb/gendef/ -- to be ignored by the
+type checker.  It is useful for schemas which contain informal
+nonsense, as in the following example:
+\begin{demo}
+%%unchecked
+\begin{schema}{Register}
+    enrolled: \power STUDENT \\
+    completed: \power STUDENT
+\where
+    \mbox{\dots\ Invariant \dots}
+\end{schema}
+\gives
+%%unchecked
+\begin{schema}{Register}
+    enrolled: \power STUDENT \\
+    completed: \power STUDENT
+\where
+    \mbox{\dots\ Invariant \dots}
+\end{schema}
+\end{demo}
+A specification document might contain an informal definition of the
+$Register$ schema like this one, followed by a discussion of what
+invariant might be appropriate, and finally the proper definition of
+$Register$.  By using the \verb/%%unchecked/ directive, the writer
+can have both schema boxes printed like any other, but have the
+type checker take notice of only the second, complete one.
+
+A sort of opposite to \verb/%%unchecked/ is the \verb/%%/
+directive.\index{|%%| directive}
+This is useful for including short paragraphs that are processed by
+the type checker but should not appear in the output:
+\begin{demo}
+We give the name $FN$ 
+%% \begin{zed} [FN] \end{zed}
+to the set of all file names.
+\gives
+\begin{quote}
+We give the name $FN$ 
+%% \begin{zed} [FN] \end{zed}
+to the set of all file names.
+\end{quote}
+\end{demo}
+Here the author wanted to avoid cluttering up the specification as
+printed with the formal definition of $FN$, but needed to include
+the definition for the sake of the type checker.
+
+A second use for \verb/%%/ is in combination with \verb/%%unchecked/.
+In the $Register$ example, the whole schema is ignored by the
+type checker, and this may cause problems if a complete definition
+is not included later, and the declaration part of
+the schema is needed for type-checking the rest of the specification.
+The best thing in this case is to include a brief definition of
+$Register$ using \verb/%%/:
+\begin{verbatim}
+%% \begin{schema}{Register}
+%%     enrolled, completed: \power STUDENT
+%% \end{schema}
+\end{verbatim}
+This can be put next to the unchecked but visible definition.
+This technique is sometimes useful when it seems clearer to present
+the parts of a specification in a different order from the one that
+would be needed to follow strictly the principle of definition
+before use.\index{definition before use}
+
+Another use for the \verb/%%/ directive is to introduce local
+variables for a predicate:
+\begin{demo}
+A name $n$ is included in the output exactly if
+\begin{zed}
+%% \exists BirthdayBook; n: NAME; today: DATE @
+    birthday(n) = today
+\end{zed}
+\gives
+\begin{quote}
+A name $n$ is included in the output exactly if
+\begin{zed}
+%% \exists BirthdayBook; n: NAME; today: DATE @
+    birthday(n) = today
+\end{zed}
+\end{quote}
+\end{demo}
+The existential quantifier is included only to introduce the variables
+used in the predicate; it is used for its effect of declaring some
+variables rather than for its logical meaning. In such a simple
+example as this one, it would be easier to exclude the predicate from
+checking, either by marking it with \verb/%%unchecked/, or by using 
+\verb/\[ ... \]/ in place of the \verb/zed/ environment. In more
+complicated examples, however, this technique allows more thorough
+type-checking to be done.
+
+\chapter{Error Messages}\label{mess}
+
+Most of the messages about type errors produced by \fuzz\ come with
+supporting evidence about the expressions and types involved.  These
+expressions and types are obtained from the internal data structures
+that \fuzz\ uses to represent them, so they may differ slightly from
+the actual forms written in the specification.  For example,
+expressions tend to have extra brackets added to clarify the
+precedence of operators. 
+
+This corroborative detail makes the meaning of most error messages
+clear; but here anyway is a list of the semantic error
+messages \fuzz\ produces, together with a little more information
+about each one.  The numbers in square brackets give the pages in
+the \ZRM\ where relevant rules of the language are explained.
+\begin{trivlist}
+\item[]{\bf Application of a non-function}\\
+        In an expression of the form $f(E)$, the sub-expression $f$
+        does not have type $\power (t_1 \cross t_2)$ for some types
+        $t_1$ and $t_2$. \zrmref{p:apply} 
+
+\item[]{\bf Argument $k$ has wrong type}\\
+        In an expression of the form $f(E_1, E_2, \ldots, E_n)$, the
+        type of $E_k$ does not match the type expected for the $k$'th
+        argument of $f$. Also applies to expressions of the form
+        $E_1\:f\:E_2$, where $f$ is an infix function symbol.
+        \zrmref{p:apply}
+
+\item[]{\bf Argument $k$ of $\cross$ must be a set}\\
+        In an expression $E_1 \cross E_2 \cross \cdots \cross E_n$,
+        the sub-expression $E_k$ does not have type $\power t$ for
+        some type $t$. \zrmref{p:Pcross}
+
+\item[]{\bf Argument of application has wrong type}\\
+        In an expression $f(E)$, the type of $E$ is different from the
+        type expected for the argument of $f$. \zrmref{p:Pcross}
+
+\item[]{\bf Argument of $\power$ must be a set}\\
+        In an expression $\power E$, the sub-expression $E$ does not
+        have type $\power t$ for some type $t$. \zrmref{p:Pcross}
+
+\item[]{\bf Argument of postfix operator has wrong type}\\
+        In an expression $E~\omega$, where $\omega$ is a postfix
+        function symbol, the type of $E$ is not the type expected
+        for the argument of $\omega$. \zrmref{p:operators}
+
+\item[]{\bf Argument of prefix relation has wrong type}\\
+        In a predicate $R\;E$, where $R$ is a prefix relation symbol,
+        the type of $E$ is not the type expected for the argument of
+        $R$. \zrmref{p:relations}
+
+\item[]{\bf Argument of selection must have schema type}\\
+        In an expression $E.x$, the sub-expression $E$ does not have a
+        schema type. \zrmref{p:select}
+
+\item[]{\bf Basic type $X$ cannot have parameters}\\
+        A reference to the basic type $X$ has actual generic
+        parameters. Only generic constants and schemas can have
+        parameters. \zrmref{p:genuse}
+
+\item[]{\bf Basic type name $X$ multiply declared}\\
+        The basic type name $X$ appears more than once in the same
+        basic type definition or formal generic parameter list. The
+        second occurrence is ignored.
+        \zrmref{ss:basictype,ss:genschema,ss:genconst}
+
+\item[]{\bf Component $x$ has wrong type in schema reference}\\
+        A schema reference is used as a predicate, and the type of
+        the component $x$ in the schema is different from the type
+        $x$ has in the current context.  \zrmref{p:srefpred}
+
+\item[]{\bf Constructor name $x$ multiply declared}\\
+        The constructor name $x$ appears in more than one branch of
+        the same free type definition.  The second occurrence is
+        ignored.  \zrmref{s:freetype}
+
+\item[]{\bf Decoration ignored in schema reference}\\
+        A schema reference used as an expression contains a non-empty
+        decoration. The decoration is ignored. \zrmref{p:srefexp}
+
+\item[]{\bf Function expects $n$ arguments}\\
+        In an expression $f(E_1, E_2, \ldots, E_k)$, the number of
+        arguments supplied, $k$, is different from the number $n$ expected
+        by $f$. \zrmref{p:apply}
+
+\item[]{\bf Generic constant $x$ expects $n$ parameters}\\
+        In an expression $x[E_1, E_2, \ldots, E_k]$, the number of
+        parameters supplied, $k$, is different from the number $n$ expected
+        by $x$. Also applies to expressions of the form $E_1\;x\;E_2$
+        or $x\;E$ where $x$ is an infix or prefix generic symbol.
+        \zrmref{p:genuse}
+
+\item[]{\bf Global name $x$ multiply declared}\\
+        The name $x$ has more than one global definition. The second
+        definition overrides the first. \zrmref{p:multidec}
+
+\item[]{\bf Hiding non-existent component $x$}\\
+        In a schema expression which hides certain components of a
+        schema, the component $x$ being hidden does not exist.
+        Applies to the quantifiers $\forall$, $\exists$ and
+        $\exists_1$, and the explicit hiding operator $\hide$.
+        \zrmref{p:hide}
+
+\item[]{\bf Identifier $x$ is not declared}\\
+        No declaration or definition of $x$ is in scope.
+        \zrmref{s:scope}
+
+\item[]{\bf Implicit parameters not completely determined}\\
+        The actual parameters of a generic constant have been left
+        implicit, but they are not completely determined by the
+        context. Also applies to set, sequence and bag displays.
+        \zrmref{p:undetvar}
+
+\item[]{\bf Infix operator $\omega$ is not a function}\\ 
+        In an expression $E_1 \mathbin{\omega} E_2$, where $\omega$
+        is an infix function symbol, $\omega$ does not have the
+        right type to be a function. \zrmref{p:operators}
+
+\item[]{\bf Infix relation symbol $R$ is not a binary relation}\\
+        In a predicate $E_1\;R\;E_2$, where $R$ is an infix relation
+        symbol, $R$ does not have type $\power (t_1 \cross t_2)$ for
+        some types $t_1$ and $t_2$.  \zrmref{p:relations}
+
+\item[]{\bf Left argument of operator $\omega$ has wrong type}\\
+        In an expression $E_1 \mathbin{\omega} E_2$, where $\omega$
+        is an infix function symbol, the type of $E_1$ does not
+        match the type expected for the left argument of $\omega$.
+        \zrmref{p:operators}
+
+\item[]{\bf Let variable $x$ multiply declared}\\
+        In a let-expression $\LET x_1 == E_1; x_2 == E_2~\ldots$,
+        the same identifier appears more that once among the
+        left-hand sides $x_1$, $x_2$, \dots~.  \zrmref{p:letexp}
+
+\item[]{\bf Name $x$ is not a schema}\\
+        The name $x$ appears in a schema reference, but it is not
+        defined as a schema. \zrmref{s:schemaref}
+
+\item[]{\bf Postfix operator $\omega$ is not a function}\\
+        In a predicate $E~\omega$, where $\omega$ is a postfix
+        function symbol, $\omega$ does not have the right type to be a
+        function. \zrmref{p:operators}
+
+\item[]{\bf Prefix relation symbol $R$ is not a set}\\
+        In a predicate $R\;E$, where $R$ is a prefix relation symbol,
+        $R$ does not have a set type. \zrmref{p:relations}
+
+\item[]{\bf Renamed component $x$ does not exist}\\
+        In a schema reference $S[y/x, \dots]$, there is no component
+        of $S$ with the name $x$. \zrmref{s:schemaref}
+
+\item[]{\bf Renaming ignored in schema reference}\\
+        A schema reference used as an expression contains a non-empty
+        renaming part. The renaming part is ignored. \zrmref{p:srefexp}
+
+\item[]{\bf Right argument of operator $\omega$ has wrong type}\\
+        In an expression $E_1 \mathbin{\omega} E_2$, where $\omega$
+        is an infix function symbol, the type of $E_2$ does not
+        match the type expected for the right argument of $\omega$.
+        \zrmref{p:operators}
+
+\item[]{\bf Schema $S$ expects $n$ parameters}\\
+        In a schema reference $S[E_1, E_2, \ldots, E_k]$, the number
+        of actual generic parameters, $k$, is different from the number
+        $n$ expected by $S$. \zrmref{ss:genschema}
+
+\item[]{\bf Schema $S$ is not defined}\\
+        The schema $S$ appearing in a schema reference has not been
+        defined. \zrmref{s:schemaref} 
+
+\item[]{\bf Selecting non-existent component $x$}\\
+        In an expression $E.x$, the name $x$ is not one of the
+        components in the type of $E$. \zrmref{p:select}
+
+\item[]
+{\bf Set-valued expression required in actual generic parameter}\\
+{\bf Set-valued expression required in declaration}\\
+{\bf Set-valued expression required in free type definition}\\
+        An expression $E$ appearing as an actual generic parameter (as
+        in $A[E]$), in a declaration (as in $x: E$), or in a free type
+        definition -- as in 
+        \[ T ::= \ldots | f \ldata E \rdata | \ldots \]
+        -- does not have a set type.
+        \zrmref{s:decl,ss:genschema,ss:genconst,s:freetype}
+
+\item[]
+{\bf Tame function $x$ has no global definition}\\
+{\bf Tame function $x$ is not a generic function}\\
+        The name $x$ appears in a \verb/%%tame/ directive, but
+        either it has no global definition, or it is not a generic
+        function.  The directive is ignored.
+
+\item[]
+{\bf Type abbreviation $x$ has no global definition}\\
+{\bf Type abbreviation $x$ is not a set}\\
+        The name $x$ appears in a \verb/%%type/ directive, but
+        either it has no global definition, or it does not have a set
+        type. The directive is ignored.
+
+\item[]
+{\bf Type mismatch in bag display}\\
+{\bf Type mismatch in sequence display}\\
+{\bf Type mismatch in set display}\\
+        In a set display $\{E_1, E_2, \ldots, E_n\}$, the
+        expressions $E_i$ do not all have the same type. Also applies
+        to sequence and bag displays. \zrmref{p:tuple,p:displays}
+
+\item[]{\bf Type mismatch in conditional expression}\\
+        In a conditional expression $\IF P \THEN E_1 \ELSE E_2$, the
+        types of $E_1$ and $E_2$ are different. \zrmref{p:condexp}
+
+\item[]{\bf Type mismatch in declarations of $x$}\\
+        In a declaration part, or a schema expression, there are two
+        declarations of $x$ which give it different types.
+        \zrmref{ss:combschema,p:combdecl}
+        
+\item[]{\bf Type mismatch in hiding variable $x$}\\
+        In a quantified schema expression $\forall D | P @ S$, the
+        type of component $x$ in the schema $S$ is different from the
+        type it is given by the declaration $D$. Also applies to the
+        quantifiers $\exists$ and $\exists_1$. \zrmref{p:hide}
+
+\item[]
+{\bf Type mismatch in left argument of infix relation}\\
+{\bf Type mismatch in right argument of infix relation}\\
+        In a predicate $E_1\;R\;E_2$, where $R$ is an infix relation
+        symbol, either $E_1$ or $E_2$ has a type different from that
+        expected by $R$. \zrmref{p:relations}
+
+\item[]{\bf Type mismatch in piping}\\
+        In a piping $S_1 \pipe S_2$, the type of some output $x!$ of
+        $S_1$ is different from the type of the input $x?$ of
+        $S_2$.  \zrmref{p:opcomp}
+
+\item[]{\bf Type mismatch in sequential composition}\\
+        In a sequential composition $S_1 \semi S_2$, the type of some
+        component $x'$ in $S_1$ is different from the type of $x$ in
+        $S_2$.  \zrmref{p:opcomp}
+
+\item[]{\bf Types do not agree in equation}\\
+        In a predicate $E_1 = E_2$, the left hand side has a different
+        type from the right hand side.  \zrmref{p:eqmem}
+
+\item[]{\bf Types do not agree in set membership}\\
+        In a predicate $E_1 \in E_2$, the type of the right hand side
+        is not the same as $\power t$, where $t$ is the type of the
+        left hand side.  \zrmref{p:eqmem}
+
+\item[]{\bf Variable $x$ cannot have parameters}\\
+        A reference to the variable $x$ has actual generic
+        parameters. Only generic constants and schemas can have
+        parameters. \zrmref{p:genuse}
+
+\item[]{\bf Warning -- implicitly quantified name $x$ appears only once}%
+	\index{implicit quantifiers}\\
+        Under the \verb/-q/ switch, an implicit quantifier has been
+        inserted for the name $x$, which occurs in a predicate only
+        once.  This is allowed, but may indicate a spelling mistake.
+
+\item[]
+{\bf Warning -- infix relation symbol $\omega$ is not declared as a
+        binary\hfil\break\hbox{}\qquad relation}\\
+{\bf Warning -- infix function symbol $\omega$ is not declared as a
+        binary\hfil\break\hbox{}\qquad function}\\
+{\bf Warning -- postfix function symbol $\omega$ is not declared as
+        a\hfil\break\hbox{}\qquad function}\\
+{\bf Warning -- prefix relation symbol $\omega$ is not declared as a set}\\
+        The symbol $\omega$ has been declared with a type that is
+        not appropriate to its syntactic class.  This is allowed, but
+        will cause an error if the symbol is ever used.
+
+\item[]{\bf Warning -- $X$ already declared as a basic type}\\
+        The identifier $X$ appears to the left of $::=$, but has
+        been declared as a basic type earlier in the specification.
+        \Fuzz\ allows this so that mutually recursive free type
+        definitions can be written.
+
+\end{trivlist}
+\bigskip
+\noindent
+\def\errtype{{\tt *errtype*}}
+If there are errors in the specification, the fictitious type
+\verb/*errtype*/\index{\errtype} may appear in the types reported
+for variables, or in error messages. This indicates that the type
+checker could not ascribe 
+a type to some expression in the specification, and replaced its type
+with a special marker. The type \verb/*errtype*/ never appears in the
+output produced from a correct specification; it is simply a device
+which allows more checking to be done on a specification after errors
+have been detected.
+
+Types appearing in error messages may also contain `place-markers',
+indicated by \verb/?/~.\index{|?| as type} These place-markers are
+generated when generic constants are written without explicit
+parameters, and the type checker works out from the context what the
+parameters must be.  If \verb/?/ appears in an error message, it
+means that the type checker has not completely worked out the type
+of a phrase, but the type it has found so far has the wrong shape to
+match the context.  For example, the predicate
+\begin{zed}
+        \emptyset = 3
+\end{zed}
+results in the error message
+\begin{verbatim}
+Types do not agree in equation
+> Predicate: \emptyset = 3
+> LHS type:  P ?
+> RHS type:  NN
+\end{verbatim}
+This indicates that $\emptyset$ always has a set type, but
+whatever type is given to the elements of the set, this cannot be
+the same as the type $\nat$ ascribed to $3$.
+
+\chapter{Syntax Summary}\label{syntax}
+
+This chapter contains a syntax summary of the input language
+recognized by the \fuzz\ type checker, showing the \LaTeX\ commands
+for the constructs of Z rather than the way they look when printed.
+Except for the use of \LaTeX\ commands in place of the printed
+symbols, this syntax is identical with the one in the \ZRM.
+Only the formal parts of the specification are shown in the summary,
+but of course one {\sf Paragraph} should be separated from the next
+by plenty of explanatory text.
+
+The following conventions about repeated and optional phrases are
+used: {\sf S{\tt ,} \dots{\tt ,} S} stands for a list of one or more
+instances of the class {\sf S} separated by commas, and {\sf S{\tt
+;} \dots{\tt ;} S} stands for one or more instances of {\sf S}
+separated by semicolons.  The notation {\sf S \dots\ S} stands for one
+or more adjacent instances of {\sf S} with no separators.  Phrases
+enclosed in slanted square brackets \lopt\ \dots\ \ropt\ are optional.
+
+Certain collections of symbols have a range of binding powers: they
+are the logical connectives, used in predicates and schema
+expressions, the special-purpose schema operators, and infix function
+symbols, used in expressions. The relative binding powers of the
+logical connectives are indicated by listing them in decreasing order
+of binding power; the binding powers of infix function symbols are
+given in Section~\ref{symtabs}. Each production for which a binding
+power is relevant has been marked with an upper-case letter at the
+right margin; `L' marks a symbol which associates to the left -- so $A
+\land B \land C$ means $(A \land B) \land C$ -- and `R' marks a symbol
+which associates to the right. Unary symbols are marked with `U'.
+\par\vfill\break % PAGE
+\begin{makeatletter}% The big hack in search of Hades ...
+\catcode`\`=\active \def`{\verb'}
+\zedindent=0pt
+\@zed\@znoskip
+\halign to\linewidth\bgroup
+        \strut\sf#\hfil&\hfil${}#{}$\hfil&\sf#\hfil
+        \tabskip=0pt plus1fil&\hbox to0pt{\hss#\unskip}\tabskip=0pt\cr
+Specification & ::= & Paragraph \dots\ Paragraph
+\also
+Paragraph
+        & ::= & Unboxed-Para \\
+        &  |  & Axiomatic-Box \\
+        &  |  & Schema-Box \\
+        &  |  & Generic-Box 
+\also
+Unboxed-Para
+        & ::= & `\begin{zed}' \\
+        &     & \qquad Item Sep \dots\ Sep Item \\
+        &     & `\end{zed}'
+\also
+Item
+        & ::= & `['Ident`,' \dots`,' Ident`]' \\
+        &  |  & Schema-Name\lopt Gen-Formals\ropt\ `\defs' Schema-Exp \\
+        &  |  & Def-Lhs `==' Expression \\
+        &  |  & Ident `::=' Branch `|' \ldots `|' Branch \\
+        &  |  & Predicate
+\also
+Axiomatic-Box 
+        & ::= & `\begin{axdef}' \\
+        &     & \qquad Decl-Part \\
+        &     & \llap{\lopt\quad}`\where' \\
+        &     & \qquad Axiom-Part\quad\ropt \\
+        &     & `\end{axdef}'
+\also
+Schema-Box 
+        & ::= & `\begin{schema}{'Schema-Name`}'\lopt Gen-Formals\ropt \\
+        &     & \qquad Decl-Part \\
+        &     & \llap{\lopt\quad}`\where' \\
+        &     & \qquad Axiom-Part\quad\ropt \\
+        &     & `\end{schema}'
+\also
+Generic-Box 
+        & ::= & `\begin{gendef}'\lopt Gen-Formals\ropt \\
+        &     & \qquad Decl-Part \\
+        &     & \llap{\lopt\quad}`\where' \\
+        &     & \qquad Axiom-Part\quad\ropt \\
+        &     & `\end{gendef}'
+\also
+Decl-Part & ::= & Basic-Decl Sep \dots\ Sep Basic-Decl
+\also
+Axiom-Part & ::= & Predicate Sep \dots\ Sep Predicate
+\also
+Sep & ::= & `;' $|$ `\\' $|$ `\also'
+\also
+Def-Lhs
+        & ::= & Var-Name\lopt Gen-Formals\ropt \\
+        &  |  & Pre-Gen Decoration Ident \\
+        &  |  & Ident In-Gen Decoration Ident
+\also
+Branch
+        & ::= & Ident \\
+        &  |  & Var-Name `\ldata' Expression `\rdata'
+\also
+Schema-Exp
+        & ::= & `\forall' Schema-Text `@' Schema-Exp \\
+        &  |  & `\exists' Schema-Text `@' Schema-Exp \\
+        &  |  & `\exists_1' Schema-Text `@' Schema-Exp \\
+        &  |  & Schema-Exp-1
+\also
+Schema-Exp-1
+        & ::= & `[' Schema-Text `]' \\
+        &  |  & Schema-Ref \\
+        &  |  & `\lnot' Schema-Exp-1                            & U \\
+        &  |  & `\pre' Schema-Exp-1                             & U \\
+        &  |  & Schema-Exp-1 `\land' Schema-Exp-1               & L \\
+        &  |  & Schema-Exp-1 `\lor' Schema-Exp-1                & L \\
+        &  |  & Schema-Exp-1 `\implies' Schema-Exp-1            & R \\
+        &  |  & Schema-Exp-1 `\iff' Schema-Exp-1                & L \\
+        &  |  & Schema-Exp-1 `\project' Schema-Exp-1            & L \\
+        &  |  & Schema-Exp-1 `\hide' \\
+        &     & \qquad `('Decl-Name`,' \dots`,' Decl-Name`)' \quad & L \\
+        &  |  & Schema-Exp-1 `\semi' Schema-Exp-1               & L \\
+        &  |  & Schema-Exp-1 `\pipe' Schema-Exp-1               & L \\
+        &  |  & `(' Schema-Exp `)'
+\also
+Schema-Text & ::= & Declaration \lopt `|' Predicate\ropt
+\also
+Schema-Ref & ::= & Schema-Name Decoration 
+                        \lopt Gen-Actuals\ropt \lopt Renaming\ropt
+\also
+Renaming & ::= & `['Decl-Name`/'Decl-Name`,' 
+                        \dots`,' Decl-Name`/'Decl-Name`]'\hidewidth
+\also
+Declaration & ::= & Basic-Decl`;' \dots`;' Basic-Decl
+\also
+Basic-Decl
+        & ::= & Decl-Name`,' \dots`,' Decl-Name `:' Expression \\
+        &  |  & Schema-Ref
+\also
+Predicate
+        & ::= & `\forall' Schema-Text `@' Predicate \\
+        &  |  & `\exists' Schema-Text `@' Predicate \\
+        &  |  & `\exists_1' Schema-Text `@' Predicate \\
+        &  |  & `\LET' Let-Def`;' \dots`;' Let-Def `@' Predicate \\
+        &  |  & Predicate-1
+\also
+Predicate-1
+        & ::= & Expression Rel Expression Rel \dots\ Rel Expression \\
+        &  |  & Pre-Rel Decoration Expression \\
+        &  |  & Schema-Ref \\
+        &  |  & `\pre' Schema-Ref \\
+        &  |  & `true' \\
+        &  |  & `false' \\
+        &  |  & `\lnot' Predicate-1                             & U \\
+        &  |  & Predicate-1 `\land' Predicate-1                 & L \\
+        &  |  & Predicate-1 `\lor' Predicate-1                  & L \\
+        &  |  & Predicate-1 `\implies' Predicate-1              & R \\
+        &  |  & Predicate-1 `\iff' Predicate-1                  & L \\
+        &  |  & ( Predicate )
+\also
+Rel & ::= & `=' $|$ `\in' $|$ In-Rel Decoration $|$ `\inrel{' Ident `}'
+\also
+Let-Def & ::= & Var-Name `==' Expression
+\also
+Expression-0
+        & ::= & `\lambda' Schema-Text `@' Expression \\
+        &  |  & `\mu' Schema-Text \lopt`@' Expression\ropt \\
+        &  |  & `\LET' Let-Def`;' \dots`;' Let-Def `@' Expression \\
+        &  |  & Expression
+\also
+Expression
+        & ::= & `\IF' Predicate `\THEN' Expression `\ELSE' Expression \\
+        &  |  & Expression-1
+\also
+Expression-1
+        & ::= & Expression-1 In-Gen Decoration Expression-1     & R \\
+        &  |  & Expression-2 `\cross' Expression-2 \\
+        &     & \qquad `\cross' \dots\ `\cross' Expression-2 \\
+        &  |  & Expression-2
+\also
+Expression-2
+        & ::= & Expression-2 In-Fun Decoration Expression-2     & L \\
+        &  |  & `\power' Expression-4 \\
+        &  |  & Pre-Gen Decoration Expression-4 \\
+        &  |  & `-' Decoration Expression-4 \\
+        &  |  & Expression-4 `\limg' Expression-0 `\rimg' Decoration \\
+        &  |  & Expression-3
+\also
+Expression-3
+        & ::= & Expression-3 Expression-4 \\
+        &  |  & Expression-4
+\also
+Expression-4
+        & ::= & Var-Name\lopt Gen-Actuals\ropt \\
+        &  |  & Number \\
+        &  |  & Schema-Ref \\
+        &  |  & Set-Exp \\
+        &  |  & `\langle'\lopt Expression`,' 
+                        \dots`,' Expression\ropt`\rangle' \\
+        &  |  & `\lbag'\lopt Expression`,' 
+                        \dots`,' Expression\ropt`\rbag' \\
+        &  |  & `(' Expression`,' \dots`,' Expression `)' \\
+        &  |  & `\theta' Schema-Name Decoration \lopt Renaming\ropt \\
+        &  |  & Expression-4 `.' Var-Name \\
+        &  |  & Expression-4 Post-Fun Decoration \\
+        &  |  & Expression-4 `\bsup' Expression `\esup' \\
+        &  |  & `(' Expression-0 `)'
+\also
+Set-Exp
+        & ::= & `\{' \lopt Expression`,' \dots`,' Expression\ropt\ `\}' \\
+        &  |  & `\{' Schema-Text \lopt`@' Expression \ropt\ `\}'
+\also
+Ident & ::= & Word Decoration
+\also
+Decl-Name & ::= & Ident $|$ Op-Name
+\also
+Var-Name & ::= & Ident $|$ `('Op-Name`)'
+\also
+Op-Name
+        & ::= & `\_' In-Sym Decoration `\_' \\
+        &  |  & Pre-Sym Decoration `\_' \\
+        &  |  & `\_' Post-Sym Decoration \\
+        &  |  & `\_' `\limg' `\_' `\rimg' Decoration \\
+        &  |  & `-' Decoration
+\also
+In-Sym & ::= & In-Fun $|$ In-Gen $|$ In-Rel
+\also
+Pre-Sym & ::= & Pre-Gen $|$ Pre-Rel
+\also
+Post-Sym & ::= & Post-Fun
+\also
+Decoration & ::= & \lopt Stroke \dots\ Stroke\ropt
+\also
+Gen-Formals & ::= & `['Ident`,' \dots`,' Ident`]'
+\also
+Gen-Actuals & ::= & `['Expression`,' \dots`,' Expression`]'
+\crcr\egroup\postdisplaypenalty=-10000$$%
+\end{makeatletter}%
+The syntax summary uses several classes of terminal symbol that
+are defined as follows:
+\begin{itemize}
+\item a {\sf Word}\index{identifier: syntax rules} is an undecorated
+        name or special symbol. It may be either a non-empty
+        sequence of letters, digits and underscores (written using
+        the \verb/\_/ command) that starts with a letter, a
+        non-empty sequence of characters drawn from the list
+        \verb/+-*.=<>/, or a \LaTeX\ command.  Some strings that
+        would otherwise be {\sf Word}'s are reserved for other
+        purposes, and others are taken as {\sf Schema-Name}'s or
+        operator symbols.
+
+\item a {\sf Schema-Name}\label{lexis}%
+        \index{schema name: syntax rules} is either a {\sf Word} that
+        has been defined as a schema, or one of the Greek
+        letters \verb/\Delta/ or \verb/\Xi/ followed by a single
+        space and a {\sf Word}.
+
+\item the classes {\sf In-Fun}, {\sf Pre-Rel}, etc., stand for
+        members of the class {\sf Word} that have been announced as
+        infix function symbols, prefix relation symbols, etc.,
+        either in the prelude or by an explicit directive.
+
+\item a {\sf Number} is a non-empty sequence of decimal digits.
+
+\item a {\sf Stroke} is a single decoration: one of \verb/'/,
+        \verb/?/, \verb/!/, or a subscript digit entered as
+        \verb/_0/, \verb/_1/, and so on.
+\end{itemize}
+
+\vfill
+{\small\center Another essential Mikro{\it nella\/} design\par}
+
+\input index
+\end{document}

@@ -1,0 +1,268 @@
+%
+% zsymbol.mf
+%
+% This file is part of fuzz2000
+% Copyright (c) 1982--2006 J. M. Spivey
+% All rights reserved
+%
+% Redistribution and use in source and binary forms, with or without
+% modification, are permitted provided that the following conditions are met:
+%
+% 1. Redistributions of source code must retain the above copyright notice,
+%    this list of conditions and the following disclaimer.
+% 2. Redistributions in binary form must reproduce the above copyright notice,
+%    this list of conditions and the following disclaimer in the documentation
+%    and/or other materials provided with the distribution.
+% 3. The name of the author may not be used to endorse or promote products
+%    derived from this software without specific prior written permission.
+%
+% THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+% IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+% OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+% IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+% SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+% PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+% OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+% WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+% OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+% ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+% 
+% $Id: zsymbol.mf,v 1.2 2007-02-16 13:22:02 mike Exp $
+%
+
+iff known val: cmchar "Triple rightward arrow";
+compute_spread(.45x_height#,.55x_height#);
+beginchar(val,18u#,v_center(2spread#+rule_thickness#));
+adjust_fit(0,0); pickup rule.nib;
+lft x1=hround u-eps; x1=x2=x3; x11=x12=x13=w-x1;
+y1=y11; y2=y12; y3=y13; y1-y2=y2-y3=vround spread; y2=math_axis;
+draw z1--z11; draw z2--z12; draw z3--z13;  % bars
+pickup crisp.nib; rt x0=hround(w-u)+eps; y0=good.y math_axis;
+pos4(rule_thickness,0); pos5(rule_thickness,0);
+y4-y1=y3-y5=.24asc_height+eps; x4=x5=x0-9u-eps;
+pos6(rule_thickness,angle(z5-z0)); z6l=z0;
+pos7(rule_thickness,angle(z4-z0)); z7l=z0;
+z9=.381966[.5[z4,z5],z0];
+erase filldraw z0..{z4-z9}z4--(w,y4)
+ --(w,y5)--z5{z9-z5}..z0 & cycle;  % erase excess
+numeric t; path p; p=z5l{z9-z5}..z7r;
+t=xpart(p intersectiontimes((0,y0)--(w,y0)));
+filldraw z0..{z5-z9}z5r--subpath (0,t) of\\(z5l{z9-z5}..z7r)
+ --subpath (t,0) of\\(z4l{z9-z4}..z6r)--z4r{z9-z4}..z0 & cycle;  % arrowhead
+penlabels(0,1,2,3,4,5,6,7,8,9,11,12,13); endchar;
+
+iff known project: cmchar "Projection sign";
+beginchar(project,9u#,asc_height#,asc_depth#);
+adjust_fit(0,0); pickup crisp.nib;
+pos1(rule_thickness,0); pos2(rule_thickness,0);
+pos3(bar,90); pos4(bar,90);
+lft x1l=hround(.5w-.5rule_thickness); y1-.5rule_thickness=-d;
+x0=x1=x2; top y0=h; x0-x3=x4-x0=3u+eps;
+y3=y4=y0-.24asc_height-eps;
+pos5(bar,angle(z4-z0)); z5l=z0;
+pos6(bar,angle(z3-z0)); z6l=z0;
+numeric t; path p; p=z4l..{x0-x4,2(y0-y4)}z6r;
+t=xpart(p intersectiontimes((x2r,-d)--(x2r,h))); y2=ypart point t of p;
+filldraw z0{x4-x0,2(y4-y0)}..z4r
+ --subpath (0,t) of\\(z4l..{x0-x4,2(y0-y4)}z6r)
+ --z2r---z1r..z1l---(x2l,y0)--cycle;  % arrowhead and stem
+penlabels(0,1,2,3,4,5,6); endchar;
+
+iff known extract: cmchar "Extraction sign";
+beginchar(extract,9u#,asc_height#,asc_depth#);
+adjust_fit(0,0); pickup crisp.nib;
+pos1(rule_thickness,0); pos2(rule_thickness,0);
+pos3(bar,90); pos4(bar,90);
+lft x1l=hround(.5w-.5rule_thickness); y1-.5rule_thickness=-d;
+x0=x1=x2; top y0=h; x0-x3=x4-x0=3u+eps;
+y3=y4=y0-.24asc_height-eps;
+pos5(bar,angle(z4-z0)); z5l=z0;
+pos6(bar,angle(z3-z0)); z6l=z0;
+numeric t; path p; p=z4l..{x0-x4,2(y0-y4)}z6r;
+t=xpart(p intersectiontimes((x2r,-d)--(x2r,h))); y2=ypart point t of p;
+filldraw z0{x3-x0,2(y3-y0)}..z3r
+ --subpath (0,t) of\\(z3l..{x0-x3,2(y0-y3)}z5r)
+ --z2l---z1l..z1r---(x2r,y0)--cycle;  % arrowhead and stem
+penlabels(0,1,2,3,4,5,6); endchar;
+
+iff known restrict: cmchar "Restriction sign";
+compute_spread(5/4x_height#,3/2x_height#);
+beginchar(restrict,14u#,v_center(spread#+rule_thickness#));
+adjust_fit(0,0); pickup rule.nib; autorounded;
+lft x2=hround 1.5u-eps; x1=x3=w-x2;
+y1-y3=spread; y2=.5[y1,y3]=math_axis;
+draw z1--z2--z3--z1;
+labels(1,2,3); endchar;
+
+iff known corestrict: cmchar "Corestriction sign";
+compute_spread(5/4x_height#,3/2x_height#);
+beginchar(corestrict,14u#,v_center(spread#+rule_thickness#));
+adjust_fit(0,0); pickup rule.nib; autorounded;
+lft x1=hround 1.5u-eps; x3=x1; x2=w-x1;
+y1-y3=spread; y2=.5[y1,y3]=math_axis;
+draw z1--z2--z3--z1;
+labels(1,2,3); endchar;
+
+iff known anti_restrict: cmchar "Anti-restriction sign";
+compute_spread(5/4x_height#,3/2x_height#);
+beginchar(anti_restrict,14u#,v_center(spread#+rule_thickness#));
+adjust_fit(0,0); pickup rule.nib; autorounded;
+lft x2=hround 1.5u-eps; x1=x3=x4=w-x2;
+y1-y3=spread; y2=y4=.5[y1,y3]=math_axis;
+draw z1--z2--z3--z1;
+draw z2--z4;
+labels(1,2,3,4); endchar;
+
+iff known anti_corestrict: cmchar "Anti-corestriction sign";
+compute_spread(5/4x_height#,3/2x_height#);
+beginchar(anti_corestrict,14u#,v_center(spread#+rule_thickness#));
+adjust_fit(0,0); pickup rule.nib; autorounded;
+lft x1=hround 1.5u-eps; x3=x4=x1; x2=w-x1;
+y1-y3=spread; y2=y4=.5[y1,y3]=math_axis;
+draw z1--z2--z3--z1;
+draw z2--z4;
+labels(1,2,3,4); endchar;
+
+iff known sq_sub: cmchar "Square subset sign";
+compute_spread(5/4x_height#,3/2x_height#);
+beginchar(sq_sub,14u#,v_center(spread#+rule_thickness#));
+adjust_fit(0,0); pickup rule.nib; autorounded;
+x1=x4=hround(w-1.5u)+eps; lft x2=hround(1.5u+oo); x3=x2;
+y1-y4=spread; .5[y1,y4]=math_axis; y2=y1; y3=y4;
+draw z1--z2--z3--z4;  % bars and stem
+labels(1,2,3,4); endchar;
+
+iff known este: cmchar "Square membership sign";
+compute_spread(5/4x_height#,3/2x_height#);
+beginchar(este,14u#,v_center(spread#+rule_thickness#));
+adjust_fit(0,0); pickup rule.nib; autorounded;
+x1=x4=x6=hround(w-1.5u)+eps; lft x2=hround(1.5u+oo); x3=x5=x2;
+y1-y4=spread; .5[y1,y4]=y5=y6=math_axis; y2=y1; y3=y4;
+draw z1--z2--z3--z4;  % bars and stem
+draw z5--z6;  % midline
+labels(1,2,3,4,5,6); endchar;
+
+iff known limage: cmchar "Left image bracket";
+% The parenthesis part of this is a monoweight version of that in cmr.
+beginchar(limage,7u#,body_height#,paren_depth#);
+adjust_fit(0,0); pickup rule.nib; autorounded;
+rt x1=hround(w-u)+eps; x3=x1; lft x2=hround(2u)-eps;
+top y1=h+eps; y2=.5[y1,y3]=math_axis;
+draw z1{3(x2-x1),y2-y1}...z2...{3(x3-x2),y3-y2}z3--z1;
+labels(1,2,3); endchar;
+
+iff known rimage: cmchar "Right image bracket";
+beginchar(rimage,7u#,body_height#,paren_depth#);
+adjust_fit(0,0); pickup rule.nib; autorounded;
+lft x1=hround u-eps; x3=x1; rt x2=hround(w-2u)+eps;
+top y1=h+eps; y2=.5[y1,y3]=math_axis;
+draw z1{3(x2-x1),y2-y1}...z2...{3(x3-x2),y3-y2}z3--z1;
+labels(1,2,3); endchar;
+
+iff known lsem: cmchar "Left semantic bracket";
+beginchar(lsem,7u#,body_height#,paren_depth#);
+adjust_fit(0,0);
+pickup crisp.nib; pos1(rule_thickness,0); pos2(rule_thickness,0);
+top y1=h; bot y2=-d; lft x1l=lft x2l=hround(2u-.5rule_thickness)-1-eps;
+filldraw stroke z1e--z2e;  % left stem
+pos7(rule_thickness,0); pos8(rule_thickness,0);
+top y7=h; bot y8=-d; lft x7l=lft x8l=hround(4.5u-.5rule_thickness)-1-eps;
+filldraw stroke z7e--z8e;  % right stem
+pos3(rule_thickness,90); pos4(rule_thickness,90);
+pos5(rule_thickness,90); pos6(rule_thickness,90);
+x3=x5=x1l; rt x4=rt x6=ceiling(w-.4u)+eps; y3r=y4r=y1; y5l=y6l=y2;
+filldraw stroke z3e--z4e;  % upper bar
+filldraw stroke z5e--z6e;  % lower bar
+penlabels(1,2,3,4,5,6,7,8); endchar;
+
+iff known rsem: cmchar "Right semantic bracket";
+beginchar(rsem,7u#,body_height#,paren_depth#);
+adjust_fit(0,0);
+pickup crisp.nib; pos1(rule_thickness,0); pos2(rule_thickness,0);
+top y1=h; bot y2=-d; rt x1r=rt x2r=hround(w-2u+.5rule_thickness)+1+eps;
+filldraw stroke z1e--z2e;  % right stem
+pos7(rule_thickness,0); pos8(rule_thickness,0);
+top y7=h; bot y8=-d; rt x7r=rt x8r=hround(w-4.5u+.5rule_thickness)+1+eps;
+filldraw stroke z7e--z8e;  % left stem
+pos3(rule_thickness,90); pos4(rule_thickness,90);
+pos5(rule_thickness,90); pos6(rule_thickness,90);
+x3=x5=x1r; lft x4=lft x6=floor .4u-eps; y3r=y4r=y1; y5l=y6l=y2;
+filldraw stroke z3e--z4e;  % upper bar
+filldraw stroke z5e--z6e;  % lower bar
+penlabels(1,2,3,4,5,6,7,8); endchar;
+
+iff known ltracket: cmchar "Left triangular bracket";
+beginchar(ltracket,7u#,body_height#,paren_depth#);
+adjust_fit(0,0); pickup rule.nib; autorounded;
+rt x1=hround(w-u)+eps; x1=x3; lft x2=hround 2u-1-eps;
+top y1=h+eps; .5[y1,y3]=y2=math_axis;
+draw z1--z2--z3--z1;  % diagonals and stem
+labels(1,2,3); endchar;
+
+iff known rtracket: cmchar "Right triangular bracket";
+beginchar(rtracket,7u#,body_height#,paren_depth#);
+adjust_fit(0,0); pickup rule.nib; autorounded;
+rt(w-x1)=hround(w-u)+eps; x1=x3; lft(w-x2)=hround 2u-1-eps;
+top y1=h+eps; .5[y1,y3]=y2=math_axis;
+draw z1--z2--z3--z1;  % diagonals and stem
+labels(1,2,3); endchar;
+
+iff known ldata: cmchar "Left data-type bracket";
+beginchar(ldata,11u#,body_height#,paren_depth#);
+adjust_fit(0,0); pickup rule.nib; autorounded;
+rt x1=hround(6u)+eps; x1=x3; lft x2=hround 2u-1-eps;
+rt x4=hround(10u)+eps; x4=x6; lft x5=hround 6u-1-eps;
+top y4=top y1=h+eps; .5[y4,y6]=.5[y1,y3]=y5=y2=math_axis;
+draw z1--z2--z3; draw z4--z5--z6;
+labels(1,2,3,4,5,6); endchar;
+
+iff known rdata: cmchar "Right data-type bracket";
+beginchar(rdata,11u#,body_height#,paren_depth#);
+adjust_fit(0,0); pickup rule.nib; autorounded;
+rt(w-x1)=hround(6u)+eps; x1=x3; lft(w-x2)=hround 2u-1-eps;
+rt(w-x4)=hround(10u)+eps; x4=x6; lft(w-x5)=hround 6u-1-eps;
+top y4=top y1=h+eps; .5[y4,y6]=.5[y1,y3]=y5=y2=math_axis;
+draw z1--z2--z3; draw z4--z5--z6;
+labels(1,2,3,4,5,6); endchar;
+
+iff known fat_semi: cmchar "Fat semicolon";
+beginchar(fat_semi,6u#,0.5[x_height#,asc_height#],comma_depth#);
+adjust_fit(0,0); pickup rule.nib; autorounded;
+lft x3=lft x7=hround u; rt x1=rt x5=hround(w-u); x2=x4=x6=x8=w/2;
+top y4=h; bot y6=0; y4-y2=y8-y6=x1-x3; y1=y3=0.5[y2,y4];
+y5=y7=0.5[y6,y8]; lft x9=2u; bot y9=-d;
+draw z1..z2..z3..z4..cycle;
+draw z5{down}..z6..z7..z8..z5{down}..{curl 0}z9;
+labels(1,2,3,4,5,6,7,8,9); endchar;
+
+iff known empty_set: cmchar "Empty set sign";
+beginchar(empty_set,14u#,12u#,0);
+adjust_fit(0,0); pickup rule.nib; autorounded;
+lft x6=hround u; x2=w-x6; bot y4=0; top y8=h;
+z9=(x2,y8); z10=(x6,y4);
+circle_points; draw_circle;
+draw z9--z10;
+labels (1,2,3,4,5,6,7,8,9,10); endchar;
+
+iff known cat: cmchar "Catenation sign";
+beginchar(cat,12u#,asc_height#,0);
+adjust_fit(0,0); pickup fine.nib;
+numeric light_stem; light_stem=Vround .5[vair,stem];
+x1-.5hair=hround u; y1-.5hair=vround(h-.3x_height-.5hair); x3=w-x1; y3=y1;
+pos2(light_stem,90); x2=.5w; y2r=good.y h;
+numeric theta; theta=angle((z2-z1) yscaled 3);
+pos1(hair,90+theta); pos3(hair,90-theta);
+filldraw z1l{dir theta}...z2l...{dir-theta}z3l
+ ..z3r{-dir-theta}...z2r...{-dir theta}z1r..cycle;  % arc
+penlabels(1,2,3); endchar;
+
+iff known uminus: cmchar "Bag difference sign";
+beginchar(uminus,12u#,.8asc_height#,0); autorounded;
+adjust_fit(if monospace:-.5u#,-.5u# else: 0,0 fi); pickup rule.nib;
+lft x1=hround u; x2=x1; x3=w-x3; x4=x5=w-x1;
+y1=good.y h+o; bot y3=-o; y2=y4=2/3[y1,y3]; y5=y1;
+draw z1---z2...z3...z4---z5;  % stems and cup
+y8=y9=.47[y1,y3]; x8=w-x9=x1+2rule_thickness+eps;
+x6=x7=x3; .5[y6,y7]=y8; y7-y6=x9-x8;
+draw z8--z9;  % enclosed minus sign
+labels(1,2,3,4,5,6,7,8,9); endchar;

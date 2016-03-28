@@ -1,0 +1,126 @@
+%
+% test7.in
+%
+% This file is part of fuzz2000
+% Copyright (c) 1982--2006 J. M. Spivey
+% All rights reserved
+%
+% Redistribution and use in source and binary forms, with or without
+% modification, are permitted provided that the following conditions are met:
+%
+% 1. Redistributions of source code must retain the above copyright notice,
+%    this list of conditions and the following disclaimer.
+% 2. Redistributions in binary form must reproduce the above copyright notice,
+%    this list of conditions and the following disclaimer in the documentation
+%    and/or other materials provided with the distribution.
+% 3. The name of the author may not be used to endorse or promote products
+%    derived from this software without specific prior written permission.
+%
+% THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+% IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+% OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+% IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+% SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+% PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+% OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+% WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+% OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+% ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+% 
+% $Id: test7.in,v 1.2 2007-02-16 13:22:02 mike Exp $
+%
+
+\documentstyle[12pt,fuzz]{article}
+\begin{document}
+
+%% New language features added in V2
+
+%% Let predicates and expressions
+
+\begin{zed}
+  foo == (\LET x == 3 @ (\LET y == x @ x+y))
+\also
+  baz == (\LET (\_ + \_) == (\lambda x, y: \nat @ \{x, y\}) @ foo + foo)
+\also
+  \LET pop == foo @ foo = pop
+\end{zed}
+
+%% Renaming a la mode
+\begin{schema}{A} x, y: \nat \end{schema}
+
+\begin{zed}
+  R == \{~A; A[z/x] | z = x~\}
+\end{zed}
+
+\begin{schema}{B} A; A[z/x] \end{schema}
+
+%% Underlined infixes
+\begin{zed}
+  \exists R: \num \rel \num @ \forall x, y: \num @ x \inrel{R} y
+\end{zed}
+
+\begin{zed}
+  asdf == 0 + (\IF 1 = 2 \THEN 3 \ELSE 4)
+\end{zed}
+
+\begin{schema}{State}
+  x, y: \nat
+\end{schema}
+
+\begin{schema}{FetchX}
+  \Delta State\\
+  val!: \nat
+\where
+  val! = x' = x
+\end{schema}
+
+\begin{schema}{IncY}
+  \Delta State\\
+  val?: \nat
+\where
+  y' = y + val?
+\end{schema}
+
+\begin{zed} Add \defs FetchX \pipe IncY \end{zed}
+
+\begin{zed}
+  a == \emptyset[\num \cross \num] \oplus \emptyset\\
+  b == \{ 1, 3, 5 \} \extract \langle 3, 1, 4, 1, 5, 9, 3 \rangle\\
+\also
+  squash~\{1 \mapsto 2, 3 \mapsto 4\} = \langle 2, 4 \rangle
+\also
+  \forall R: \{ (\_\prefix\_), (\_\suffix\_), (\_\inseq\_)\} @
+    \langle \rangle \inrel{R} \langle 54 \rangle
+\also
+  \forall x: \bag (\bag \nat) @ 
+    count~x~\lbag3\rbag = x \bcount \lbag3\rbag
+\also
+  \lbag 1, 2, 3 \rbag \subbageq 4 \otimes \lbag 2, 3 \rbag
+\also
+  \lbag 1, 2, 3 \rbag \uminus \lbag 2 \rbag = \lbag 1, 3 \rbag
+\also
+  2 \inbag \lbag 1, 2 \rbag
+\end{zed}
+
+\begin{schema}{Set}[X]
+  val: \power X
+\end{schema}
+
+\begin{schema}{Insert}[X]
+  \Delta Set[X]\\
+  in?: X
+\where
+  val' = val \cup \{in?\}
+\end{schema}
+
+\begin{zed}
+  q == \{\{1\} \mapsto \empty\} \cup (\id \_)
+\end{zed}
+
+\begin{zed}
+  \lbag 1, 2, 3 \rbag \uminus \lbag 2 \rbag = \lbag 1, 3 \rbag
+\also
+  2 \inbag \lbag 1, 2 \rbag
+\end{zed}
+
+\end{document}

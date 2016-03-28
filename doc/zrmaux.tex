@@ -1,0 +1,226 @@
+%
+% zrmaux.tex
+%
+% This file is part of fuzz2000
+% Copyright (c) 1982--2006 J. M. Spivey
+% All rights reserved
+%
+% Redistribution and use in source and binary forms, with or without
+% modification, are permitted provided that the following conditions are met:
+%
+% 1. Redistributions of source code must retain the above copyright notice,
+%    this list of conditions and the following disclaimer.
+% 2. Redistributions in binary form must reproduce the above copyright notice,
+%    this list of conditions and the following disclaimer in the documentation
+%    and/or other materials provided with the distribution.
+% 3. The name of the author may not be used to endorse or promote products
+%    derived from this software without specific prior written permission.
+%
+% THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+% IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+% OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+% IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+% SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+% PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+% OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+% WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+% OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+% ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+% 
+% $Id: zrmaux.tex,v 1.2 2007-02-16 12:45:13 mike Exp $
+%
+
+\relax 
+\@writefile{toc}{\string\contentsline\space {chapter}{Preface}{vii}}
+\@writefile{toc}{\string\contentsline\space {chapter}{\string\numberline\space {1}Tutorial Introduction}{1}}
+\newlabel{c:tutorial}{{1}{1}}
+\@writefile{toc}{\string\contentsline\space {section}{\string\numberline\space {1.1}What is a formal specification?}{1}}
+\@writefile{toc}{\string\contentsline\space {section}{\string\numberline\space {1.2}The birthday book}{3}}
+\newlabel{bb}{{1.2}{3}}
+\@writefile{toc}{\string\contentsline\space {section}{\string\numberline\space {1.3}Strengthening the specification}{7}}
+\@writefile{toc}{\string\contentsline\space {section}{\string\numberline\space {1.4}From specifications to designs}{10}}
+\@writefile{toc}{\string\contentsline\space {section}{\string\numberline\space {1.5}Implementing the birthday book}{11}}
+\@writefile{toc}{\string\contentsline\space {section}{\string\numberline\space {1.6}A simple checkpointing scheme}{17}}
+\@writefile{toc}{\string\contentsline\space {chapter}{\string\numberline\space {2}Background}{24}}
+\newlabel{c:background}{{2}{24}}
+\@writefile{toc}{\string\contentsline\space {section}{\string\numberline\space {2.1}Objects and types}{24}}
+\newlabel{s:types}{{2.1}{24}}
+\@writefile{toc}{\string\contentsline\space {subsection}{\string\numberline\space {2.1.1}Sets and set types}{25}}
+\@writefile{toc}{\string\contentsline\space {subsection}{\string\numberline\space {2.1.2}Tuples and Cartesian product types}{25}}
+\@writefile{toc}{\string\contentsline\space {subsection}{\string\numberline\space {2.1.3}Bindings and schema types}{26}}
+\@writefile{toc}{\string\contentsline\space {subsection}{\string\numberline\space {2.1.4}Relations and functions}{27}}
+\@writefile{toc}{\string\contentsline\space {section}{\string\numberline\space {2.2}Properties and schemas}{28}}
+\newlabel{s:propschema}{{2.2}{28}}
+\@writefile{toc}{\string\contentsline\space {subsection}{\string\numberline\space {2.2.1}Combining properties}{29}}
+\@writefile{toc}{\string\contentsline\space {subsection}{\string\numberline\space {2.2.2}Decorations and renaming}{30}}
+\newlabel{ss:decor}{{2.2.2}{30}}
+\@writefile{toc}{\string\contentsline\space {subsection}{\string\numberline\space {2.2.3}Combining schemas}{31}}
+\newlabel{ss:combschema}{{2.2.3}{31}}
+\@writefile{toc}{\string\contentsline\space {section}{\string\numberline\space {2.3}Variables and scope}{34}}
+\newlabel{s:scope}{{2.3}{34}}
+\@writefile{toc}{\string\contentsline\space {subsection}{\string\numberline\space {2.3.1}Nested scopes}{35}}
+\newlabel{p:multidec}{{2.3.1}{36}}
+\@writefile{toc}{\string\contentsline\space {subsection}{\string\numberline\space {2.3.2}Schemas with global variables}{36}}
+\newlabel{ss:glovar}{{2.3.2}{36}}
+\@writefile{toc}{\string\contentsline\space {section}{\string\numberline\space {2.4}Generic constructions}{38}}
+\newlabel{s:generics}{{2.4}{38}}
+\@writefile{toc}{\string\contentsline\space {section}{\string\numberline\space {2.5}Partially-defined expressions}{40}}
+\newlabel{s:partial}{{2.5}{40}}
+\@writefile{toc}{\string\contentsline\space {chapter}{\string\numberline\space {3}The Z Language}{42}}
+\newlabel{c:language}{{3}{42}}
+\@writefile{toc}{\string\contentsline\space {section}{\string\numberline\space {3.1}Syntactic conventions}{42}}
+\@writefile{toc}{\string\contentsline\space {subsection}{\string\numberline\space {3.1.1}Words, decorations and identifiers}{43}}
+\@writefile{toc}{\string\contentsline\space {subsection}{\string\numberline\space {3.1.2}Operator symbols}{43}}
+\newlabel{ss:infix}{{3.1.2}{43}}
+\@writefile{toc}{\string\contentsline\space {paragraph}{Standard operator symbols}{46}}
+\newlabel{p:stdsym}{{3.1.2}{46}}
+\@writefile{toc}{\string\contentsline\space {subsection}{\string\numberline\space {3.1.3}Layout}{46}}
+\newlabel{ss:layout}{{3.1.3}{46}}
+\@writefile{toc}{\string\contentsline\space {section}{\string\numberline\space {3.2}Specifications}{47}}
+\newlabel{s:spec}{{3.2}{47}}
+\@writefile{toc}{\string\contentsline\space {subsection}{\string\numberline\space {3.2.1}Basic type definitions}{47}}
+\newlabel{ss:basictype}{{3.2.1}{47}}
+\@writefile{toc}{\string\contentsline\space {subsection}{\string\numberline\space {3.2.2}Axiomatic descriptions}{48}}
+\newlabel{ss:axdef}{{3.2.2}{48}}
+\@writefile{toc}{\string\contentsline\space {subsection}{\string\numberline\space {3.2.3}Constraints}{48}}
+\newlabel{ss:constraint}{{3.2.3}{48}}
+\@writefile{toc}{\string\contentsline\space {subsection}{\string\numberline\space {3.2.4}Schema definitions}{49}}
+\newlabel{ss:schemadef}{{3.2.4}{49}}
+\@writefile{toc}{\string\contentsline\space {subsection}{\string\numberline\space {3.2.5}Abbreviation definitions}{50}}
+\newlabel{ss:abbrev}{{3.2.5}{50}}
+\@writefile{toc}{\string\contentsline\space {section}{\string\numberline\space {3.3}Schema references}{50}}
+\newlabel{s:schemaref}{{3.3}{50}}
+\@writefile{toc}{\string\contentsline\space {section}{\string\numberline\space {3.4}Declarations}{51}}
+\newlabel{s:decl}{{3.4}{51}}
+\newlabel{p:combdecl}{{3.4}{51}}
+\@writefile{toc}{\string\contentsline\space {subsection}{\string\numberline\space {3.4.1}Characteristic tuples}{52}}
+\newlabel{ss:chartuple}{{3.4.1}{52}}
+\@writefile{toc}{\string\contentsline\space {paragraph}{Examples}{53}}
+\@writefile{toc}{\string\contentsline\space {section}{\string\numberline\space {3.5}Schema texts}{53}}
+\newlabel{s:schematext}{{3.5}{53}}
+\@writefile{toc}{\string\contentsline\space {section}{\string\numberline\space {3.6}Expressions}{54}}
+\newlabel{s:exp}{{3.6}{54}}
+\newlabel{p:tuple}{{3.6}{55}}
+\newlabel{p:Pcross}{{3.6}{56}}
+\newlabel{p:setcomp}{{3.6}{57}}
+\newlabel{p:lambdamu}{{3.6}{58}}
+\newlabel{p:letexp}{{3.6}{59}}
+\newlabel{p:apply}{{3.6}{60}}
+\newlabel{p:select}{{3.6}{61}}
+\newlabel{p:theta}{{3.6}{62}}
+\newlabel{p:srefexp}{{3.6}{63}}
+\newlabel{p:condexp}{{3.6}{64}}
+\newlabel{p:operators}{{3.6}{65}}
+\newlabel{p:displays}{{3.6}{66}}
+\@writefile{toc}{\string\contentsline\space {section}{\string\numberline\space {3.7}Predicates}{67}}
+\newlabel{s:pred}{{3.7}{67}}
+\newlabel{p:eqmem}{{3.7}{68}}
+\newlabel{p:propcon}{{3.7}{69}}
+\newlabel{p:quant}{{3.7}{70}}
+\newlabel{p:letpred}{{3.7}{71}}
+\newlabel{p:srefpred}{{3.7}{72}}
+\newlabel{p:relations}{{3.7}{73}}
+\@writefile{toc}{\string\contentsline\space {section}{\string\numberline\space {3.8}Schema expressions}{74}}
+\newlabel{s:schemaexp}{{3.8}{74}}
+\newlabel{p:slogic}{{3.8}{75}}
+\newlabel{p:hide}{{3.8}{76}}
+\newlabel{p:pre}{{3.8}{77}}
+\newlabel{p:opcomp}{{3.8}{78}}
+\@writefile{toc}{\string\contentsline\space {section}{\string\numberline\space {3.9}Generics}{79}}
+\newlabel{s:gendefs}{{3.9}{79}}
+\@writefile{toc}{\string\contentsline\space {subsection}{\string\numberline\space {3.9.1}Generic schemas}{79}}
+\newlabel{ss:genschema}{{3.9.1}{79}}
+\@writefile{toc}{\string\contentsline\space {subsection}{\string\numberline\space {3.9.2}Generic constants}{80}}
+\newlabel{ss:genconst}{{3.9.2}{80}}
+\newlabel{p:genuse}{{3.9.2}{80}}
+\newlabel{p:undetvar}{{3.9.2}{81}}
+\@writefile{toc}{\string\contentsline\space {section}{\string\numberline\space {3.10}Free types}{82}}
+\newlabel{s:freetype}{{3.10}{82}}
+\newlabel{p:cocoeq}{{3.10}{82}}
+\@writefile{toc}{\string\contentsline\space {subsection}{\string\numberline\space {3.10.1}Example: binary trees}{83}}
+\@writefile{toc}{\string\contentsline\space {subsection}{\string\numberline\space {3.10.2}Consistency}{84}}
+\newlabel{ss:consistency}{{3.10.2}{84}}
+\@writefile{toc}{\string\contentsline\space {chapter}{\string\numberline\space {4}The Mathematical Tool-kit}{86}}
+\newlabel{c:library}{{4}{86}}
+\newlabel{p:symlist+}{{4}{86}}
+\newlabel{p:symlist-}{{4}{88}}
+\newlabel{p:forward}{{4}{88}}
+\@writefile{toc}{\string\contentsline\space {section}{\string\numberline\space {4.1}Sets}{89}}
+\newlabel{s:setlib}{{4.1}{89}}
+\newlabel{p:10}{{4.1}{89}}
+\newlabel{p:20}{{4.1}{90}}
+\newlabel{p:40}{{4.1}{91}}
+\newlabel{p:60}{{4.1}{92}}
+\newlabel{p:70}{{4.1}{93}}
+\@writefile{toc}{\string\contentsline\space {paragraph}{Order properties of set operations}{94}}
+\newlabel{p:80}{{4.1}{94}}
+\@writefile{toc}{\string\contentsline\space {section}{\string\numberline\space {4.2}Relations}{95}}
+\newlabel{s:rellib}{{4.2}{95}}
+\newlabel{p:1010}{{4.2}{95}}
+\newlabel{p:1020}{{4.2}{96}}
+\newlabel{p:1030}{{4.2}{97}}
+\newlabel{p:1040}{{4.2}{98}}
+\newlabel{p:1050}{{4.2}{99}}
+\newlabel{p:1060}{{4.2}{100}}
+\newlabel{p:1070}{{4.2}{101}}
+\newlabel{p:1075}{{4.2}{102}}
+\newlabel{p:1080}{{4.2}{103}}
+\@writefile{toc}{\string\contentsline\space {paragraph}{Monotonic operations}{104}}
+\newlabel{p:1090}{{4.2}{104}}
+\newlabel{p:mono}{{4.2}{104}}
+\@writefile{toc}{\string\contentsline\space {section}{\string\numberline\space {4.3}Functions}{105}}
+\newlabel{s:funlib}{{4.3}{105}}
+\newlabel{p:2010}{{4.3}{105}}
+\newlabel{p:2050}{{4.3}{107}}
+\@writefile{toc}{\string\contentsline\space {paragraph}{Relational operations on functions}{107}}
+\@writefile{toc}{\string\contentsline\space {section}{\string\numberline\space {4.4}Numbers and finiteness}{108}}
+\newlabel{s:numlib}{{4.4}{108}}
+\newlabel{p:3010}{{4.4}{108}}
+\newlabel{p:3020}{{4.4}{109}}
+\newlabel{p:iter}{{4.4}{110}}
+\newlabel{p:3030}{{4.4}{110}}
+\newlabel{p:3050}{{4.4}{111}}
+\newlabel{p:3060}{{4.4}{112}}
+\newlabel{p:3070}{{4.4}{113}}
+\@writefile{toc}{\string\contentsline\space {paragraph}{Proof by induction}{114}}
+\newlabel{p:3080}{{4.4}{114}}
+\@writefile{toc}{\string\contentsline\space {section}{\string\numberline\space {4.5}Sequences}{115}}
+\newlabel{s:seqlib}{{4.5}{115}}
+\newlabel{p:seq}{{4.5}{115}}
+\newlabel{p:4010}{{4.5}{115}}
+\newlabel{p:4020}{{4.5}{116}}
+\newlabel{p:4040}{{4.5}{117}}
+\newlabel{p:4060}{{4.5}{118}}
+\newlabel{p:4065}{{4.5}{119}}
+\newlabel{p:4090}{{4.5}{120}}
+\@writefile{toc}{\string\contentsline\space {paragraph}{Relational operations on sequences}{120}}
+\newlabel{p:4070}{{4.5}{121}}
+\newlabel{p:4080}{{4.5}{122}}
+\newlabel{p:4100}{{4.5}{123}}
+\@writefile{toc}{\string\contentsline\space {paragraph}{Induction for sequences}{123}}
+\@writefile{toc}{\string\contentsline\space {section}{\string\numberline\space {4.6}Bags}{124}}
+\newlabel{s:baglib}{{4.6}{124}}
+\newlabel{p:bag}{{4.6}{124}}
+\newlabel{p:5010}{{4.6}{124}}
+\newlabel{p:inbag}{{4.6}{125}}
+\newlabel{p:5015}{{4.6}{125}}
+\newlabel{p:5020}{{4.6}{126}}
+\newlabel{p:5030}{{4.6}{127}}
+\@writefile{toc}{\string\contentsline\space {chapter}{\string\numberline\space {5}Sequential Systems}{128}}
+\newlabel{c:seqprog}{{5}{128}}
+\@writefile{toc}{\string\contentsline\space {section}{\string\numberline\space {5.1}States and operations}{128}}
+\@writefile{toc}{\string\contentsline\space {section}{\string\numberline\space {5.2}The \char 1\ and \char 4\ conventions}{131}}
+\newlabel{s:deltaxi}{{5.2}{131}}
+\@writefile{toc}{\string\contentsline\space {section}{\string\numberline\space {5.3}Loose specifications}{133}}
+\newlabel{s:loose}{{5.3}{133}}
+\@writefile{toc}{\string\contentsline\space {section}{\string\numberline\space {5.4}Sequential composition and piping}{134}}
+\@writefile{toc}{\string\contentsline\space {section}{\string\numberline\space {5.5}Operation refinement}{135}}
+\@writefile{toc}{\string\contentsline\space {section}{\string\numberline\space {5.6}Data refinement}{137}}
+\newlabel{s:dataref}{{5.6}{137}}
+\@writefile{toc}{\string\contentsline\space {section}{\string\numberline\space {5.7}Functional data refinement}{140}}
+\@writefile{toc}{\string\contentsline\space {chapter}{\string\numberline\space {6}Syntax Summary}{142}}
+\newlabel{c:syntax}{{6}{142}}
+\@writefile{toc}{\string\contentsline\space {chapter}{Changes from the first edition}{147}}
+\@writefile{toc}{\string\contentsline\space {chapter}{Glossary}{149}}
+\@writefile{toc}{\string\contentsline\space {chapter}{Index of symbols}{153}}
+\@writefile{toc}{\string\contentsline\space {chapter}{General index}{154}}

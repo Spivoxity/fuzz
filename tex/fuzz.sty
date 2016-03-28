@@ -1,0 +1,357 @@
+%
+% fuzz.sty
+%
+% This file is part of fuzz2000
+% Copyright (c) 1982--2006 J. M. Spivey
+% All rights reserved
+%
+% Redistribution and use in source and binary forms, with or without
+% modification, are permitted provided that the following conditions are met:
+%
+% 1. Redistributions of source code must retain the above copyright notice,
+%    this list of conditions and the following disclaimer.
+% 2. Redistributions in binary form must reproduce the above copyright notice,
+%    this list of conditions and the following disclaimer in the documentation
+%    and/or other materials provided with the distribution.
+% 3. The name of the author may not be used to endorse or promote products
+%    derived from this software without specific prior written permission.
+%
+% THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+% IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+% OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+% IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+% SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+% PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+% OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+% WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+% OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+% ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+% 
+% $Id: fuzz.sty,v 1.2 2007-02-16 13:22:02 mike Exp $
+%
+
+\ProvidesPackage{fuzz}[1997/03/17]
+
+\def\fuzz{{\large\it f\kern0.1em}{\normalsize\sc uzz}}
+
+%
+% MATH FONTS AND FAMILIES
+%
+% The Z symbols font is loaded in every conceivable size.
+%
+
+\DeclareFontFamily{U}{oxsz}{}
+\DeclareFontShape{U}{oxsz}{m}{n}{%
+    <5> oxsz5
+    <6> oxsz6
+    <7> oxsz7
+    <8> oxsz8
+    <9> oxsz9
+    <10> <10.95> <12> <14.4> <17.28> <20.74> %
+				<24.88> <29.86> <35.83> oxsz10
+    }{}
+\DeclareSymbolFont{zed}{U}{oxsz}{m}{n}
+
+%
+% MATHCODES
+%
+% The mathcodes for the letters A, ..., Z, a, ..., z are changed to
+% generate text italic rather than math italic by default. This makes
+% multi-character identifiers look better. The mathcode for 'c'
+% is set to "7000 (variable family) + "?00 (text italic) + c.
+%
+
+% \setmcodes{begin}{end}{base} -- assign successive mathcode to
+% characters BEGIN thru END, starting at BASE.
+\def\@setmcodes#1#2#3{{\count0=#1 \count1=#3
+  \loop \global\mathcode\count0=\count1 \ifnum \count0<#2
+  \advance\count0 by1 \advance\count1 by1 \repeat}}
+
+\DeclareSymbolFont{italic}{OT1}{\rmdefault}{m}{it}
+\let\mathit\undefined
+\DeclareSymbolFontAlphabet{\mathit}{italic}
+\edef\@tempa{\hexnumber@\symitalic}
+\@setmcodes{`A}{`Z}{"7\@tempa41}
+\@setmcodes{`a}{`z}{"7\@tempa61}
+
+%
+% COMMON SYMBOLS
+%
+% Here are some math symbols and conventions that are independent of
+% the symbol font.
+%
+
+% ~ gives a \, space in math mode
+\def~{\ifmmode\,\else\penalty\@M\ \fi}
+
+% Semicolon is active in math mode; it inserts a thick space
+\mathcode`\;="8000 % Makes ; active in math mode
+{\catcode`\;=\active \gdef;{\mathchar"3B\;}}
+
+% \@myop makes an operator, with a strut to defeat TeX's vertical adjustment.
+% (see TeXbook, Appendix G, verse 13, p. 444)
+\def\@myop#1{\mathop{\mathstrut{#1}}\nolimits}
+
+% This underscore is a bit wider than the one in Plain, and doesn't
+% have the little kern. In math mode, it still suffers from italic
+% corrections inserted because a preceding letter is not marked as a
+% text symbol (see TeXbook, Appendix G, verse 14, p. 444 and
+% verse 17, p. 445). But in such cases, you can write e.g. $"DISK\_POOL"$.
+\def\_{\leavevmode \ifmmode\else\kern0.06em\fi \vbox{\hrule width0.5em}}
+\mathcode`\"="8000
+\def\@kwote#1"{\hbox{\it #1}}
+{\catcode`\"=\active \global\let"=\@kwote}
+
+% @ and | are re-defined to produce \spot and \mid.
+\mathchardef\spot="320F
+\mathcode`\@=\spot
+\mathcode`\|=\mid
+
+% \bsup and \esup for superscripts
+\def\bsup#1\esup{^{#1}}
+
+% \inrel for underlined relations
+\def\inrel#1{\mathrel{\underline{#1}}}
+
+%
+% SCHEMAS, Etc.
+%
+% Here are environments for the various sorts of
+% displays which occur in Z documents. All displays are set
+% flush left, indented by \zedindent, by default \leftmargini.
+% schemas, etc, are made just wide enough to give equal margins
+% left and right.
+%
+% Some environments (schema, etc.) must not be split,
+% and others (argue) may be split arbitrarily. All generate alignment
+% displays, and penalties are used to control page breaks.
+%
+
+% Style parameters
+\newdimen\zedindent	\zedindent=\leftmargini
+\newdimen\zedleftsep	\zedleftsep=1em
+\newdimen\zedtab	\zedtab=2em
+\newdimen\zedbar	\zedbar=6em
+\newskip\zedskip	\zedskip=0.5\baselineskip plus0.333333\baselineskip
+				minus0.333333\baselineskip
+\def\zedsize{}
+
+% Internal variables
+\newcount\interzedlinepenalty \interzedlinepenalty=10000
+\newcount\preboxpenalty \preboxpenalty=0
+\newif\ifzt@p		\zt@pfalse
+
+\def\@jot{0.5\zedskip}
+
+\def\@narrow{\advance\linewidth by-\zedindent}
+
+\def\@zrulefill{\leaders\hrule height\arrayrulewidth\hfill}
+
+\def\@topline#1{\hbox to\linewidth{%
+  \vrule height\arrayrulewidth width\arrayrulewidth
+  \vrule height0pt depth\@jot width0pt
+  \hbox to\zedleftsep{\@zrulefill\thinspace}%
+  #1\thinspace\@zrulefill}}
+
+\def\@zedline{\omit \vrule height\arrayrulewidth width\linewidth \cr}
+
+\def\where{\@zskip\@jot
+  \omit \vrule height\arrayrulewidth width\zedbar \cr
+  \@zskip\@jot}
+
+\def\also{\crcr \noalign{\penalty\interdisplaylinepenalty \vskip\zedskip}}
+\def\@zskip#1{\crcr \omit \vrule height#1 width\arrayrulewidth \cr}
+\def\@zlign{\tabskip\z@skip\everycr{}} % \@lign missing in SliTeX
+
+% This new \t allows braces around numbers 10 and up but doesn't need them
+\let\tie=\t
+\def\t#1{\afterassignment\@t\count@=#1}
+\def\@t{\hskip\count@\zedtab}
+
+% \@setzsize allows size changing in math mode
+\def\@setzsize{\let\next=\@nomath\def\@nomath##1{}%
+  \skip0=\abovedisplayskip\skip1=\belowdisplayskip
+  \zedsize \let\@nomath=\next 
+  \abovedisplayskip=\skip0\belowdisplayskip=\skip1}
+
+\def\@zed{\ifvmode\@zleavevmode\fi
+  $$\global\zt@ptrue
+  \@setzsize
+  \advance\linewidth by-\zedindent
+  \advance\displayindent by\zedindent
+  \def\\{\crcr}% Must have \def and not \let for nested alignments.
+  \let\par=\relax
+  \tabskip=0pt}
+
+\def\@znoskip{\offinterlineskip
+  \everycr={\noalign{\ifzt@p \global\zt@pfalse
+    % Simulate interline glue
+      \ifdim\prevdepth>-1000pt \skip0=\normalbaselineskip
+        \advance\skip0by-\prevdepth \advance\skip0by-\ht\strutbox
+        \ifdim\skip0<\normallineskiplimit \vskip\normallineskip
+        \else \vskip\skip0 \fi\fi
+    \else \penalty\interzedlinepenalty \fi}}}
+
+\def\zed{\@zed\@znoskip\halign to\linewidth\bgroup
+  \strut$\@zlign##$\hfil \tabskip=0pt plus1fil\cr}
+\def\endzed{\crcr\egroup$$\global\@ignoretrue}
+
+\def\[{\begingroup\zed}
+\def\]{\crcr\egroup$$\endgroup\ignorespaces}
+
+\def\axdef{\def\also{\@zskip\zedskip}%
+  \predisplaypenalty=\preboxpenalty
+  \@zed\@znoskip \halign to\linewidth\bgroup
+    \strut \vrule width\arrayrulewidth \hskip\zedleftsep
+    $\@zlign##$\hfil \tabskip=0pt plus1fil\cr}
+\let\endaxdef=\endzed
+
+\def\schema#1{\@ifnextchar[{\@schema{#1}}{\@nschema{#1}}}
+\def\@schema#1[#2]{\@nschema{#1[#2]}}
+\def\@nschema#1{\@narrow\axdef \omit\@topline{$\strut#1$}\cr}
+\def\endschema{\@zskip\@jot \@zedline \endzed}
+
+\@namedef{schema*}{\@narrow\axdef \@zedline \@zskip\@jot}
+\expandafter\let\csname endschema*\endcsname=\endschema
+
+\def\gendef{\@ifnextchar[{\@gendef}{\@ngendef}}
+\def\@gendef[#1]{\@narrow\axdef \omit \setbox0=\hbox{$\strut[#1]$}%
+  \rlap{\raise\doublerulesep\@topline{\hskip\wd0}}\@topline{\box0}\cr}
+\def\@ngendef{\@narrow\axdef \@zedline \omit \hbox to\linewidth{\vrule
+  height\doublerulesep width\arrayrulewidth \@zrulefill}\cr \@zskip\@jot}
+\let\endgendef=\endschema
+
+\def\argue{\@zed \interzedlinepenalty=\interdisplaylinepenalty
+  \openup\@jot \halign to\linewidth\bgroup
+    \strut$\@zlign##$\hfil \tabskip=0pt plus1fil
+    &\hbox to0pt{\hss[\@zlign##\unskip]}\tabskip=0pt\cr
+    \noalign{\vskip-\@jot}}
+\let\endargue=\endzed
+
+% \because gives a reason in \argue on a line of its own.
+\def\because#1{\noalign{\vskip-\jot}&#1\cr}
+
+\def\syntax{\@zed\@znoskip \halign\bgroup
+  \strut$\@zlign##$\hfil &\hfil$\@zlign{}##{}$\hfil
+  &$\@zlign##$\hfil\cr}
+\let\endsyntax=\endzed
+
+% `infrule' environment: used for inference rules. The horizontal line is
+% generated by \derive: an optional argument contains the side-conditions
+% of the rule.
+\def\infrule{\@zed\@znoskip \halign\bgroup
+  \strut\quad$\@zlign##$\quad\hfil&\quad\@zlign##\hfil\cr}
+\let\endinfrule=\endzed
+
+\def\derive{\crcr \noalign{\vskip\@jot} \omit\@zrulefill
+  \@ifnextchar[{\@xderive}{\@yderive}}
+\def\@xderive[#1]{&$\smash{\lower 0.5ex\hbox{$[\;#1\;]$}}$\cr 
+  \noalign{\vskip\@jot}}
+\def\@yderive{\cr \noalign{\vskip\@jot}}
+
+% \@zleavevmode -- Enter horizontal mode, taking account of possible
+% interaction with lists and section heads:
+%	1	After a \item, use \indent to get the label (this
+%		fails to run in even short labels).
+%	2	After a run-in heading, use \indent.
+%	3	After an ordinary heading, throw away the \everypar
+%		tokens, reset \@nobreak, and use \noindent with \parskip
+%		zero. Set \abovedisplayskip to zero.
+%	4	Otherwise, use \noindent with \parskip zero
+\def\@zleavevmode{\if@inlabel \indent
+  \else\if@noskipsec \indent
+  \else\if@nobreak \global\@nobreakfalse
+      \everypar={}\abovedisplayskip=0pt\fi
+    {\parskip=0pt\noindent}\fi\fi}
+
+%
+% Z SYMBOLS
+%
+
+\let\@mc=\mathchardef
+\def\@ms#1"#2?#3#4{\DeclareMathSymbol{#1}{#2}{zed}{"#3#4}}
+
+% In the same order as the Z reference manual ...
+
+% Chapter 2
+\@ms \lblot	"4?09
+\@ms \rblot	"5?0A
+\@ms \bind      "2?01
+
+% Chapter 3
+\def \defs	{\mathrel{\widehat=}}
+\@ms \@power	"0?0B
+\def \power	{\@myop{\@power}}
+\let \cross	\times
+\def \lambda	{\@myop{\mathchar"115}}
+\def \mu	{\@myop{\mathchar"116}}
+\@ms \lbag	"4?0E
+\@ms \rbag	"5?0F
+\def \lnot	{\neg\;}
+\@mc \land	"325E
+\@mc \lor	"325F
+\let \implies	\Rightarrow
+\let \iff	\Leftrightarrow
+\def \forall	{\@myop{\mathchar"238}}
+\def \exists	{\@myop{\mathchar"239}}
+\@mc \hide	"326E
+\@ms \project	"3?02
+\def \pre	{\mathrm{pre}\;}
+\@ms \semi	"3?1C
+\@ms \ldata	"4?12
+\@ms \rdata	"5?13
+\let \shows	\vdash
+\def \pipe      {\mathrel{\mathchar"13E\!\!\mathchar"13E}}
+\def \LET       {{\mathbf{let}}\;}
+\def \IF	{{\mathbf{if}}\;}
+\def \THEN	{\mathrel{\mathbf{then}}}
+\def \ELSE	{\mathrel{\mathbf{else}}}
+
+% Chapter 4
+\@ms \emptyset	"0?1E
+\@ms \rel	"2?23
+\def \dom	{\mathop{\mathrm{dom}}}
+\def \ran	{\mathop{\mathrm{ran}}}
+\def \id	{\mathop{\mathrm{id}}}
+\@ms \comp	"2?1C
+\@ms \dres	"2?03
+\@ms \rres	"2?04
+\@ms \ndres	"2?05
+\@ms \nrres	"2?06
+\def \inv	{^\sim}
+\@ms \limg	"4?10
+\@ms \rimg	"5?11
+\@ms \pfun	"2?14
+\@ms \fun	"2?22
+\@ms \pinj	"2?19
+\@ms \inj	"2?18
+\@ms \psurj	"2?17
+\@ms \surj	"2?16
+\@ms \bij	"2?1B
+\@ms \nat	"0?0D
+\@ms \num	"0?1D
+\def \div	{\mathbin{\mathsf{div}}}
+\def \mod	{\mathbin{\mathsf{mod}}}
+\def \upto	{\mathbin{\ldotp\ldotp}}
+\def \plus	{^+}
+\def \star	{^*}
+\@ms \@finset	"0?0C
+\def \finset	{\@myop{\@finset}}
+\@ms \ffun	"2?15
+\@ms \finj	"2?1A
+\def \seq	{\mathop{\mathrm{seq}}}
+\def \iseq	{\mathop{\mathrm{iseq}}}
+\@ms \cat	"2?1F
+\@ms \filter	"2?02
+\def \dcat	{\mathop{\cat/}}
+\def \bag	{\mathop{\mathrm{bag}}}
+\def \bcount	{\mathbin{\sharp}}
+\@ms \inbag	"3?08
+\let \subbageq  \sqsubseteq
+\def \disjoint  {{\mathsf{disjoint}}\;}
+\def \partition {\mathrel{\mathsf{partition}}}
+\def \prefix    {\mathrel{\mathsf{prefix}}}
+\def \suffix    {\mathrel{\mathsf{suffix}}}
+\def \inseq     {\mathrel{\mathsf{in}}}
+\@ms \extract   "2?20
+\@ms \uminus    "2?21

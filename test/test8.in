@@ -1,0 +1,228 @@
+%
+% test8.in
+%
+% This file is part of fuzz2000
+% Copyright (c) 1982--2006 J. M. Spivey
+% All rights reserved
+%
+% Redistribution and use in source and binary forms, with or without
+% modification, are permitted provided that the following conditions are met:
+%
+% 1. Redistributions of source code must retain the above copyright notice,
+%    this list of conditions and the following disclaimer.
+% 2. Redistributions in binary form must reproduce the above copyright notice,
+%    this list of conditions and the following disclaimer in the documentation
+%    and/or other materials provided with the distribution.
+% 3. The name of the author may not be used to endorse or promote products
+%    derived from this software without specific prior written permission.
+%
+% THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+% IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+% OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+% IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+% SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+% PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+% OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+% WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+% OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+% ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+% 
+% $Id: test8.in,v 1.2 2007-02-16 13:22:02 mike Exp $
+%
+
+% I changed all \pipe's to \semi's in the following.  JMS.
+
+From ianh@au.oz.uq.cs Thu May 28 18:38:03 1992
+Date: Mon, 25 May 92 14:19:03 +1000
+From: ianh@au.oz.uq.cs
+To: spivey@prg
+Subject: Bug in fuzz
+
+Mike,
+
+I managed to get your new fuzz to dump core.
+Here is the file.
+-------------------------------------------------
+\begin{zed}
+ [Name],
+\end{zed}
+
+    \begin{zed}
+      [Client]
+    \end{zed}
+    \begin{zed}
+      Time == \nat
+    \end{zed}
+   \begin{zed}
+     Money == \nat
+   \end{zed}
+    
+%%\begin{zed}
+%%  [Piece] \\
+%%  Data == \seq Piece
+%%\end{zed}
+\begin{schema}{FILE}
+     owner   : Client
+\\     created , 
+\\     expires  : Time
+\\     contents : Data
+\where 
+     created \leq expires
+\end{schema}
+
+\begin{schema}{FS}
+     files : Name \pfun FILE
+\end{schema}
+\begin{schema}{\Delta FS}
+     files , files' : Name \pfun FILE
+\\     who       : Client
+\\     when      : Time
+\end{schema}
+\begin{axdef}
+  Size: Data \fun \nat \\
+  Tariff: FILE \fun Money
+\where
+ Tariff = (\lambda FILE \spot  (expires - created) * Size(contents))
+\end{axdef}
+\begin{schema}{StoreFile}
+     \Delta FS
+\\     contents? : Data
+\\     expires? : Time
+\\     name!   : Name
+\\     cost!   : Money
+\where 
+     (\exists FILE' \spot 
+\\\t1           owner'    = who \land created'  = when \land
+\\\t1           expires'  = expires? \land contents'  = contents? \land
+\also 
+  \t1           name!  \notin  \dom files \land
+\\\t1           files' = files \oplus \{name! \mapsto \theta FILE'\} \land
+\\\t1           cost!  = Tariff (\theta FILE'))
+\end{schema}
+\begin{schema}{ReadFile}
+       \Delta FS
+\\     name?   : Name
+\\     expires! : Time
+\\     contents! : Data
+\where 
+     \theta FS' = \theta FS
+\also
+       name? \in \dom files \\
+       (\exists FILE \spot 
+\\\t1           \theta FILE      = files (name?) \land
+\\\t1           expires   > when \land
+\\\t1           expires!  = expires \land
+\\\t1           contents!  = contents)
+\end{schema}
+\begin{axdef}
+ Rebate : FILE \cross Time \fun Money
+\where
+ Rebate = \\
+\t1  (\lambda FILE; when : Time \spot  (expires - when) * Size(contents))
+\end{axdef}
+\begin{schema}{DeleteFile}
+       \Delta FS
+\\     name? : Name
+\\     cost! : Money
+\where 
+     name? \in \dom files \\
+     (\exists FILE \spot 
+\\\t1           \theta FILE   = files (name?) \land
+\\\t1           expires > when \land
+\\\t1           owner  = who \land
+\\\t1           files'  = \{name?\} \ndres files \land
+\\\t1           cost!  = - (Rebate (\theta FILE , when)))
+\end{schema}
+\begin{schema}{ReadData}
+       contents? : Data
+\\     start? , 
+\\     number?  : \nat 
+\\     pieces!  : Data
+\where 
+     \#pieces! = min \{ number? , (\#contents? - start?) \}
+\also
+       (\forall i : 1 \upto \#pieces! \spot pieces!(i) = contents?(i + start?))
+\end{schema}
+\begin{schema}{UpdateData}
+       contents? , 
+\\     contents! : Data
+\\     start?   : \nat 
+\\     pieces?  : Data
+\where 
+      \#contents! = max \{ \#contents? , (start? + \#pieces?) \}
+\\    start?   \leq \#contents?
+\also
+       (\forall i : 1 \upto \#contents! \spot 
+\\\t1       (i - start?) \in 1 \upto \#pieces? \implies
+\\\t2           contents!(i) = pieces?(i - start?)  \land
+\also
+  \t1       (i - start?) \notin 1 \upto \#pieces? \implies
+\\\t2           contents!(i) = contents?(i))
+\end{schema}
+\begin{zed}
+ ReadStoredFile  \defs  ReadFile \semi ReadData.
+\end{zed}% \draftnote{The pipe used to be a semi.}
+
+\begin{schema}{ReadStoredFile2}
+       \Delta FS
+\\     name?  : Name
+\\     start? , 
+\\     number? : \nat 
+\\     expires! : Time
+\\     pieces! : Data
+\where 
+     \theta FS' = \theta FS
+\also
+       name? \in \dom files \\
+       (\exists FILE \spot 
+\\\t1       \theta FILE    = files (name?) \land
+\\\t1       expires  > when \land
+\\\t1       expires! = expires      \land
+\also
+  \t1       \#pieces! = min \{ number? , (\#contents - start?) \} \land
+\\\t1       (\forall i : 1 \upto \#pieces! \spot pieces!(i) = contents(i + start?)))
+\end{schema}
+\begin{zed}
+    Bosnia \defs ReadFile \semi DeleteFile [dcost!/cost!]
+\end{zed}
+\begin{zed}
+    UpdateStoredFile  \defs 
+\\\t1 ReadFile \semi 
+\\\t1 DeleteFile [dcost!/cost!] \semi 
+\\\t1 UpdateData \semi 
+\\\t1 StoreFile [name?/name! , scost!/cost!] \semi 
+%noindex
+\\\t1 [ dcost? , scost? , cost! : Money | cost! = dcost? +~scost? ]
+\end{zed}% \draftnote{The second and third pipes were semis.}
+\begin{zed}
+    UpdateStoredFile2  \defs 
+\\\t1 ReadFile \semi
+\\\t1 DeleteFile [dcost!/cost!] \semi
+\\\t1 UpdateData \semi
+\\\t1 StoreFile [name?/name! , scost!/cost!] \semi 
+%noindex
+\\\t1 [ dcost? , scost? , cost! : Money | cost! = dcost? +~scost? ]
+\end{zed}% \draftnote{The second and third pipes were semis.}
+-------------------------------------------------
+The problem is an error in the definition of UpdateStoredFile at the
+very end. If I change the middle 2 \semi's to \pipe (as they should be)
+then it goes through OK, but I thought you might like to know about the
+bug. Just in case, here is a stack trace.
+-------------------------------------------------
+core file = core -- program ``newfuzz''
+SIGSEGV 11: segmentation violation
+$C
+_sort_env(0x37e60,0x3d590,0x3c94c,0x37e60,0x37d2c,0x38374) + 80
+_compose(0x37d2c,0x37e4c,0x35c70,0x38374,0x38354,0x3800c) + 264
+_get_sexp(0x37d2c,0x37e4c,0x37e60,0x37e34,0x9,0x9) + 1ec
+_compose(0x37e2c,0x37e4c,0x35c70,0x35c50,0x1d283,0x37e60) + 64
+_get_sexp(0x37e2c,0x37e4c,0x37e60,0x8,0x32f44,0x37c28) + 1ec
+_tc_sexp(0x37e2c,0x37e4c,0x37c2c,0x37c34,0x1bc00,0x0) + 30
+_tc_para(0x37e3c,0x10c,0x37e3c,0xf7fff60c,0x2,0x2) + 120
+_do_para(0x37e3c,0x1,0x5,0x14,0x2e1c8,0x1a0e0) + 94
+_yyparse(0x88,0x4,0x10,0x2e1cc,0x37e3c,0x1d400) + 7a4
+_main(0x1d400,0xf7fff714,0xf7fff720,0x18000,0x0,0x0) + 314
+---------------------------------------------------
+Ian
+
+

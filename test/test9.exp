@@ -1,0 +1,18 @@
+x = x (| x |)
+
+"test9.in", line 36: Identifier x is not declared
+
+"test9.in", line 36: Identifier x is not declared
+
+"test9.in", line 36: Identifier x is not declared
+
+x = x (| x |)'
+
+"test9.in", line 37: Identifier x is not declared
+
+"test9.in", line 37: Identifier x is not declared
+
+"test9.in", line 37: Identifier x is not declared
+
+"test9.in", line 37: Identifier _(|_|)' is not declared
+

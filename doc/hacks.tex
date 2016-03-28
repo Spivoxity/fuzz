@@ -1,0 +1,112 @@
+%
+% hacks.tex
+%
+% This file is part of fuzz2000
+% Copyright (c) 1982--2006 J. M. Spivey
+% All rights reserved
+%
+% Redistribution and use in source and binary forms, with or without
+% modification, are permitted provided that the following conditions are met:
+%
+% 1. Redistributions of source code must retain the above copyright notice,
+%    this list of conditions and the following disclaimer.
+% 2. Redistributions in binary form must reproduce the above copyright notice,
+%    this list of conditions and the following disclaimer in the documentation
+%    and/or other materials provided with the distribution.
+% 3. The name of the author may not be used to endorse or promote products
+%    derived from this software without specific prior written permission.
+%
+% THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+% IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+% OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+% IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+% SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+% PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+% OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+% WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+% OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+% ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+% 
+% $Id: hacks.tex,v 1.2 2007-02-16 12:45:13 mike Exp $
+%
+
+% This file contains hacks needed for both the fuzz manual and
+% the free guide to the fuzz style option
+
+\makeatletter % Oh-ho, prepare for a big dose of lark's vomit fondue
+
+% The verbatim environment is indented like a quote.
+% There are also numverb and demo environments.
+
+\begingroup \catcode `|=0 \catcode `[= 1
+\catcode`]=2 \catcode `\{=12 \catcode `\}=12
+\catcode`\\=12
+|gdef|@demo#1\gives[#1|gives]
+|gdef|@xnumverb#1\end{numverb}[#1|end[numverb]]
+|endgroup
+
+\def\@verbatim{\quote\if@minipage\else\vskip\parskip\fi
+\leftskip\@totalleftmargin\rightskip\z@
+\parindent\z@\parfillskip\@flushglue\parskip\z@
+\@tempswafalse \def\par{\if@tempswa\hbox{}\fi\@tempswatrue\@@par}
+\obeylines \tt \catcode``=13 \@noligs \let\do\@makeother \dospecials}
+
+\def\verbatim{\@verbatim \frenchspacing\@vobeyspaces \@xverbatim}
+\let\endverbatim=\endquote
+
+\def\numverb{\@verbatim\small\tt\@numlines
+  \frenchspacing\@vobeyspaces \@xnumverb}
+\let\endnumverb=\endquote
+
+\newcount\@lineno
+\newtoks\@hack@ % Save list env's everypar
+\def\@numlines{\@lineno=0 \@hack@=\everypar
+  \everypar{{\the\@hack@}\@hack@{}%
+    \advance\@lineno by1 \llap{{\tiny\rm \the\@lineno}\enspace}}}
+
+\def\demo{\predisplaypenalty=10000\preboxpenalty=10000
+	\begingroup\@verbatim \frenchspacing\@vobeyspaces \@demo}
+\def\gives{\endverbatim\endgroup\@ifnextchar*{\@sgives}{\@gives}}
+\def\@gives{\nobreak}
+\def\@sgives*{\nobreak\abovedisplayskip=0pt}
+\def\enddemo{\global\@ignoretrue}
+
+% The symtab environment is used for 2-column tables of 
+% mathematical symbols.  (cf. TeXbook, Appendix D, p. 397.)
+
+\def\symtab{\par \penalty10000
+  \vskip-\prevdepth \vskip\dp\strutbox \vskip\medskipamount
+  \hrule \nobreak \vskip-0.4pt \vskip\medskipamount
+  \setbox0=\vbox\bgroup \def\\{\cr} \symalign}
+
+\def\symalign{\dimen0=\linewidth \divide\dimen0 by2
+  \halign to\dimen0\bgroup 
+    \strut\ooalign{$##$\hfil\cr\qquad\hfil\cr}\hfil
+    &\quad##\hfil\tabskip=0pt plus1fil\cr}
+
+ % This trick allows different widths in the 2 columns
+\def\changewidth{\crcr\egroup\symalign}
+
+\def\endsymtab{\crcr\egroup\egroup
+  \dimen0=\ht0 \divide\dimen0 by2 \advance\dimen0 by\ht\strutbox
+  \splittopskip=\ht\strutbox \vbadness=10000
+  \setbox1=\vsplit0 to\dimen0
+  \hbox to\linewidth{\valign{##\cr\unvbox1\cr\unvbox0\cr\noalign{\hfil}}}
+  \nobreak \vskip\medskipamount \vskip-0.4pt
+  \hrule \penalty0 \vskip\medskipamount \prevdepth=\dp\strutbox
+  {\parskip=0pt\noindent}\global\@ignoretrue}
+
+% Cross-references to ZRM are surrounded by \ifmanual ... \fi to
+% save distributing the ZRM aux file.
+\newif\ifmanual \manualfalse
+
+% A few bits and pieces
+\let\Fuzz=\fuzz
+\def\FUZZ{{\protect\LARGE\it f\kern0.1em}{\protect\Large\sc uzz}}
+\def\ZRM{{\rm ZRM}}
+\def\lopt{{\it [\/}}
+\def\ropt{{\it ]\/}}
+\def\SliTeX{{\sc Sli}\TeX}
+\def\emTeX{{\sc em}\TeX}
+
+\makeatother % sanity is restored

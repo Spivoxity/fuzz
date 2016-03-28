@@ -1,0 +1,166 @@
+Genconst _ \rel _[2]: P (P (@1 x @2))
+
+Genconst _ \fun _[2]: P (P (@1 x @2))
+
+Genconst _ \neq _[1]: P (@1 x @1)
+
+Genconst _ \notin _[1]: P (@1 x P @1)
+
+Genconst \emptyset[1]: P @1
+
+Genconst _ \subseteq _[1]: P (P @1 x P @1)
+
+Genconst _ \subset _[1]: P (P @1 x P @1)
+
+Genconst \power_1 _[1]: P (P @1)
+
+Genconst _ \cup _[1]: P ((P @1 x P @1) x P @1)
+
+Genconst _ \cap _[1]: P ((P @1 x P @1) x P @1)
+
+Genconst _ \setminus _[1]: P ((P @1 x P @1) x P @1)
+
+Genconst \bigcup[1]: P (P (P @1) x P @1)
+
+Genconst \bigcap[1]: P (P (P @1) x P @1)
+
+Genconst first[2]: P ((@1 x @2) x @1)
+
+Genconst second[2]: P ((@1 x @2) x @2)
+
+Genconst _ \mapsto _[2]: P ((@1 x @2) x (@1 x @2))
+
+Genconst \dom[2]: P (P (@1 x @2) x P @1)
+
+Genconst \ran[2]: P (P (@1 x @2) x P @2)
+
+Genconst \id _[1]: P (@1 x @1)
+
+Genconst _ \comp _[3]: P ((P (@1 x @2) x P (@2 x @3)) x P (@1 x @3))
+
+Genconst _ \circ _[3]: P ((P (@2 x @3) x P (@1 x @2)) x P (@1 x @3))
+
+Genconst _ \dres _[2]: P ((P @1 x P (@1 x @2)) x P (@1 x @2))
+
+Genconst _ \rres _[2]: P ((P (@1 x @2) x P @2) x P (@1 x @2))
+
+Genconst _ \ndres _[2]: P ((P @1 x P (@1 x @2)) x P (@1 x @2))
+
+Genconst _ \nrres _[2]: P ((P (@1 x @2) x P @2) x P (@1 x @2))
+
+Genconst _ \inv[2]: P (P (@1 x @2) x P (@2 x @1))
+
+Genconst _(|_|)[2]: P ((P (@1 x @2) x P @1) x P @2)
+
+Genconst _ \oplus _[2]: P ((P (@1 x @2) x P (@1 x @2)) x P (@1 x @2))
+
+Genconst _ \plus[1]: P (P (@1 x @1) x P (@1 x @1))
+
+Genconst _ \star[1]: P (P (@1 x @1) x P (@1 x @1))
+
+Genconst _ \pinj _[2]: P (P (@1 x @2))
+
+Genconst _ \inj _[2]: P (P (@1 x @2))
+
+Genconst _ \psurj _[2]: P (P (@1 x @2))
+
+Genconst _ \surj _[2]: P (P (@1 x @2))
+
+Genconst _ \bij _[2]: P (P (@1 x @2))
+
+Var -: P (\num x \num)
+
+Var _ + _: P ((\num x \num) x \num)
+
+Var _ - _: P ((\num x \num) x \num)
+
+Var _ * _: P ((\num x \num) x \num)
+
+Var _ \div _: P ((\num x \num) x \num)
+
+Var _ \mod _: P ((\num x \num) x \num)
+
+Var _ < _: P (\num x \num)
+
+Var _ \leq _: P (\num x \num)
+
+Var _ \geq _: P (\num x \num)
+
+Var _ > _: P (\num x \num)
+
+Abbrev \nat_1: P \num
+
+Var succ: P (\num x \num)
+
+Var _ \upto _: P ((\num x \num) x P \num)
+
+Genconst iter[1]: P (\num x P (P (@1 x @1) x P (@1 x @1)))
+
+Genconst \finset _[1]: P (P @1)
+
+Genconst \finset_1 _[1]: P (P @1)
+
+Genconst \#[1]: P (P @1 x \num)
+
+Genconst _ \ffun _[2]: P (P (@1 x @2))
+
+Genconst _ \finj _[2]: P (P (@1 x @2))
+
+Var min: P (P \num x \num)
+
+Var max: P (P \num x \num)
+
+Genconst \seq_1 _[1]: P (P (\nat x @1))
+
+Genconst \iseq _[1]: P (P (\num x @1))
+
+Genconst _ \cat _[1]: P ((P (\nat x @1) x P (\nat x @1)) x P (\nat
+        x @1))
+
+Genconst rev[1]: P (P (\nat x @1) x P (\nat x @1))
+
+Genconst head[1]: P (P (\nat x @1) x @1)
+
+Genconst last[1]: P (P (\nat x @1) x @1)
+
+Genconst tail[1]: P (P (\nat x @1) x P (\nat x @1))
+
+Genconst front[1]: P (P (\nat x @1) x P (\nat x @1))
+
+Genconst _ \extract _[1]: P ((P \nat_1 x P (\nat x @1)) x P (\nat
+        x @1))
+
+Genconst _ \filter _[1]: P ((P (\nat x @1) x P @1) x P (\nat x @1))
+
+Genconst squash[1]: P (P (\nat_1 x @1) x P (\nat x @1))
+
+Genconst _ \prefix _[1]: P (P (\nat x @1) x P (\nat x @1))
+
+Genconst _ \suffix _[1]: P (P (\nat x @1) x P (\nat x @1))
+
+Genconst _ \inseq _[1]: P (P (\nat x @1) x P (\nat x @1))
+
+Genconst \dcat[1]: P (P (\nat x P (\nat x @1)) x P (\nat x @1))
+
+Genconst \disjoint _[2]: P (P (@1 x P @2))
+
+Genconst _ \partition _[2]: P (P (@1 x P @2) x P @2)
+
+Genconst count[1]: P (P (@1 x \nat) x P (@1 x \num))
+
+Genconst _ \bcount _[1]: P ((P (@1 x \nat) x @1) x \num)
+
+Genconst _ \otimes _[1]: P ((\num x P (@1 x \nat)) x P (@1 x \nat))
+
+Genconst _ \inbag _[1]: P (@1 x P (@1 x \nat))
+
+Genconst _ \subbageq _[1]: P (P (@1 x \nat) x P (@1 x \nat))
+
+Genconst _ \uplus _[1]: P ((P (@1 x \nat) x P (@1 x \nat)) x P (@1
+        x \nat))
+
+Genconst _ \uminus _[1]: P ((P (@1 x \nat) x P (@1 x \nat)) x P (@1
+        x \nat))
+
+Genconst items[1]: P (P (\nat x @1) x P (@1 x \nat))
+

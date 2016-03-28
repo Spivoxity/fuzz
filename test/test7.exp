@@ -1,0 +1,75 @@
+Abbrev foo: ZZ
+
+Abbrev baz: P NN
+
+Schema A
+    x: NN
+    y: NN
+End
+
+Abbrev R: P (A x A)
+
+Schema B
+    x: NN
+    y: NN
+    z: NN
+End
+
+Abbrev asdf: ZZ
+
+Schema State
+    x: NN
+    y: NN
+End
+
+Schema \Delta State
+    x: NN
+    y: NN
+    x': NN
+    y': NN
+End
+
+Schema FetchX
+    x: NN
+    y: NN
+    x': NN
+    y': NN
+    val!: NN
+End
+
+Schema IncY
+    x: NN
+    y: NN
+    x': NN
+    y': NN
+    val?: NN
+End
+
+Schema Add
+    x: NN
+    y: NN
+    x': NN
+    y': NN
+End
+
+Abbrev a: ZZ <-> ZZ
+
+Abbrev b: seq ZZ
+
+Schema Set[1]
+    val: P @1
+End
+
+Schema \Delta Set[1]
+    val: P @1
+    val': P @1
+End
+
+Schema Insert[1]
+    val: P @1
+    val': P @1
+    in?: @1
+End
+
+Abbrev q: P (P ZZ x P ZZ)
+

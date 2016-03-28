@@ -1,0 +1,172 @@
+%
+% zarrow.mf
+%
+% This file is part of fuzz2000
+% Copyright (c) 1982--2006 J. M. Spivey
+% All rights reserved
+%
+% Redistribution and use in source and binary forms, with or without
+% modification, are permitted provided that the following conditions are met:
+%
+% 1. Redistributions of source code must retain the above copyright notice,
+%    this list of conditions and the following disclaimer.
+% 2. Redistributions in binary form must reproduce the above copyright notice,
+%    this list of conditions and the following disclaimer in the documentation
+%    and/or other materials provided with the distribution.
+% 3. The name of the author may not be used to endorse or promote products
+%    derived from this software without specific prior written permission.
+%
+% THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+% IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+% OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+% IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+% SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+% PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+% OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+% WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+% OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+% ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+% 
+% $Id: zarrow.mf,v 1.2 2007-02-16 13:22:02 mike Exp $
+%
+
+% extra params for arrows
+numeric barb_depth, barb_width, crossing_sep, arrow_width;
+barb_depth=4u;			 
+barb_width=vround(.64asc_height);
+crossing_sep=2u+rule_thickness;  
+arrow_width#=24u#; 		 
+
+def beginarrow(expr chr) =
+    compute_spread(.45x_height#,.55x_height#);
+    beginchar(chr,arrow_width#,v_center(spread#+rule_thickness#));
+    adjust_fit(0,0); pickup crisp.nib;
+enddef;
+
+vardef arrow_points@#(expr dirn) =
+    pos.a@#(bar,angle dirn); pos.b@#(bar,angle dirn);
+    z@#-.5[z.a@#,z.b@#]=(barb_depth+eps)*dirn;
+    z.a@#-z.b@#=(barb_width+eps)*(dirn rotated 90);
+    pos.c@#(bar,angle(z.b@#-z@#)); pos.d@#(bar, angle(z.a@#-z@#));
+    z.c@#l=z.d@#l=z@#; z.e@#=.381966[.5[z.a@#,z.b@#],z@#];
+    z.f@#=(z.a@#l{z.e@#-z.a@#}..z.c@#r)
+            intersectionpoint (z.b@#l{z.e@#-z.b@#}..z.d@#r);
+    penlabels(a@#,b@#,c@#,d@#,e@#,f@#);
+enddef;
+
+boolean fletched,plain; fletched=true; plain=false;
+
+def arrow(expr fletch) =
+    y0=y1=y2=y3=y4=math_axis;
+    rt x0=hround(w-u); lft x.a1l=x4-.5rule_thickness=hround u;
+    arrow_points0(right); arrow_points1(right);
+    pos2(rule_thickness,90); pos3(rule_thickness,90); pos4(rule_thickness,90);
+    numeric t[]; path p[];
+    p2=z.b0l{z.e0-z.b0}..z.d0r; p3=z.b1r{z.e1-z.b1}..z.d1l;
+    forsuffixes $ = 2,3:
+        t$=xpart(p$ intersectiontimes((0,y$l)--(w,y$l)));
+        x$=xpart(point t$ of p$);
+    endfor;
+    filldraw z0..{z.b0-z.e0}z.b0r--subpath (0,t2) of p2
+        --  if fletch: subpath (t3,0) of p3--z.b1l{z.e1-z.b1}..z.f1--z.f1
+            ..{z.a1-z.e1}z.a1l--subpath (0,t3) of (z.a1r{z.e1-z.a1}..z.c1l)
+            else: z2l---z4l..z4r---z2r fi
+        --subpath (t2,0) of (z.a0l{z.e0-z.a0}..z.c0r)
+        --z.a0r{z.e0-z.a0}..z0 & cycle;
+    penlabels(0,1,2,3,4);
+enddef;
+
+def second_head =
+    rt x5=hround(x.e0); y5=math_axis; arrow_points5(right);
+    filldraw z5..{z.b5-z.e5}z.b5r--z.b5l{z.e5-z.b5}..z.f5
+        --z.f5..{z.a5-z.e5}z.a5l--z.a5r{z.e5-z.a5}..z5 & cycle;
+    penlabels(5);
+enddef;
+
+def crossing(suffix $) =
+    pos$'(barb_width,90); x$'=good.x x$; y$'=y$;
+    draw z$'l--z$'r;
+enddef;
+
+def double_crossing(suffix $) =
+    x.a$=good.x x$-.5crossing_sep;
+    x.b$-x.a$=ceiling(crossing_sep);
+    y.a$=y.b$=y$;
+    crossing(a$); crossing(b$);
+enddef;
+
+iff known tot_fun: cmchar "Total function arrow";
+beginarrow(tot_fun);
+arrow(plain);  % arrow-head and stem
+endchar;
+
+iff known par_fun: cmchar "Partial function arrow";
+beginarrow(par_fun);
+arrow(plain);  % arrow-head and stem
+pickup rule.nib; 
+z6=.5[z4,z.e0]; crossing(6);  % crossing
+penlabels(6); endchar;
+
+iff known fin_fun: cmchar "Finite function arrow";
+beginarrow(fin_fun);
+arrow(plain);  % arrow-head and stem
+pickup rule.nib; 
+z6=.5[z4,z.e0]; double_crossing(6);  % crossings
+penlabels(6); endchar;
+
+iff known tot_surj: cmchar "Surjection arrow";
+beginarrow(tot_surj);
+arrow(plain);  % arrow-head and stem
+second_head;  % second arrow-head
+endchar;
+
+iff known par_surj: cmchar "Partial surjection arrow";
+beginarrow(par_surj);
+arrow(plain);  % arrow-head and stem
+second_head;  % second arrow-head
+pickup rule.nib; 
+z6=.5[z4,z.e5]; crossing(6);  % crossing
+penlabels(6); endchar;
+
+iff known tot_inj: cmchar "Injection arrow";
+beginarrow(tot_inj);
+arrow(fletched);  % arrow-head, tail and stem
+endchar;
+
+iff known par_inj: cmchar "Partial injection arrow";
+beginarrow(par_inj);
+arrow(fletched);  % arrow-head, tail and stem
+pickup rule.nib; 
+z6=.5[z.e1,z.e0]; crossing(6);  % crossing
+endchar;
+
+iff known fin_inj: cmchar "Finite injection arrow";
+beginarrow(fin_inj);
+arrow(fletched);  % arrow-head, tail and stem
+pickup rule.nib; 
+z6=.5[z.e1,z.e0]; double_crossing(6);  % crossings
+endchar;
+
+iff known tot_bij: cmchar "Bijection arrow";
+beginarrow(tot_bij);
+arrow(fletched);  % arrow-head, tail and stem
+second_head;  % second arrow-head
+endchar;
+
+iff known rel_arrow: cmchar "Relation arrow";
+beginarrow(rel_arrow);
+y0=y1=y2=y3=y4=math_axis;
+w-rt x0=lft x1=hround u;
+arrow_points0(right); arrow_points1(left);
+pos2(rule_thickness,90); pos3(rule_thickness,90);
+numeric t; path p;
+p = z.b0l{z.e0-z.b0}..z.d0r;
+t = xpart(p intersectiontimes ((0,y2l)--(w,y2l)));
+x2=w-x3=xpart(point t of p);
+filldraw z0..{z.b0-z.e0}z.b0r--subpath (0,t) of p
+    --z2l--z3l--subpath (t,0) of (z.a1l{z.e1-z.a1}..z.c1r)
+    --z.a1r{z.e1-z.a1}..z1--z1..{z.b1-z.e1}z.b1r
+    --subpath (0,t) of (z.b1l{z.e1-z.b1}..z.d1r)--z3r--z2r
+    --subpath (t,0) of (z.a0l{z.e0-z.a0}..z.c0r)
+    --z.a0r{z.e0-z.a0}..z0 & cycle;  % two arrowheads and stem
+endchar;

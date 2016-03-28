@@ -1,0 +1,28 @@
+"test2.in", line 35: Tab command not at start of line at symbol "\t1"
+
+"test2.in", line 39: Syntax error at symbol "+"
+
+"test2.in", line 40: Closing parenthesis expected at symbol "="
+
+"test2.in", line 41: Syntax error at symbol "="
+
+"test2.in", line 47: Syntax error at symbol ":"
+
+"test2.in", line 48: \end does not match \begin at symbol
+        "\end{axdef}"
+
+"test2.in", line 52: \end does not match \begin at symbol "\end{zed}"
+
+"test2.in", line 56: Syntax error at symbol "\forall"
+
+"test2.in", line 63: Opening parenthesis expected at symbol "\exists"
+
+"test2.in", line 69: Syntax error at symbol ":"
+
+"test2.in", line 75: Decoration ignored in schema def at symbol
+        "\defs"
+
+"test2.in", line 78: Syntax error at symbol "''"
+
+"test2.in", line 85: Syntax error at end of file
+

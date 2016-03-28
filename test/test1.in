@@ -1,0 +1,913 @@
+%
+% test1.in
+%
+% This file is part of fuzz2000
+% Copyright (c) 1982--2006 J. M. Spivey
+% All rights reserved
+%
+% Redistribution and use in source and binary forms, with or without
+% modification, are permitted provided that the following conditions are met:
+%
+% 1. Redistributions of source code must retain the above copyright notice,
+%    this list of conditions and the following disclaimer.
+% 2. Redistributions in binary form must reproduce the above copyright notice,
+%    this list of conditions and the following disclaimer in the documentation
+%    and/or other materials provided with the distribution.
+% 3. The name of the author may not be used to endorse or promote products
+%    derived from this software without specific prior written permission.
+%
+% THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+% IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+% OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+% IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+% SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+% PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+% OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+% WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+% OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+% ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+% 
+% $Id: test1.in,v 1.2 2007-02-16 13:22:02 mike Exp $
+%
+
+%% \begin{zed} [NAME, DATE] \end{zed}
+
+\begin{schema}{BirthdayBook}
+    known: \power NAME \\
+    birthday: NAME \pfun DATE
+\where
+    known\quad=\qquad\dom\ birthday
+\end{schema}
+
+\begin{schema}{AddBirthday}
+     \Delta BirthdayBook \\
+     name?: NAME \\
+     date?: DATE
+\where
+     name? \notin known
+\also
+     birthday' = birthday \cup \{name? \mapsto date?\}
+\end{schema}
+
+\begin{schema}{FindBirthday}
+	\Xi BirthdayBook \\
+	name?: NAME \\
+	date!: DATE 
+\where
+	name? \in known
+\also
+	date! = birthday(name?)
+\end{schema}
+
+\begin{schema}{Remind}
+	\Xi BirthdayBook \\
+	today?: DATE \\
+	cards!: \power NAME
+\where
+	cards! = \{\,n: known | birthday(n) = today?\,\}
+\end{schema}
+
+\begin{schema}{InitBirthdayBook}
+	BirthdayBook
+\where
+	known = \empty
+\end{schema}
+
+%%unchecked
+\begin{schema}{Register}
+	enrolled: \power STUDENT \\
+	completed: \power STUDENT
+\where
+	\ldots
+\end{schema}
+
+%% \begin{zed} REPORT ::= ok | already\_known | not\_known \end{zed}
+
+\begin{schema}{Success}
+	result!: REPORT
+\where
+	result! = ok
+\end{schema}
+
+\begin{schema}{AlreadyKnown}
+	\Xi BirthdayBook \\
+	name?: NAME \\
+	result!: REPORT
+\where
+	name? \in known
+\also
+	result! = already\_known
+\end{schema}
+
+\begin{zed}
+	RAddBirthday \defs (AddBirthday \land Success) \lor AlreadyKnown.
+\end{zed}
+
+\begin{schema}{RAddBirthday}
+	\Delta BirthdayBook \\
+	name?: NAME \\
+	date?: DATE \\
+	result!: REPORT
+\where
+	(name? \notin known \land \\
+\t1		birthday' = birthday \cup \{name? \mapsto date?\} \land \\
+\t1		result! = ok) \lor \\
+	(name? \in known \land \\
+\t1		birthday' = birthday \land \\
+\t1		result! = already\_known)
+\end{schema}
+
+\begin{schema}{NotKnown}
+	\Xi BirthdayBook \\
+	name?: NAME \\
+	result!: REPORT
+\where
+	name? \notin known
+\also
+	result! = not\_known
+\end{schema}
+
+\begin{zed}
+	RFindBirthday \defs (FindBirthday \land Success) \lor NotKnown.
+\end{zed}
+
+\begin{zed}
+	RRemind \defs Remind \land Success.
+\end{zed}
+
+\begin{schema}{BirthdayBook1}
+	names: \nat_1 \fun NAME \\
+	dates: \nat_1 \fun DATE \\
+	hwm: \nat
+\where
+	\forall i, j: 1 \upto hwm @ \\
+\t1		i \neq j \implies names(i) \neq names(j)
+\end{schema}
+
+\begin{schema}{Abs}
+	BirthdayBook \\
+	BirthdayBook1
+\where
+	known = \{\,i: 1 \upto hwm @ names(i)\,\}
+\also
+	\forall i: 1 \upto hwm @ \\
+\t1		birthday(names(i)) = dates(i)
+\end{schema}
+
+\begin{schema}{AddBirthday1}
+	\Delta BirthdayBook1 \\
+	name?: NAME \\
+	date?: DATE
+\where
+	\forall i: 1 \upto hwm @ name? \neq names(i)
+\also
+	hwm' = hwm + 1 \\
+	names' = names \oplus \{ hwm' \mapsto name? \} \\
+	dates' = dates \oplus \{ hwm' \mapsto date? \}
+\end{schema}
+
+\begin{schema}{FindBirthday1}
+	\Xi BirthdayBook1 \\
+	name?: NAME \\
+	date!: DATE
+\where
+	\exists i: 1 \upto hwm @ \\
+\t1		name? = names(i) \land date! = dates(i)
+\end{schema}
+
+\begin{schema}{AbsCards}
+	cards: \power NAME \\
+	cardlist: \nat_1 \fun NAME \\
+	ncards: \nat
+\where
+	cards = \{\,i: 1 \upto ncards @ cardlist(i)\,\}
+\end{schema}
+
+\begin{schema}{Remind1}
+	\Xi BirthdayBook1 \\
+	today?: DATE \\
+	cardlist!: \nat_1 \fun NAME \\
+	ncards!: \nat
+\where
+	\{\,i: 1 \upto ncards! @ cardlist!(i)\,\} \\
+\t1		= \{\,j: 1 \upto hwm | dates(j) = today? @ names(j)\,\}
+\end{schema}
+
+\begin{schema}{InitBirthdayBook1}
+	BirthdayBook1
+\where
+	hwm = 0
+\end{schema}
+
+\begin{zed}
+%%	[ADDR, PAGE] \\
+	DATABASE == ADDR \fun PAGE.
+\end{zed}
+
+\begin{schema}{CheckSys}
+	working, backup: DATABASE
+\end{schema}
+
+\begin{schema}{Access}
+	\Xi CheckSys \\
+	a?: ADDR \\
+	p!: PAGE
+\where
+	p!= working(a?)
+\end{schema}
+
+\begin{schema}{Update}
+	\Delta CheckSys \\
+	a?: ADDR \\
+	p?: PAGE
+\where
+	working' = working \oplus \{a? \mapsto p? \} \\
+	backup' = backup
+\end{schema}
+
+\begin{schema}{CheckPoint}
+	\Delta CheckSys
+\where
+	working' = working \\
+	backup' = working
+\end{schema}
+
+\begin{schema}{Restart}
+	\Delta CheckSys
+\where 
+	working'=backup \\
+	backup' = backup
+\end{schema}
+
+\begin{schema}{Master}
+	master: DATABASE
+\end{schema}
+
+\begin{schema}{Changes}
+	changes: ADDR \pfun PAGE
+\end{schema}
+
+\begin{schema}{CheckSys1}
+	Master \\
+	Changes
+\end{schema}
+
+\begin{schema}{AbsDB}
+	CheckSys \\
+	CheckSys1
+\where  
+	backup = master \\
+	working = master \oplus changes
+\end{schema}
+
+\begin{schema}{Access1}
+	\Xi CheckSys1 \\
+	a?: ADDR \\
+	p!: PAGE
+\where
+	p! = (master \oplus changes)(a?)
+\end{schema}
+
+%% \begin{zed} RESULT ::= found | not\_present \end{zed}
+
+\begin{schema}{GetChange}
+	\Xi Changes \\
+	a?: ADDR \\
+	p!: PAGE \\
+	r!: RESULT
+\where
+	(a? \in \dom changes \land \\
+\t1		p! = changes(a?) \land \\
+\t1		r! = found) \lor \\
+	(a? \notin \dom changes \land \\
+\t1		r! = not\_present)
+\end{schema}
+
+\begin{schema}{ReadMaster}
+	\Xi Master \\
+	a?: ADDR \\
+	p!: PAGE
+\where
+	p! = master(a?)
+\end{schema}
+
+\begin{schema}{Update1}
+	\Delta CheckSys1 \\
+	a?: ADDR	 \\
+	p?: PAGE
+\where
+	master' = master \\
+	changes' = changes \oplus \{a? \mapsto p?\}
+\end{schema}
+
+\begin{schema}{CheckPoint1}
+	\Delta CheckSys1
+\where
+	master' = master \oplus changes \\
+	changes' = \empty
+\end{schema}
+
+\begin{schema}{Restart1}
+	\Delta CheckSys1
+\where
+	master' = master \\
+	changes' = \empty
+\end{schema}
+
+\begin{schema}{STATE}
+	value, limit: \nat
+\where
+	value \leq limit
+\end{schema}
+
+\begin{schema}{INC}
+	\Delta STATE \\
+	n?: \nat
+\where
+	value' = value + n?
+\end{schema}
+
+\begin{zed} 
+	PreINC \defs \pre INC 
+\end{zed}
+
+\begin{schema}{LOOK}
+	\Xi STATE \\
+	out!: \nat
+\where
+	out! = value
+\end{schema}
+
+\begin{zed}
+	INCandLOOK \defs INC \semi LOOK \\
+	SIMPLE \defs STATE \hide (limit) \\
+	SimpleINC \defs INC \project [\Delta SIMPLE; n?: \nat]
+\end{zed}
+
+\begin{zed} \empty 3 = 4 \end{zed} -- OK
+
+\begin{zed} (3,4) 5 = 7 \end{zed}
+
+\begin{axdef} 
+	foo: \num \cross \power \num \cross \num \fun \power \num
+\end{axdef} -- OK
+
+\begin{zed} foo(3,4,5) = 6 \end{zed}
+
+\begin{zed} \nat \cross 3 \cross \nat = \empty \end{zed}
+
+\begin{zed} \power (3,4,5) = \empty \end{zed}
+
+\begin{zed} foo \empty = \empty \end{zed}
+
+\begin{zed} \disjoint 3 \end{zed}
+
+\begin{zed} foo(3,\empty,4).x = \empty \end{zed}
+
+\begin{zed} [X] \end{zed} -- OK
+
+\begin{zed} X[\nat, \nat] = \empty \end{zed}
+
+\begin{zed} [Y,Y,Y] \end{zed}
+
+\begin{zed} baz[X,X] == X \end{zed}
+
+\begin{schema}{Aleph}
+	x, y: \nat
+\end{schema} -- OK
+
+\begin{zed} Aleph' = \empty \end{zed}
+
+\begin{zed} foo(3,4) = \{5\} \end{zed}
+
+\begin{zed} glug[X,Y] == X \cross Y \end{zed} -- OK
+
+\begin{zed} glug[X] = 3 \end{zed}
+
+\begin{axdef} baz: \nat \end{axdef}
+
+\begin{zed} Beth \defs Aleph \hide (y,z) \end{zed}
+
+\begin{zed} \exists_1 x: \nat; y: \power \nat @ Aleph \end{zed}
+
+\begin{zed} McCavity = 3 \end{zed}
+
+\begin{zed} (\empty, \empty, \{3\}) = (\{4\}, \empty, \empty \empty) \end{zed}
+
+\begin{zed} \forall \_ < \_: \nat @ 3 < 4 \end{zed}
+
+\begin{schema}{First}
+	x, y, x', y': \nat
+\end{schema}
+
+\begin{schema}{Second}
+	x, x': \nat
+\end{schema}
+
+\begin{zed} Third \defs First \semi Second \end{zed}
+
+\begin{zed} Fourth \defs Second \semi First \end{zed}
+
+\begin{zed} Baz \defs \Delta Foo \end{zed}
+
+\begin{zed} \exists \disjoint \_: \nat @ \disjoint 7 \end{zed}
+
+\begin{schema}{Table[X,Y]}
+	knives: \power X; \\
+	forks: \power Y
+\end{schema} -- OK
+
+\begin{zed} Mess \defs Table[\num, \num, \num] \end{zed}
+
+\begin{zed} \exists a: Aleph @ a.z = 7 \end{zed}
+
+\begin{zed} \empty[3] = \empty \end{zed}
+
+\begin{zed} FOO ::= just \ldata 3 \rdata \end{zed}
+
+\begin{zed} \forall x: 3 @ true \end{zed}
+
+%%type McCavity
+
+%%type baz
+
+\begin{zed} \lbag 3, 4, \{5\} \rbag = \empty \end{zed}
+
+\begin{zed} \langle 3, 4, \{5\} \rangle = \empty \end{zed}
+
+\begin{zed} \{ 3, 4, \{5\} \} = \empty \end{zed}
+
+\begin{zed} Aleph0 \defs \forall x: \power \nat @ Aleph \end{zed}
+
+\begin{zed} (3,4) < 5 \end{zed}
+
+\begin{zed} 3 < (4,5) \end{zed}
+
+\begin{zed} (3,4) < (5,6) \end{zed}
+
+\begin{zed} \forall x: \nat; x: X @ x = x \end{zed}
+
+\begin{schema}{Fourth}
+	x, x': \nat \\
+	y, y': \power \nat
+\end{schema} -- OK
+
+\begin{zed} Fifth \defs First \semi Fourth \end{zed}
+
+\begin{zed} \empty[X] = \langle \rangle \end{zed}
+
+\begin{zed} \empty \in \{3\} \end{zed}
+
+\begin{zed} baz[X] = 0 \end{zed}
+
+\begin{zed} Aleph \end{zed}
+
+Some stuff to test set expressions:
+
+\begin{zed}
+	\{ 1, 2, 3, 4 \} = \empty \\
+	\{ x, y, z+2 \} = \empty \\
+	\{ Aleph \} = \empty \\
+	\{ (Aleph) \} = \empty \\
+	\{ Aleph @ x+y \} = \empty \\
+	\{ x, y, z: \nat \} = \num \cross \num \cross \num \\
+	\{ Aleph; Aleph' \} = \empty
+\end{zed}
+
+%%inrel spurns
+
+\begin{zed}
+	(\_ spurns \_)[X] == \empty[X]
+\end{zed}
+
+\begin{zed}
+	3 spurns (4,5)
+\end{zed}
+
+\begin{zed}
+	first spurns second
+\end{zed}
+
+What happens if we forget the brackets round lambda ?
+
+\begin{axdef}
+	f: \nat \fun \nat
+\where
+	f = (\lambda x: \nat \spot x+1)
+\end{axdef}
+
+\begin{axdef}
+	g: \nat \fun \nat
+\where
+	g = \lambda x: \nat \spot x+1
+\end{axdef}
+
+Let's test the `partial environment' idea:
+
+\begin{schema}{Daleth}
+	Gamma
+\where
+	x < 10
+\end{schema}
+
+\begin{zed}
+	\theta NotASChema = 3
+\end{zed}
+
+\begin{syntax}
+	LIST & ::= & nil \\
+	     &  |  & cons \ldata \nat \cross LIST \rdata \\
+	     &  |  & cons \ldata CHAR \cross LIST \rdata \\
+\end{syntax}
+
+Which line will be marked?
+
+\begin{schema}{Aleph}
+	Aleph \\
+	z: \nat
+\where
+	x < y < z \\
+	true \\ % Ever tried this?
+	false
+\end{schema}
+
+All the different kinds of def.lhs:
+
+%%ingen \prod
+%%pregen \just
+\begin{zed}
+	prod == \nat \\
+	prod'[X,Y'] == X \cross Y' \\
+	(\_ \prod \_) == \nat \\
+	(\_ \prod' \_)[X,Y] == X \cross Y \\
+	\just X' == X' \\
+	\just' X'' == \nat \prod' X'' \\
+	X'' \prod'' Y'' == X'' \\
+\end{zed}
+
+\begin{zed}
+	EXPR ::= var \ldata \nat \rdata 
+	      |  (\_ +_0 \_)\ldata EXPR \cross EXPR \rdata
+\end{zed}
+
+\begin{zed}
+	PreFirst \defs \pre First
+\end{zed}
+
+\begin{zed}
+	AAA \defs Aleph[z/x,foo/baz] \\
+	XYZ \defs Fourth[y/x]
+\end{zed}
+
+\begin{zed}
+	((Aleph)) \\
+	((Aleph)) = Aleph \\
+	BBB == \{ Aleph \} \\
+	CCC == \{ (Aleph) \}
+\end{zed}
+
+\begin{zed}
+	\nat \surj \nat \cross \nat \neq \empty \\
+	(\_\surj\_)[\nat, \nat \cross \nat] \neq \empty \\
+	(\id \nat)^{2} = \id \nat
+\end{zed}
+
+\begin{zed}
+	One \defs [x: \nat] \\
+	Two \defs [x: \nat \cross \nat] \\
+	Three \defs One \land Two \\
+	Four \defs \Delta One \land One! \\
+	Five \defs \Delta One \land Two! \\
+	Six \defs Four \semi Five
+\end{zed}
+
+\begin{schema}{ABC}
+	x, x', x'': \nat
+\end{schema}
+
+\begin{zed}
+	ABCD \defs ABC \land ABC'
+\end{zed}
+	
+\begin{zed} (-') == (-) \end{zed}
+
+\begin{axdef}
+	-'': \num \fun \num
+\where
+	(-'') = (-)
+\end{axdef}
+
+\begin{zed} 1 - 2 = - 1 \end{zed}
+
+\begin{zed} succ (-2) = 1 + (- 2) \end{zed}
+
+Test printing of image brackets
+
+\begin{zed}
+	\exists \_ \limg \_ \rimg': 
+		(\nat \rel \nat) \cross \power \nat \fun \power \nat @ \\
+	\forall R: \nat \rel \nat; S: \power \nat @ \\
+		R \limg S \rimg' = 
+			\nat \setminus (R \limg \nat \setminus S \rimg)
+\end{zed}
+
+Colin Boyd is guilty of this:
+
+\begin{zed}
+	[Z]
+\end{zed}
+
+\begin{schema}{Fred}
+	a, b, z?: Z \\
+	f, g: Z \fun (Z \rel Z)
+\where
+	g = f \oplus \{ a \mapsto f(a) \cup \{ (z?, z?) \} \} \\
+	a = b
+\end{schema}
+
+Generic delta:
+
+\begin{schema}{Queue}[ELEM]
+	queue: \seq ELEM
+\end{schema}
+
+\begin{schema}{Add[ELEM]}
+	\Delta Queue[ELEM] \\
+	x?: ELEM
+  \where
+	queue' = queue \cat \langle x? \rangle
+\end{schema}
+
+Ian Houston's fragment (caused a PC crash once)
+
+\begin{zed}
+	[Site, RscId, Attribute]
+\end{zed}
+
+\begin{schema}{Resource}
+        refs: Site \rel RscId \\
+        attr: Attribute
+\where
+        refs \neq \empty
+\end{schema}
+
+\begin{axdef}
+        projrefs: Resource \fun Site \pfun RscId
+\where
+        projrefs = (\lambda Resource @ refs)
+\end{axdef}
+
+\begin{schema}{DistOS}
+        sites: \power Site \\
+        resources: \power Resource \\
+        manages: Site \pfun \power Resource
+\where
+        sites = \dom manages \\
+        \disjoint (resources \dres projrefs) \\
+        manages \partition resources \\
+        \forall \rho: resources @ \dom \rho.refs \subseteq sites
+\end{schema}
+
+\begin{zed}
+	InitDistOS \defs [DistOS' | \ran manages' = \empty]
+\end{zed}
+
+\begin{axdef}
+        identifiedby: Site \cross RscId \pfun Resource
+\where
+        \forall \sigma: Site; \rho: RscId @ 
+		identifiedby (\sigma, \rho) = 
+			(\mu Resource | (\sigma \mapsto \rho) \in refs)
+\end{axdef}
+
+\begin{zed}
+	Response ::= Ok | TooManyReferences | AlreadyExists
+\end{zed}
+
+\begin{zed}
+	Success \defs [resp!: Response | resp! = Ok]
+\end{zed}
+
+\begin{zed}
+	InitResource \defs [Resource']
+\end{zed}
+
+\begin{zed}
+	\Delta Resource \defs [Resource; Resource']
+\end{zed}
+
+\begin{zed}
+	\Xi Resource \defs 
+		[\Delta Resource | \theta Resource = \theta Resource']
+\end{zed}
+
+\begin{zed}
+	NoEffectOnResource \defs [\Xi Resource; resp!: Response]
+\end{zed}
+
+\begin{schema}{AddRef}
+        \Delta Resource \\
+        nr?: Site \rel RscId \\
+        Success
+\where
+        attr' = attr \\
+        refs' = refs \cup nr?
+\end{schema}
+
+\begin{schema}{SubtractRef0}
+        \Delta Resource \\
+        tg?: Site \rel RscId \\
+        Success
+\where
+        tg? \subset refs \\
+        attr' = attr \\
+        refs' = refs \setminus tg?
+\end{schema}
+
+\begin{schema}{SubtractRefError}
+        tg?: Site \rel RscId \\
+        NoEffectOnResource
+\where
+        refs \subseteq tg? \\
+        resp! = TooManyReferences
+\end{schema}
+
+\begin{zed}
+	SubtractRef \defs SubtractRef0 \lor SubtractRefError
+\end{zed}
+
+\begin{schema}{NewAttribute}
+        \Delta Resource \\
+        Success \\
+        na?: Attribute
+\where
+        attr' = na? \\
+        refs' = refs
+\end{schema}
+
+\begin{zed}
+	NewResource \defs InitResource \semi AddRef \semi NewAttribute
+\end{zed}
+
+\begin{axdef}
+        ResourceInstance: (Site \rel RscId) \fun Attribute \fun Resource
+\where
+        ResourceInstance = 
+		(\lambda nr?: Site \rel RscId @ 
+		(\lambda na?: Attribute @ 
+		(\mu NewResource @ \theta Resource')))
+\end{axdef}
+
+\begin{zed}
+	\Delta DistOS \defs [DistOS; DistOS']
+\end{zed}
+
+\begin{zed}
+	\Xi DistOS \defs [\Delta DistOS | \theta DistOS = \theta DistOS']
+\end{zed}
+
+\begin{zed}
+	NoEffectOnDistOS \defs [\Xi DistOS; resp!: Response]
+\end{zed}
+
+\begin{schema}{CreateResource0}
+        \Delta DistOS \\
+        Success \\
+        NewResource \\
+        m?: Site
+\where
+        manages' = manages \oplus 
+		(m? \mapsto manages~m? \cup \{ResourceInstance~nr?~na?\})
+\end{schema}
+
+First bug in America: reference to an abbrev with implicit parameters.
+
+\begin{zed} 
+	(\_ \pfun \_) = \empty[\power(\nat \cross \nat)] 
+\end{zed}
+
+Second bug in America: ditto with wrong number of params.
+
+\begin{zed} (\_ \rel \_)[X] = \empty \end{zed}
+
+Paul Sausman (DataLogic) contributed this one:
+
+\begin{zed}
+	[Class, Inumber, FtabI]
+\also
+	ClInum ::= file \ldata Class \cross Inumber \rdata
+\also
+	ClFtabI ::= table \ldata Class \cross FtabI \rdata
+\end{zed}
+
+This can be improved by using tame functions:
+
+\begin{zed}
+	funs1 == \{ succ \} \cup \empty \\
+	funs2 == \{ succ \} \cup \{ succ \} \\
+	funs3 == \{ succ \} \cup \{ \id \nat \}
+\end{zed}
+
+These are the famous three bugs of fuzz:
+
+\begin{axdef}
+	R: (\_ \rel \_)
+\where
+        (0, 0) \in R
+\end{axdef}
+
+Gives R: NN <-> NN rather than R: ZZ <-> ZZ
+
+\begin{gendef}[X]
+	all: X \fun \power X
+\where
+	\forall x: X @ all~x = X
+\end{gendef}
+
+\begin{zed}
+	bug2 == all~3
+\end{zed}
+
+Gives bug2: P NN rather than bug2: P ZZ
+
+\begin{zed}
+	bug3 == \{3, -4\} \\
+	bug4 == \{3, 4\} \\
+\end{zed}
+
+Gives bug3: P NN rather than bug3: P ZZ
+
+\begin{zed}
+	Mercury \defs [ x, y: \nat ]\\
+	Venus \defs [ y, z: \nat ]\\
+	Mars \defs Mercury \lor Venus
+\end{zed}
+
+\begin{schema}{Aleph}
+        x, y: \num
+\where
+        x < y
+\end{schema}
+
+\begin{schema}{Gimel}
+	y: \nat \\
+	z: \nat \fun \nat
+\where
+	y = z~1 * z~2
+\end{schema}
+
+\begin{zed}
+	Example1 \defs Aleph \land Gimel \\
+	Example2 \defs \lnot Gimel \\
+	Example3 \defs Gimel \hide (z) \\
+	Example4 \defs \forall y: \num | y > 5 @ Gimel
+\end{zed}
+
+\begin{zed}
+	xyyx \defs [x, y: \nat] \land [y, x: \nat]
+\end{zed}
+
+\begin{zed}
+	four == (\LET two == 2 @ two + two).
+\end{zed}
+
+\begin{zed}
+	pred == succ^{-1} \\
+	minus6 == succ\bsup-1\esup(-5)
+\end{zed}
+
+\begin{zed}
+  \forall R: \{ (\_\prefix\_), (\_\suffix\_)\} @
+    \langle \rangle \inrel{R} \langle 54 \rangle
+\end{zed}
+
+% Ian Hayes reported a crash on the following:
+
+\begin{zed} Hayes1 \defs [ x: \nat ] \end{zed}
+
+\begin{schema}{Hayes2}
+    y, y': \nat \fun Hayes1 \\
+    Hayes1?
+\where
+    y' = y \oplus \{ 1 \mapsto \theta Hayes1? \}
+\end{schema}
+
+% Trevor King's bug: type_union was broken for schema types
+
+\begin{schema}{Trevor1}[X]
+  x: X
+\end{schema}
+
+\begin{axdef}
+  trevor: \power \num
+\end{axdef}
+
+\begin{zed}
+  Trevor2 \defs [a: Trevor1[trevor]] \lor [a: Trevor1[trevor]]
+\end{zed}
+
+% This emerged in 2007
+
+\begin{zed}
+\pre AddBirthday
+\end{zed}

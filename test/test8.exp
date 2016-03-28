@@ -1,0 +1,155 @@
+Given Name
+
+Given Client
+
+Abbrev Time: P NN
+
+Abbrev Money: P NN
+
+Given Piece
+
+Abbrev Data: P (seq Piece)
+
+Schema FILE
+    owner: Client
+    created: Time
+    expires: Time
+    contents: Data
+End
+
+Schema FS
+    files: Name -+> FILE
+End
+
+Schema \Delta FS
+    files: Name -+> FILE
+    who: Client
+    when: Time
+    files': Name -+> FILE
+End
+
+Var Size: Data -+> NN
+
+Var Tariff: FILE -+> Money
+
+Schema StoreFile
+    files: Name -+> FILE
+    who: Client
+    when: Time
+    files': Name -+> FILE
+    expires?: Time
+    contents?: Data
+    name!: Name
+    cost!: Money
+End
+
+Schema ReadFile
+    files: Name -+> FILE
+    who: Client
+    when: Time
+    files': Name -+> FILE
+    name?: Name
+    expires!: Time
+    contents!: Data
+End
+
+Var Rebate: FILE x Time -+> Money
+
+Schema DeleteFile
+    files: Name -+> FILE
+    who: Client
+    when: Time
+    files': Name -+> FILE
+    name?: Name
+    cost!: Money
+End
+
+Schema ReadData
+    contents?: Data
+    start?: NN
+    number?: NN
+    pieces!: Data
+End
+
+Schema UpdateData
+    contents?: Data
+    start?: NN
+    pieces?: Data
+    contents!: Data
+End
+
+Schema ReadStoredFile
+    files: Name -+> FILE
+    who: Client
+    when: Time
+    files': Name -+> FILE
+    contents?: Data
+    name?: Name
+    start?: NN
+    number?: NN
+    expires!: Time
+    contents!: Data
+    pieces!: Data
+End
+
+Schema ReadStoredFile2
+    files: Name -+> FILE
+    who: Client
+    when: Time
+    files': Name -+> FILE
+    name?: Name
+    start?: NN
+    number?: NN
+    expires!: Time
+    pieces!: Data
+End
+
+Schema Bosnia
+    files: Name -+> FILE
+    who: Client
+    when: Time
+    files': Name -+> FILE
+    name?: Name
+    expires!: Time
+    contents!: Data
+    dcost!: Money
+End
+
+Schema UpdateStoredFile
+    files: Name -+> FILE
+    who: Client
+    when: Time
+    files': Name -+> FILE
+    expires?: Time
+    contents?: Data
+    name?: Name
+    start?: NN
+    pieces?: Data
+    dcost?: Money
+    scost?: Money
+    expires!: Time
+    contents!: Data
+    cost!: Money
+    dcost!: Money
+    scost!: Money
+End
+
+Schema UpdateStoredFile2
+    files: Name -+> FILE
+    who: Client
+    when: Time
+    files': Name -+> FILE
+    expires?: Time
+    contents?: Data
+    name?: Name
+    start?: NN
+    pieces?: Data
+    dcost?: Money
+    scost?: Money
+    expires!: Time
+    contents!: Data
+    cost!: Money
+    dcost!: Money
+    scost!: Money
+End
+

@@ -1,0 +1,105 @@
+RELEASE NOTES FOR FUZZ 2000
+
+This version of the fuzz type-checker for Z is released under the MIT
+Public Licence.  It's a later version than the commercial ones, and
+includes a couple of new features, including automatic re-ordering of
+paragraphs to respect def-before-use.  So it's better than money can
+buy!
+
+Manual and software copyright (C) J. M. Spivey 1988, 1992, 2000.
+
+
+1. INSTALLATION
+
+The source of the type-checker is in the 'src' directory.  There are
+no configuration options, and all I can say is that it compiles OK
+under Linux/i386.  However, previous versions of the type-checker have
+been ported to lots of different 16- and 32-bit architectures, so
+there's some hope it is fairly robust.
+
+To build and install:
+
+	1. Edit the top level Makefile to set the installation
+           directories.  Also edit the pathname contained in
+           src/param.c.
+
+	2. Say 'make' at the top level (or in the src subdirectory) to
+           build the type-checker.
+
+	3. (Optional) Say 'make test' to run some regression tests.
+
+	4. Say 'su -c "make install"' to install all the bits and
+           pieces.
+
+	5. If your TeX implementation needs it, run 'texhash' to
+           update TeX's directory information.
+
+That's all!
+
+Documentation can be found in the 'doc' subdirectory.  There's a
+manual in 'fuzzman.pdf' and a reference card in 'refcard.pdf'.  Also,
+there are files called 'fuzzman-2up.pdf' and 'refcard-2up.pdf' that
+are suitable for printing on A4 paper, and a slightly different
+reference card in 'refcard-3up.pdf' that can be printed on the two
+sides of a single sheet of A4 card.  Generating these files from the
+LaTeX input requires LaTeX 2.09 and a number of post-processing
+programs, so I've included the PDF files for convenience.
+
+
+2. LANGUAGE
+
+The Z language accepted is still that of the Z Reference Manual,
+second edition.  There are no plans to support the Z standard.
+
+
+3. NEW FEATURES.
+
+There are a couple of new features of the type-checker:
+
+a. Use before definition (-d flag).  The type-checker can build a
+   dependency graph of the specification before type-checking and
+   topologically sort it.  The upshot is that, with very few
+   restrictions, you can put the paragraphs of a specification in
+   whatever order best suits exposition.
+
+b. Lisp-style echoing (-l flag).  The type-checker will optionally
+   echo each input paragraph in dependency order using a lisp-style
+   syntax.  I've used this as a way of inputting specs into
+   experimental analysis programs, saving the experimenter the trouble
+   of parsing and doing dependency analysis.  It's trivial to write a
+   parser for the lisp-style syntax in most languages: we've used ML
+   in our experiments.
+
+
+4. LICENCE STATEMENT
+
+Copyright (c) 1982-2006 J. M. Spivey
+All rights reserved
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are
+met:
+
+1. Redistributions of source code must retain the above copyright
+   notice, this list of conditions and the following disclaimer.
+
+2. Redistributions in binary form must reproduce the above copyright
+   notice, this list of conditions and the following disclaimer in the
+   documentation and/or other materials provided with the
+   distribution.
+
+3. The name of the author may not be used to endorse or promote
+   products derived from this software without specific prior written
+   permission.
+
+THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT,
+INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
+IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+POSSIBILITY OF SUCH DAMAGE.

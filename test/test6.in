@@ -1,0 +1,2067 @@
+%
+% test6.in
+%
+% This file is part of fuzz2000
+% Copyright (c) 1982--2006 J. M. Spivey
+% All rights reserved
+%
+% Redistribution and use in source and binary forms, with or without
+% modification, are permitted provided that the following conditions are met:
+%
+% 1. Redistributions of source code must retain the above copyright notice,
+%    this list of conditions and the following disclaimer.
+% 2. Redistributions in binary form must reproduce the above copyright notice,
+%    this list of conditions and the following disclaimer in the documentation
+%    and/or other materials provided with the distribution.
+% 3. The name of the author may not be used to endorse or promote products
+%    derived from this software without specific prior written permission.
+%
+% THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+% IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+% OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+% IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+% SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+% PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+% OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+% WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+% OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+% ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+% 
+% $Id: test6.in,v 1.2 2007-02-16 13:22:02 mike Exp $
+%
+
+\chapter{The Mathematical Tool-kit}\label{c:library}
+
+\def\blank{\quad$\diamond$}
+
+% Notational conventions:
+%	S, T, U, V, W	Sets
+%	A, B		Sets of sets
+%	P, Q, R		Relations
+%	f, g, h		Functions
+
+An important part of the Z method is a standard library or tool-kit
+of mathematical definitions.  This
+tool-kit allows many structures in information systems to be
+described very compactly, and because the data types it contains are
+oriented towards mathematical simplicity rather than computer
+implementation, reasoning about properties of the systems is made
+easier.  This chapter consists almost entirely of independent manual
+pages, each introducing an operation or group of related operations
+from the tool-kit. Each page includes laws which relate its
+operations to each other and to the operations defined on preceding
+pages.  These laws are stated without explicitly declaring the
+variables they contain; their types should be clear from the
+context.  A number of pages consist entirely of laws of a certain
+kind: for example, the induction principles for natural numbers and
+for sequences are summarized on their own pages.
+
+The tool-kit begins\label{p:symlist+} with the basic operations of set
+algebra (Section~\ref{s:setlib}). Many of these operations have a
+strong connection with the subset ordering $\subseteq$, and the laws
+relating them are listed on a separate page.
+\begin{menu}
+	$\neq$, $\notin$
+		& Inequality, non-membership		\prf{10} \\
+	$\emptyset$, $\subseteq$, $\subset$, $\power_1$
+		& Empty set, subsets, non-empty sets 	\prf{20} \\
+	$\cup$, $\cap$, $\setminus$
+		& Set algebra 				\prf{40} \\
+	$\bigcup$, $\bigcap$
+		& Generalized union and	intersection 	\prf{60} \\
+	$first$, $second$
+		& Projection functions			\prf{70} \\
+	\blank
+		& Order properties of set operations 	\prf{80}
+\end{menu}
+Next, the idea of a relation as a set of ordered pairs is introduced,
+together with various operations on relations (Section~\ref{s:rellib}).
+Again, the subset ordering plays a special part, in that many of the
+operations are monotonic with respect to it: these laws are shown on
+their own page.
+\begin{menu}
+	$\rel$, $\mapsto$ 	
+		& Binary relations, maplet 		\prf{1010} \\
+	$\dom$, $\ran$		
+		& Domain and range of a relation 	\prf{1020} \\
+        $\id$, $\comp$, $\circ$	
+		& Identity relation, composition 	\prf{1030} \\
+        $\dres$, $\rres$
+		& Domain and range restriction 		\prf{1040} \\
+        $\ndres$, $\nrres$
+		& Domain and range anti-restriction 	\prf{1050} \\
+	$\_\inv$
+		& Relational inversion 			\prf{1060} \\
+        $\_\limg\_\rimg$
+		& Relational image 			\prf{1070} \\
+	$\oplus$
+		& Overriding		 		\prf{1075} \\
+        $\_^+$, $\_ \star$
+		& Transitive closure 			\prf{1080} \\
+	\blank
+		& Monotonic operations			\prf{1090}
+\end{menu}
+In Section~\ref{s:funlib}, functions are introduced as a special kind
+of relation; and injections, surjections and bijections are introduced as
+special kinds of function.  Because functions are really relations,
+the operations on relations may be used on functions too.  Extra laws
+about this usage are listed on a separate page.
+\begin{menu}
+	$\pfun$, $\fun$
+		& Partial and total functions 		\prf{2010} \\
+	$\pinj$, $\inj$
+		& Partial and total injections		\prf{2020} \\
+	$\psurj$, $\surj$, $\bij$ 
+		& Partial and total surjections, bijections \prf{2030} \\
+	\blank
+		& Relational operations on functions 	\prf{2050}
+\end{menu}
+Natural numbers are introduced in Section~\ref{s:numlib}, together
+with the ideas of iteration of a relation and of finite sets and
+functions.  Induction is an important proof method for natural
+numbers, and it is given its own page.
+\begin{menu}
+	\rlap{$\nat$, $\num$, $+$, $\minus$, $*$, $\div$,
+		$\mod$, $\lt$, $\leq$, $\geq$, $\gt$}\\
+		& Natural numbers, integers 		\prf{3010} \\
+        $\nat_1$, $succ$, $\upto$
+		& Strictly positive integers, successor \\
+		& \quad function, number range 		\prf{3020} \\
+	$R^k$, $iter$		
+		& Iteration 				\prf{3030} \\
+	$\finset$, $\finset\!_1$, $\#$
+		& Finite sets, number of members 	\prf{3050} \\
+	$\ffun$, $\finj$
+		& Finite partial functions and injections \prf{3060} \\
+        $min$, $max$
+		& Minimum and maximum numbers 		\prf{3070} \\
+	\blank
+		& Proof by induction 			\prf{3080}
+\end{menu}
+Next, sequences are introduced as functions whose domains are certain
+segments of the natural numbers (Section~\ref{s:seqlib}). There are
+several important operations on sequences, and they inherit the
+operations on relations; some extra laws about these are listed on a
+separate page. There are specialized induction principles
+for sequences, and these too have their own page.
+\begin{menu}
+        $\seq$, $\seq_1$, $\iseq$ 
+		& Finite and injective sequences 	\prf{4010} \\
+        $\cat$, $rev$
+		& Concatenation, reverse		\prf{4020} \\
+        $head$, $last$, $tail$, $front$
+		& Sequence decomposition 		\prf{4040} \\
+        $\extract$, $\filter$, $squash$
+		& Extraction, filtering, compaction 	\prf{4060} \\
+	$\prefix$, $\suffix$, $\inseq$
+		& Subsequences				\prf{4065} \\
+	\blank
+		& Relational operations on sequences 	\prf{4090} \\
+        $\cat/$
+		& Distributed concatenation 		\prf{4070} \\
+        $\disjoint$, $\partition$
+		& Disjointness, partitions 		\prf{4080} \\
+	\blank
+		& Induction for sequences 		\prf{4100}
+\end{menu}
+Bags are like sets, except that it matters how many times a bag
+contains each of its elements.  Bags and operations
+on bags are defined in Section~\ref{s:baglib}.
+\begin{menu}
+        $\bag$, $count$, $\bcount$, $\otimes$
+		& Bags, counting, scaling	 	\prf{5010} \\
+	$\inbag$, $\subbageq$
+		& Bag membership, sub-bags		\prf{5015} \\
+        $\uplus$, $\uminus$
+		& Bag union and difference	 	\prf{5020} \\
+        $items$
+		& Bag of elements of a sequence 	\prf{5030}%
+							\label{p:symlist-}
+\end{menu}
+
+The `definition' parts of this chapter are a formal
+specification of the tool-kit. The principle of definition
+before use\index{definition before use} has been observed in all but
+two cases, the symbols $\rel$ and $\fun$.
+For completeness, their definitions are given here:\label{p:forward}
+\begin{zed}
+        X \rel Y  ==  \power (X \cross Y)
+\also
+        X \fun Y  ==  \{~f: X \rel Y | %
+                \forall x: X @ \exists_1 y: Y @ (x, y) \in f~\}
+\end{zed}
+%-----------------------------------------------------
+\newpage
+\section{Sets}\label{s:setlib}
+\begin{manpage}\label{p:10}
+\item[Name]
+\begin{name}
+        \neq   & Inequality\index{inequality ($\neq$)}\symdex{$\neq$} \\
+        \notin & Non-membership%
+			\index{non-membership ($\notin$)}\symdex{$\notin$}
+\end{name}
+
+\item[Definition]
+\begin{gendef}[X]
+        \_ \neq \_: X \rel X \\
+        \_ \notin \_: X \rel \power X
+\where
+        \forall x, y: X @ x \neq y \iff \lnot (x = y)
+\also
+        \forall x: X; S: \power X @ x \notin S \iff \lnot (x \in S)
+\end{gendef}
+
+\item[Description]
+The relations $\neq$ and $\notin$ are the complements of the 
+equality\index{equality ($=$)} and membership\index{membership ($\in$)}
+relations expressed by $=$ and $\in$ respectively.
+
+\item[Laws]
+\begin{laws}
+        x \neq y \implies y \neq x
+\end{laws}
+\end{manpage}
+%-----------------------------------------------------
+\begin{manpage}\label{p:20}
+\item[Name]
+\begin{name}
+        \emptyset & Empty set\index{empty set ($\emptyset$, $\{\}$)}%
+			\symdex{$\emptyset$} \\
+        \subseteq & Subset relation%
+			\index{subset ($\subseteq$)}\symdex{$\subseteq$} \\
+        \subset   & Proper subset relation%
+			\index{subset: proper ($\subset$)}\symdex{$\subset$} \\
+        \power_1 & Non-empty subsets\index{subset: non-empty ($\power_1$)}%
+			\symdex{$\power_1$}
+\end{name}
+
+\item[Definition]
+\begin{zed}
+	\emptyset[X] == \{~x: X | false~\}
+\end{zed}
+\begin{gendef}[X]
+	\_ \subseteq \_~, \_ \subset \_: \power X \rel \power X
+\where
+        \forall S, T: \power X @ \\
+\t1         (S \subseteq T \iff %
+                (\forall x: X @ x \in S \implies x \in T)) \land \\
+\t1         (S \subset T \iff S \subseteq T \land S \neq T)
+\end{gendef}
+\begin{zed}
+	\power_1 X == \{~S: \power X | S \neq \emptyset~\}
+\end{zed}
+
+\item[Description]
+$\emptyset$ is the empty set. It has no members.
+
+A set $S$ is a {\em subset\/} of a set $T$ ($S \subseteq T$) if every
+member of $S$ is also a member of $T$. We say $S$ is a {\em proper
+subset\/} of $T$ ($S \subset T$) if in addition $S$ is different from
+$T$.
+
+For any set $X$, $\power_1 X$ is the set of all subsets of $X$
+which are not empty.
+
+\item[Laws]
+\begin{laws}
+        x \notin \emptyset \-
+\also
+        S \subseteq T \iff S \in \power T \-
+\also
+        S \subseteq S &
+	        \lnot (S \subset S) \\
+        S \subseteq T \land T \subseteq S \iff S = T &
+	        \lnot (S \subset T \land T \subset S) \\
+	S \subseteq T \land T \subseteq V \implies S \subseteq V &
+                S \subset T \land T \subset V \implies S \subset V
+\also
+	\emptyset \subseteq S &
+		\emptyset \subset S \iff S \neq \emptyset
+\also
+        \power_1 X = \emptyset \iff X = \emptyset \-
+	X \neq \emptyset \iff X \in \power_1 X \-
+\end{laws}
+\end{manpage}
+%-----------------------------------------------------
+\begin{manpage}\label{p:40}
+\item[Name]
+\begin{name}
+        \cup      & Set union\index{union ($\cup$)}\symdex{$\cup$} \\
+        \cap      & Set intersection%
+			\index{intersection ($\cap$)}\symdex{$\cap$} \\
+        \setminus & Set difference\index{difference ($\setminus$)}%
+                \index{set: subtraction ($\setminus$)}\symdex{$\setminus$}
+\end{name}
+
+\item[Definition]
+\begin{gendef}[X]
+        \_  \cup \_~, \_ \cap \_~, \_ \setminus \_:
+                \power X \cross \power X \fun \power X
+\where
+        \forall S, T: \power X @ \\
+\t1         S \cup T = \{~x: X | x \in S \lor x \in T~\} \land \\
+\t1         S \cap T = \{~x: X | x \in S \land x \in T~\} \land \\
+\t1         S \setminus T = \{~x: X | x \in S \land x \notin T~\}
+\end{gendef}
+
+\item[Description]
+These are the ordinary operations of set algebra.
+The members of the set $S$ $\cup T$ are those objects which are members of
+$S$ or $T$ or both. The members of $S \cap T$ are those objects
+which are members of both $S$ and $T$. The members of
+$S \setminus T$ are those objects which are members of $S$
+but not of $T$.
+
+\item[Laws]
+\let\less=\setminus
+\begin{laws}
+        S \cup S = S \cup \emptyset = S \cap S = S \less \emptyset = S \-
+        S \cap \emptyset = S \less S = \emptyset \less S = \emptyset \-
+\also
+        S \cup T = T \cup S
+	  & S \cap T = T \cap S \\
+        S \cup (T \cup V) = (S \cup T) \cup V
+	  & S \cap (T \cap V) = (S \cap T) \cap V
+\also
+        S \cup (T \cap V) = (S \cup T) \cap (S \cup V) 
+	  & S \cap (T \cup V) = (S \cap T) \cup (S \cap V)
+\also
+        (S \cap T) \cup (S \less T) = S
+	  & S \cup (T \less V) = (S \cup T) \less (V \less S) \\
+
+        (S \less T) \cap T = \emptyset
+          & S \cap (T \less V) = (S \cap T) \less V \\
+
+        S \less (T \less V) = (S \less T) \cup (S \cap V)
+          & (S \cup T) \less V = (S \less V) \cup (T \less V) \\
+
+        (S \less T) \less V = S \less (T \cup V)
+          & S \less (T \cap V) = (S \less T) \cup (S \less V)
+\end{laws}
+\end{manpage}
+%-----------------------------------------------------
+\begin{manpage}\label{p:60}
+\item[Name]
+\begin{name}
+        \bigcup & Generalized union%
+			\index{generalized union ($\bigcup$)}\symdex{$\bigcup$}
+\also
+        \bigcap & Generalized intersection%
+                \index{generalized intersection ($\bigcap$)}\symdex{$\bigcap$}
+\end{name}
+
+\item[Definition]
+\begin{gendef}[X]
+        \bigcup, \bigcap: \power (\power X) \fun \power X
+\where
+        \forall A: \power (\power X) @
+\also
+\t1         \bigcup A = \{~x: X | (\exists S: A @ x \in S)~\} \land
+\also
+\t1         \bigcap A = \{~x: X | (\forall S: A @ x \in S)~\}
+\end{gendef}
+
+\item[Description]
+If $A$ is a set of sets, $\bigcup A$ is its {\em generalized union}:
+it contains all objects which are members of some member of $A$.
+The set $\bigcap A$ is the {\em generalized intersection\/} of $A$:
+it contains those objects which are members of all members of $A$.
+
+\item[Laws]
+\begin{laws}
+        \bigcup (A \cup B) = (\bigcup A) \cup (\bigcup B) \\
+        \bigcap (A \cup B) = (\bigcap A) \cap (\bigcap B)
+\also
+        \bigcup[X]~\emptyset = \emptyset \\
+        \bigcap[X]~\emptyset = X
+\also
+        S \cap (\bigcup A) = \bigcup \{~T: A @ S \cap T~\} \\
+        S \cup (\bigcap A) = \bigcap \{~T: A @ S \cup T~\} \\
+        (\bigcup A) \setminus S = \bigcup \{~T: A @ T \setminus S~\} \\
+        S \setminus (\bigcap A) = \bigcup \{~T: A @ S \setminus T~\} \\
+        A \neq \emptyset \implies S \setminus (\bigcup A) = %
+                \bigcap \{~T: A @ S \setminus T~\} \\
+        A \neq \emptyset \implies (\bigcap A) \setminus S = %
+                \bigcap \{~T: A @ T \setminus S~\}
+\also
+       A \subseteq B \implies \bigcup A \subseteq \bigcup B \\
+       A \subseteq B \implies \bigcap B \subseteq \bigcap A
+\end{laws}
+\end{manpage}
+%-----------------------------------------------------
+\begin{manpage}\label{p:70}
+\item[Name]
+\begin{name}
+     first\index{$first$}, second\index{$second$} %
+        & Projection functions\index{projection function} for ordered pairs
+\end{name}
+
+\item[Definition]
+
+\begin{gendef}[X,Y]
+        first: X \cross Y \fun X \\
+        second: X \cross Y \fun Y
+\where
+        \forall x: X; y: Y @ \\
+\t1         first(x,y) = x \land \\
+\t1         second(x,y) = y
+\end{gendef}
+
+\item[Description]
+These projection functions split ordered pairs into their first and second
+co-ordinates.
+
+\item[Laws]
+\begin{laws}
+        (first~p, second~p) = p
+\end{laws}
+\end{manpage}
+%-----------------------------------------------------
+\begin{pagestyle}{manpage}
+\paragraph{Order properties of set operations}\label{p:80}
+
+The subset relation $\subseteq$ on sets is a partial
+order\index{partial order}: this is the content of three of the laws
+shown on its page in the manual.  The operations of union and
+intersection are least upper bound\index{least upper bound} and
+greatest lower bound\index{greatest lower bound} operations for this
+partial order, as is expressed in the laws which follow.  If $S$ and
+$T$ are sets, then $S \cup T$ is the smallest set which contains both
+$S$ and $T$ as subsets:
+\begin{laws}
+       S \subseteq S \cup T \\
+       T \subseteq S \cup T \\
+       S \subseteq W \land T \subseteq W
+		\implies S \cup T \subseteq W.
+\end{laws}
+For a set of sets $A$, the generalized union $\bigcup A$ is the smallest
+set which contains each member of $A$ as a subset:
+\begin{laws}
+       \forall S: A @ S \subseteq \bigcup A \\
+       (\forall S: A @ S \subseteq W) 
+		\implies \bigcup A \subseteq W.
+\end{laws}
+Similarly, $S \cap T$ is the largest set which is a subset of
+both $S$ and $T$:
+\begin{laws}
+       S \cap T \subseteq S \\
+       S \cap T \subseteq T \\
+       W \subseteq S \land W \subseteq T 
+		\implies W \subseteq S \cap T.
+\end{laws}
+The set $\bigcap A$ is the largest set which is a subset of each
+member of $A$:
+\begin{laws}
+       \forall S: A @ \bigcap A \subseteq S \\
+       (\forall S: A @ W \subseteq S) \implies W \subseteq \bigcap A
+\end{laws}
+Finally, $S \setminus T$ is the largest subset of $S$ which is
+disjoint from $T$:
+\begin{laws}
+       S \setminus T \subseteq S \\
+       (S \setminus T) \cap T = \emptyset \\
+       W \subseteq S \land W \cap T = \emptyset \implies %
+                W \subseteq S \setminus T.
+\end{laws}
+\newpage
+\end{pagestyle}
+%-----------------------------------------------------
+\section{Relations}\label{s:rellib}
+\begin{manpage}\label{p:1010}
+\item[Name]
+\begin{name}
+       \rel & Binary relations\index{relation ($\rel$)}\symdex{$\rel$} \\
+       \mapsto & Maplet\index{maplet ($\mapsto$)}\symdex{$\mapsto$}
+\end{name}
+
+\item[Definition]
+% \rel was defined at the top of the chapter
+%%unchecked
+\begin{zed}
+	X \rel Y  ==  \power (X \cross Y)
+\end{zed}
+\begin{gendef}[X,Y]
+       \_ \mapsto \_: X \cross Y \fun X \cross Y
+\where
+       \forall x: X; y: Y @ \\
+\t1           x \mapsto y = (x, y)
+\end{gendef}
+
+\item[Description]
+If $X$ and $Y$ are sets, then $X \rel Y$ is the set of {\em binary
+relations\/} between $X$ and $Y$. Each such relation is a subset
+of $X \cross Y$. The `maplet' notation $x \mapsto y$ is a graphic way
+of expressing the ordered pair $(x, y)$.
+
+The definition of $X \rel Y$ given here repeats the one given on
+page~\pageref{p:forward}.
+\end{manpage}
+%-----------------------------------------------------
+\begin{manpage}\label{p:1020}
+\item[Name]
+\begin{name}
+       \dom, \ran & Domain\index{domain ($\dom$)} and %
+                range\index{range ($\ran$)} of a relation
+\end{name}
+
+\item[Definition]
+\begin{gendef}[X,Y]
+        \dom: (X \rel Y) \fun \power X \\
+        \ran: (X \rel Y) \fun \power Y
+\where
+        \forall R: X \rel Y @ \\
+\t1         \dom R = \{~x:X; y:Y | x \inrel{R} y @ x~\} \land \\
+\t1         \ran R = \{~x:X; y:Y | x \inrel{R} y @ y~\}
+\end{gendef}
+
+\item[Description]
+If $R$ is a binary relation between $X$ and $Y$, then the
+{\em domain\/} of $R$ ($\dom R$) is the set of all members of $X$ which
+are related to at least one member of $Y$ by $R$. The {\em range\/}
+of $R$ ($\ran R$) is the set of all members of $Y$ to which at
+least one member of $X$ is related by $R$.
+
+\item[Laws]
+\begin{laws}
+     x \in \dom R \iff (\exists y: Y @ x \inrel{R} y) \\
+     y \in \ran R \iff (\exists x: X @ x \inrel{R} y)
+\also
+     \dom~\{x_1 \mapsto y_1,\ldots,x_n \mapsto y_n\} = \{x_1,\ldots,x_n\} \\
+     \ran~\{x_1 \mapsto y_1,\ldots,x_n \mapsto y_n\} = \{y_1,\ldots,y_n\}
+\also
+     \dom (Q \cup R) = (\dom Q) \cup (\dom R) \\
+     \ran (Q \cup R) = (\ran Q) \cup (\ran R) \\
+     \dom (Q \cap R) \subseteq (\dom Q) \cap (\dom R) \\
+     \ran (Q \cap R) \subseteq (\ran Q) \cap (\ran R)
+\also
+     \dom \emptyset = \emptyset \\
+     \ran \emptyset = \emptyset
+\end{laws}
+\end{manpage}
+%-----------------------------------------------------
+\begin{manpage}\label{p:1030}
+\item[Name]
+\begin{name}
+        \id & Identity relation\index{identity relation ($\id$)} \\
+        \comp   & Relational composition%
+		\index{composition ($\comp$)}\symdex{$\semi$} \\
+	\circ	& Backward relational composition%
+		\index{backward composition ($\circ$)}\symdex{$\circ$}%
+		\index{composition>backward composition}
+\end{name}
+
+\item[Definition]
+\begin{zed}
+	\id X  ==  \{~x: X @ x \mapsto x~\}
+\end{zed}
+\begin{gendef}[X,Y,Z]
+        \_ \comp \_: (X \rel Y) \cross (Y \rel Z) \fun (X \rel Z) \\
+	\_ \circ \_: (Y \rel Z) \cross (X \rel Y) \fun (X \rel Z)
+\where
+        \forall Q: X \rel Y; R: Y \rel Z @ \\
+\t1         Q \comp R = R \circ Q = \{~x: X; y: Y; z: Z | \\
+\t5            		x \inrel{Q} y \land y \inrel{R} z @ x \mapsto z~\}
+\end{gendef}
+
+\item[Description]
+
+The {\em identity relation\/} $\id X$ on a set $X$ relates each member of
+$X$ to itself. The {\em composition\/} $Q \comp R$ of two relations $Q: X
+\rel Y$ and $R: Y \rel Z$ relates a member $x$ of $X$ to a member $z$
+of $Z$ if and only if there is at least one element $y$ of $Y$ to which
+$x$ is related by $Q$ and which is itself related to $z$ by $R$. The
+notation $R \circ Q$ is an alternative to $Q \comp R$.
+
+\item[Laws]
+% If $P: X \rel Y$; $Q: Y \rel Z$; $R: Z \rel W$,
+\begin{laws}
+        (x \mapsto x') \in \id X \iff x = x' \in X \\
+        (x \mapsto z) \in P \comp Q \iff
+                (\exists y: Y @ x \inrel{P} y \land y \inrel{Q} z) \\
+\also
+        P \comp (Q \comp R) = (P \comp Q) \comp R \\
+        \id X \comp P = P \\
+        P \comp \id Y = P
+\also
+        \id V \comp \id W = \id (V \cap W)
+\also
+	(f \circ g)(x) = f(g(x))
+\end{laws}
+\end{manpage}
+%-----------------------------------------------------
+\begin{manpage}\label{p:1040}
+\item[Name]
+\begin{name}
+       \dres & Domain restriction\index{restriction}%
+		\index{domain: restriction ($\dres$)}\symdex{$\dres$} \\
+       \rres & Range restriction%
+		\index{range: restriction ($\rres$)}\symdex{$\rres$}
+\end{name}
+
+\item[Definition]
+\begin{gendef}[X,Y]
+        \_ \dres \_: \power X \cross (X \rel Y) \fun (X \rel Y) \\
+        \_ \rres \_: (X \rel Y) \cross \power Y \fun (X \rel Y)
+\where
+        \forall S: \power X; R: X \rel Y @ \\
+\t1         S \dres R = \{~x: X; y: Y |
+		x \in S \land x \inrel{R} y @ x \mapsto y~\}
+\also
+        \forall R: X \rel Y; T: \power Y @ \\
+\t1         R \rres T = \{~x: X; y: Y |
+		x \inrel{R} y \land y \in T @ x \mapsto y~\}
+\end{gendef}
+
+\item[Description]
+The {\em domain restriction\/} $S \dres R$ of a relation $R$ to
+a set $S$ relates $x$ to $y$ if and only if $R$ relates $x$ to
+$y$ and $x$ is a member of $S$. The {\em range restriction\/}
+$R \rres T$ of $R$ to a set $T$ relates $x$ to $y$ if and only
+if $R$ relates $x$ to $y$ and $y$ is a member of $T$.
+
+\item[Laws]
+\begin{laws}
+     S \dres R = \id S \comp R = (S \cross Y) \cap R \\
+     R \rres T = R \comp \id T = R \cap (X \cross T) \\
+\also
+     \dom (S \dres R) = S \cap (\dom R) \\
+     \ran (R \rres T) = (\ran R) \cap T \\
+\also
+     S \dres R \subseteq R \\
+     R \rres T \subseteq R \\
+\also
+     (S \dres R) \rres T = S \dres (R \rres T) \\
+     S \dres (V \dres R) = (S \cap V) \dres R \\
+     (R \rres T) \rres W = R \rres (T \cap W)
+\end{laws}
+\end{manpage}
+%-----------------------------------------------------
+\begin{manpage}\label{p:1050}
+\item[Name]
+\begin{name}
+       \ndres & Domain anti-restriction%
+		\index{domain: anti-restriction ($\ndres$)}\symdex{$\ndres$} \\
+       \nrres & Range anti-restriction%
+		\index{range: anti-restriction ($\nrres$)}\symdex{$\nrres$}%
+		\index{anti-restriction ($\ndres$, $\nrres$)}
+\end{name}
+
+\item[Definition]
+\begin{gendef}[X,Y]
+        \_ \ndres \_: \power X \cross (X \rel Y) \fun (X \rel Y) \\
+        \_ \nrres \_: (X \rel Y) \cross \power Y \fun (X \rel Y)
+\where
+        \forall S: \power X; R: X \rel Y @ \\
+\t1         S \ndres R = \{~x: X; y: Y |
+		x \notin S \land x \inrel{R} y @ x \mapsto y~\}
+\also
+        \forall R: X \rel Y; T: \power Y @ \\
+\t1         R \nrres T = \{~x: X; y: Y |
+		x \inrel{R} y \land y \notin T @ x \mapsto y~\}
+\end{gendef}
+
+\item[Description]
+These two operations are the complemented counterparts of the restriction
+operations $\_ \dres \_$ and $\_ \rres \_~$. An object $x$
+is related to an object $y$ by the relation $S \ndres R$ if and only
+if $x$ is related to $y$ by $R$ and $x$ is not a member of $S$.
+Similarly, $x$ is related to $y$ by $R \nrres T$ if and only if $x$
+is related to $y$ by $R$ and $y$ is not a member of $T$.
+
+\item[Laws]
+\begin{laws}
+        S \ndres R = (X \setminus S) \dres R \\
+        R \nrres T = R \rres (Y \setminus T) \\
+\also
+        (S \dres R) \cup (S \ndres R) = R \\
+        (R \rres T) \cup (R \nrres T) = R
+\end{laws}
+\end{manpage}
+%-----------------------------------------------------
+\begin{manpage}\label{p:1060}
+\item[Name]
+\begin{name}
+     \_\inv & Relational inversion%
+		\index{inversion ($R\inv$)}\symdex{$R\inv$}
+\end{name}
+
+\item[Definition]
+\begin{gendef}[X,Y]
+        \_\inv: (X \rel Y) \fun (Y \rel X)
+\where
+        \forall R: X \rel Y @ \\
+\t1         R\inv = \{~x: X; y: Y | %
+                        x \inrel{R} y @ y \mapsto x~\}
+\end{gendef}
+
+\item[Notation]
+The notation $R^{- 1}$ is often used for the inverse of $R$; it is
+a special case of the notation for iteration (see page~\pageref{p:iter}).
+
+\item[Description]
+An object $y$ is related to an object $x$ by the {\em relational
+inverse\/} $R\inv$ of $R$ if and only if $x$ is related to $y$ by $R$.
+
+\item[Laws]
+\begin{laws}
+        (y \mapsto x) \in R\inv \iff (x \mapsto y) \in R \\
+        (R\inv)\inv = R \\
+        (Q \comp R)\inv = R\inv \comp Q\inv \\
+        (\id V)\inv = \id V \\
+        \dom (R\inv) = \ran R \\
+        \ran (R\inv) = \dom R \\
+        \id (\dom R) \subseteq R \comp R\inv \\
+        \id (\ran R) \subseteq R\inv \comp R
+\end{laws}
+\end{manpage}
+%-----------------------------------------------------
+\begin{manpage}\label{p:1070}
+\item[Name]
+\begin{name}
+        \_\limg\_\rimg & Relational image%
+                \index{relational image ($\_\limg\_\rimg$)}%
+		\symdex{$\_\limg\_\rimg$}
+\end{name}
+
+\item[Definition]
+\begin{gendef}[X,Y]
+        \_\limg\_\rimg: (X \rel Y) \cross \power X \fun \power Y
+\where
+        \forall R: X \rel Y; S: \power X @ \\
+\t1         R\limg S\rimg = \{~x: X; y: Y | x \in S \land %
+                                        x \inrel{R} y @ y~\}
+\end{gendef}
+
+\item[Description]
+The {\em relational image\/} $R\limg S\rimg$ of a set $S$ through
+a relation $R$ is the set of all objects $y$ to which $R$ relates
+some member $x$ of $S$.
+
+\item[Laws]
+\begin{laws}
+        y \in R\limg S\rimg \iff (\exists x: X @ %
+                                        x \in S \land x \inrel{R} y) \\
+        R\limg S\rimg = \ran (S \dres R)
+\also
+        \dom (Q \comp R) = Q\inv\limg \dom R\rimg \\
+        \ran (Q \comp R) = R\limg \ran Q\rimg \\
+        R\limg S \cup T\rimg = R\limg S\rimg \cup R\limg T\rimg \\
+        R\limg S \cap T\rimg \subseteq R\limg S\rimg \cap R\limg T\rimg \\
+        R\limg \dom R\rimg = \ran R
+\also
+	\dom R = first\limg R\rimg \\
+	\ran R = second\limg R\rimg
+\end{laws}
+\end{manpage}
+%-----------------------------------------------------
+\begin{manpage}\label{p:1075}
+\item[Name]
+\begin{name}
+     \oplus & Overriding\index{overriding ($\oplus$)}\symdex{$\oplus$}
+\end{name}
+
+\item[Definition]
+\begin{gendef}[X,Y]
+        \_ \oplus \_: (X \rel Y) \cross (X \rel Y) \fun (X \rel Y)
+\where
+        \forall Q, R: X \rel Y @ \\
+\t1         Q \oplus R = ((\dom R) \ndres Q) \cup R
+\end{gendef}
+
+\item[Description]
+The relation $Q \oplus R$ relates everything in the domain of $R$ to
+the same objects as $R$ does, and everything else in the domain of
+$Q$ to the same objects as $Q$ does.
+
+\item[Laws]
+\begin{laws}
+        R \oplus R = R \\
+        P \oplus (Q \oplus R) = (P \oplus Q) \oplus R \\
+        \emptyset \oplus R = R \oplus \emptyset = R \\
+\also
+        \dom (Q \oplus R) = (\dom Q) \cup (\dom R) \\
+        \dom Q \cap \dom R = \emptyset \implies Q \oplus R = Q \cup R \\
+\also
+        V \dres (Q \oplus R) = (V \dres Q) \oplus (V \dres R) \\
+        (Q \oplus R) \rres W \subseteq (Q \rres W) \oplus (R \rres W)
+\end{laws}
+If $f$ and $g$ are functions, then
+\begin{laws}
+        x \in (\dom f) \setminus (\dom g) \implies (f \oplus g)~x = f~x \\
+        x \in \dom g \implies (f \oplus g)~x = g~x
+\end{laws}
+\end{manpage}
+%-----------------------------------------------------
+\begin{manpage}\label{p:1080}
+\item[Name]
+\begin{name}
+        \_ \plus & Transitive closure%
+		\index{transitive closure ($R \plus$)}\symdex{$R \plus$} \\
+        \_ \star & Reflexive-transitive closure%
+                \index{reflexive-transitive closure ($R \star$)}%
+		\symdex{$R \star$}
+\end{name}
+
+\item[Definition]
+\begin{gendef}[X]
+        \_ \plus, \_ \star: (X \rel X) \fun (X \rel X)
+\where
+        \forall R: X \rel X @
+\also
+\t1        R \plus = \bigcap \{~Q: X \rel X |
+		R \subseteq Q \land Q \comp Q \subseteq Q~\} \land
+\also
+\t1        R \star = \bigcap \{~Q: X \rel X |
+		\id X \subseteq Q \land R \subseteq Q \land 
+						Q \comp Q \subseteq Q~\}
+\end{gendef}
+
+\item[Description]
+If $R$ is a relation from a set $X$ to itself, $R \plus$ is the strongest
+or smallest relation containing $R$ which is transitive, and $R \star$ is the
+strongest relation containing $R$ which is both reflexive and
+transitive.
+
+For an alternative definition of $R \plus$ and $R \star$ in terms of
+iteration, see the laws on page~\pageref{p:iter}.
+
+\item[Laws]
+\begin{laws}
+     R \subseteq R \plus \\
+     R \plus \comp R \plus \subseteq R \plus \\
+     R \subseteq Q \land Q \comp Q \subseteq Q \implies R \plus \subseteq Q
+\also
+     \id X \subseteq R \star \\
+     R \subseteq R \star \\
+     R \star \comp R \star = R \star \\
+     \id X \subseteq Q \land R \subseteq Q \land Q \comp Q \subseteq Q %
+                                                \implies R \star \subseteq Q
+\also
+     R \star = R \plus \cup \id X = (R \cup \id X) \plus \\
+     R \plus = R \comp R \star = R \star \comp R \\
+     (R \plus) \plus = R \plus \\
+     (R \star) \star = R \star
+\also
+     S \subseteq R \star\limg S\rimg \\
+     R\limg R \star\limg S\rimg\rimg \subseteq R \star\limg S\rimg \\
+     S \subseteq T \land R\limg T\rimg \subseteq T \implies
+		R \star\limg S\rimg \subseteq T
+\end{laws}
+\end{manpage}
+%-----------------------------------------------------
+\begin{pagestyle}{manpage}
+\paragraph{Monotonic operations}\label{p:1090}\label{p:mono}
+
+A function $f: \power X \fun \power Y$ is {\em monotonic\/}%
+\index{monotonic function}%
+	\glossary{[monotonic function] A function
+	$f: \power X \fun \power Y$ with the property that
+	$f(S) \subseteq f(T)$ if $S \subseteq T$.}
+if
+\begin{laws}
+     S \subseteq T \implies f(S) \subseteq f(T).
+\end{laws}
+A function $g: \power X \cross \power Y \fun \power Z$ is {\em
+monotonic in both arguments\/} if
+\begin{laws}
+    S \subseteq U \land T \subseteq V
+	\implies g(S, T) \subseteq g(U, V).
+\end{laws}
+Many operations on sets and relations are monotonic, including the
+closure operators $R \plus$ and $R \star$; others satisfy the
+stronger property of being disjunctive (see below).
+It is a theorem that a function $f: \power X \fun \power Y$ is
+monotonic if and only if for all $S, T: \power X$,
+\begin{laws}
+	f(S \cap T) \subseteq f(S) \cap f(T).
+\end{laws}
+Also, a function $f$ is monotonic if and only if the following
+inequality holds for all $S$ and $T$:
+\begin{laws}
+        f(S) \cup f(T) \subseteq f(S \cup T).
+\end{laws}
+If the stronger property
+$f(S \cup T) = f(S) \cup f(T)$
+holds, we say that $f$ is {\em disjunctive}. Disjunctive functions
+include the domain and range operations $\dom$ and $\ran$ and
+inversion $R \inv$.
+A function $g$ of two arguments is {\em disjunctive in both
+arguments\/} if
+\begin{laws}
+	g(S \cup T, U) = g(S, U) \cup g(T, U) \\
+	g(S, U \cup V) = g(S, U) \cup g(S, V).
+\end{laws} 
+Many binary operations sets and relations are disjunctive in both
+arguments, including $\cup$, $\cap$, $\comp$, $\dres$, $\rres$ and
+$\_\limg\_\rimg$. These disjunctive operations are also monotonic,
+so they share all the properties of monotonic functions.
+
+A few other operations, such as $\setminus$, $\ndres$ and $\nrres$
+are disjunctive in one argument and `anti-monotonic' in the other,
+in the sense that, e.g.,
+\begin{laws}
+        S \ndres (Q \cup R) = (S \ndres Q) \cup (S \ndres R) \\
+        S \subseteq T \implies T \ndres R \subseteq S \ndres R.
+\end{laws}
+
+If $f: \power X \fun \power X$ monotonic, then Tarski's
+theorem\index{Tarski's theorem} says that it has a least fixed
+point\index{fixed point} $S$ given by
+\[ S = \bigcap \{~T: \power X | f(T) \subseteq T~\}. \]
+This set $S$ has the following two properties:
+\[
+	f(S) = S
+\also
+	\forall T: \power X | f(T) \subseteq T @ S \subseteq T.
+\]
+The first property is that $S$ is a fixed point of $f$, and the second
+is that $S$ is included in all `pre-fixed points' of $f$: in
+particular, it is a subset of every other fixed point of $f$.
+\newpage
+\end{pagestyle}
+%-----------------------------------------------------
+\section{Functions}\label{s:funlib}
+\begin{manpage}\label{p:2010}
+\item[Name]
+\begin{name}
+     \pfun & Partial functions\index{function}%
+		\index{partial function ($\pfun$)}\symdex{$\pfun$} \\
+     \fun & Total functions%
+		\index{total function ($\fun$)}\symdex{$\fun$}
+\end{name}
+
+\item[Definition]
+% \fun was defined at the top of the chapter; \pfun is built in
+%%unchecked
+\begin{zed}
+     X \pfun Y  ==
+        \{~f: X \rel Y | (\forall x: X; y_1, y_2: Y @ \\
+\t5		(x \mapsto y_1) \in f \land (x \mapsto y_2) \in f %
+                                                  \implies y_1 = y_2)~\}
+\also
+     X \fun Y  ==  \{~f: X \pfun Y | \dom f = X~\}
+\end{zed}
+
+\item[Description]
+If $X$ and $Y$ are sets, $X \pfun Y$ is the set of {\em partial
+functions\/} from $X$ to $Y$. These are relations which relate each
+member $x$ of $X$ to at most one member of $Y$. This member of
+$Y$, if it exists, is written $f~x$. $X \fun Y$ is the set of
+{\em total functions\/} from $X$ to $Y$. These are partial functions
+with domain $X$; they relate each member of $X$ to exactly one
+member of $Y$.
+
+An alternative definition of $X \fun Y$ was given on
+page~\pageref{p:forward}. It is equivalent to the one given here.
+
+\item[Laws]
+\begin{laws}
+        f \in X \pfun Y \iff f \circ f\inv = \id (\ran f)
+\end{laws}
+\end{manpage}
+%-----------------------------------------------------
+\begin{manpage}\label{p:2020}
+\item[Name]
+\begin{name}
+     \pinj & Partial injections\index{injection ($\pinj$, $\inj$)}%
+		\index{partial injection ($\pinj$)}\symdex{$\pinj$} \\
+     \inj & Total injections%
+		\index{total injection ($\inj$)}\symdex{$\inj$}
+\end{name}
+
+\item[Definition]
+\begin{zed}
+     X \pinj Y  ==
+	\{~f: X \pfun Y | (\forall x_1, x_2: \dom f @ 
+		f(x_1) = f(x_2) \implies x_1 = x_2)~\}
+\also
+     X \inj Y  ==  (X \pinj Y) \cap (X \fun Y)
+\end{zed}
+
+\item[Description]
+If $X$ and $Y$ are sets, $X \pinj Y$ is the set of {\em partial
+injections\/} from $X$ to $Y$. These are partial functions from
+$X$ to $Y$ which map different elements of the domain to different
+objects. $X \inj Y$ is the set of {\em total injections\/}
+from $X$ to $Y$, the partial injections which are also total functions.
+
+\item[Laws]
+\begin{laws}
+        f \in X \pinj Y \iff f \in X \pfun Y \land f\inv \in Y \pfun X \\
+        f \in X \inj Y \iff f \in X \fun Y \land f\inv \in Y \pfun X
+\also
+        f \in X \pinj Y \implies %
+                f\limg S \cap T\rimg = f\limg S\rimg \cap f\limg T\rimg
+\end{laws}
+\end{manpage}
+%-----------------------------------------------------
+\begin{manpage}\label{p:2030}
+\item[Name]
+\begin{name}
+     \psurj & Partial surjections\index{surjection ($\psurj$, $\surj$)}%
+		\index{partial surjection ($\psurj$)}\symdex{$\psurj$} \\
+     \surj & Total surjections%
+		\index{total surjection ($\surj$)}\symdex{$\surj$} \\
+     \bij & Bijections\index{bijection ($\bij$)}\symdex{$\bij$}
+\end{name}
+
+\item[Definition]
+\begin{zed}
+     X \psurj Y  ==  \{~f: X \pfun Y | \ran f = Y~\}
+\also
+     X \surj Y  ==  (X \psurj Y) \cap (X \fun Y)
+\also
+     X \bij Y  ==  (X \surj Y) \cap (X \inj Y)
+\end{zed}
+
+\item[Description]
+If $X$ and $Y$ are sets, $X \psurj Y$ is the set of {\em partial
+surjections\/} from $X$ to $Y$. These are partial functions from
+$X$ to $Y$ which have the whole of $Y$ as their range. $X \surj
+Y$ is the set of {\em total surjections\/} from $X$ to $Y$, the functions
+which have the whole of $X$ as their domain and the whole of $Y$
+as their range. $X \bij Y$ is the set of {\em bijections\/} from
+$X$ to $Y$. These map the elements of $X$ onto the elements of
+$Y$ in a one-to-one correspondence.
+
+\item[Laws]
+\begin{laws}
+        f \in X \bij Y \iff f \in X \fun Y \land f\inv \in Y \fun X \\
+        f \in X \psurj Y \implies f \circ f\inv = \id Y
+\end{laws}
+\end{manpage}
+%-----------------------------------------------------
+\begin{pagestyle}{manpage}\label{p:2050}
+\paragraph{Relational operations on functions}
+
+Functions\index{function: as relation} are just a special kind of
+relation, so the relational operations, such as $\circ$, $\dres$ and
+$\oplus$, may be used on functions.  Many of these operations yield
+functions when applied to functions, and some preserve other
+properties such as injectivity.
+
+The identity relation\index{identity relation: as function}
+is a function -- in fact, an injection -- and
+composition, restriction and overriding map functions to functions:
+\begin{laws}
+        S \subseteq X \implies \id S \in X \pinj X \\
+        \id X \in X \bij X
+\also
+        f \in X \pfun Y \land g \in Y \pfun Z \implies %
+                g \circ f \in X \pfun Z \\
+        f \in X \fun Y \land g \in Y \pfun Z \land %
+		\ran f \subseteq \dom g \implies g \circ f \in X \fun Z
+\also
+        f \in X \pfun Y \implies S \dres f \in X \pfun Y \\
+        f \in X \pfun Y \implies f \rres T \in X \pfun Y
+\also
+	f \in X \pfun Y \land g \in X \pfun Y \implies %
+		f \oplus g \in X \pfun Y.
+\end{laws}
+The composition\index{backward composition: of functions} of two 
+injections and the restriction of an injection
+are again injections, and inversion maps injections to injections:
+\begin{laws}
+        f \in X \pinj Y \land g \in Y \pinj Z \implies %
+                g \circ f \in X \pinj Z \\
+        f \in X \pinj Y \implies S \dres f \in X \pinj Y \\
+        f \in X \pinj Y \implies f \rres T \in X \pinj Y \\
+        f \in X \pinj Y \implies f\inv \in Y \pinj X.
+\end{laws}
+Finally, set-theoretic operations may be used to combine functions.
+Note especially that the union of two functions is a function
+only if they agree on the intersection of their domains:
+\begin{laws}
+        f \in X \pfun Y \land g \in X \pfun Y \land \\
+\t1        (\dom f) \dres g = (\dom g) \dres f \implies f \cup g \in X \pfun Y
+\also
+        f \in X \pfun Y \land g \in X \pfun Y 
+		\implies f \cap g \in X \pfun Y \\
+        f \in X \pinj Y \land g \in X \pinj Y 
+		\implies f \cap g \in X \pinj Y.
+\end{laws}
+The last two laws are special cases of the laws that any subset of a
+function is a function, and any subset of an injection is an
+injection:
+\begin{laws}
+	f \in X \pfun Y \land g \subseteq f \implies g \in X \pfun Y \\
+	f \in X \pinj Y \land g \subseteq f 
+		\implies g \in X \pinj Y.
+\end{laws}
+\newpage
+\end{pagestyle}
+%-----------------------------------------------------
+\section{Numbers and finiteness}\label{s:numlib}
+\begin{manpage}\label{p:3010}
+\item[Name]
+\begin{name}
+     \nat & Natural numbers\index{natural number ($\nat$)}\symdex{$\nat$} \\
+     \num & Integers\index{integer ($\num$)}\symdex{$\num$} \\
+     +, -, *, \div\index{division ($\div$)}, \mod\index{modulo ($\mod$)} %
+                & Arithmetic operations\index{arithmetic operation}%
+		\symdex{$+$}\symdex{$-$}\symdex{$*$} \\
+     \lt, \leq, \geq, \gt & Numerical comparison\index{comparison: numerical}%
+		\symdex{$\lt$}\symdex{$\leq$}\symdex{$\geq$}\symdex{$\gt$}%
+		\index{natural number>integer}
+\end{name}
+
+\item[Definition]
+% \num is built-in
+%%unchecked
+\begin{zed}
+	[\num]
+\end{zed}
+%%unchecked
+\begin{axdef}
+        \nat: \power \num
+\also
+        \_ + \_~, \_ - \_~, \_ * \_: \num \cross \num \fun \num \\
+        \_ \div \_~, \_ \mod \_: 
+		\num \cross (\num \setminus \{0\}) \fun \num \\
+	-: \num \fun \num
+\also
+        \_ \lt \_~, \_ \leq \_~, \_ \geq \_~, \_ \gt \_: \num \rel \num
+\where
+        \nat = \{~n: \num | n \geq 0~\}
+\also
+        \hbox{\dots\ other definitions omitted \dots}
+\end{axdef}
+%% \begin{axdef}
+%% 	   - : \num \fun \num \\
+%%         \_ + \_~, \_ - \_~, \_ * \_: \num \cross \num \fun \num \\
+%%         \_ \div \_~, \_ \mod \_: 
+%% 		\num \cross (\num \setminus \{0\}) \fun \num \\
+%%         \_ < \_~, \_ \leq \_~, \_ \geq \_~, \_ > \_: \num \rel \num
+%% \end{axdef}
+% \nat is built in
+%%unchecked
+\begin{zed}
+	\nat == \{~n: \num | n \geq 0~\}
+\end{zed}
+
+\item[Notation]
+Decimal notation may be used for elements of $\nat$.  Negative numbers
+may be written down using the unary minus function $(-)$.
+
+\item[Description]
+$\nat$ is the set of {\em natural numbers\/} $\{ 0, 1, 2, \ldots \}$,
+and $\num$ is the set of integers
+$\{ \ldots, - 2, - 1, 0, 1, 2, \ldots \}$.
+The usual {\em arithmetic operations\/} of addition, subtraction,
+multiplication, integer division and modulo are provided. Integer
+division and the modulo operation use truncation towards minus
+infinity, so that they together obey the three laws listed below.
+Numbers may be compared with the usual ordering relations.
+
+\item[Laws]
+\begin{laws}
+        b > 0 \implies 0 \leq a \mod b < b
+\also
+        b \neq 0 \implies a = (a \div b) * b + a \mod b
+\also
+        b \neq 0 \land c \neq 0 \implies (a * c) \div (b * c) = a \div b
+\end{laws}
+\end{manpage}
+%-----------------------------------------------------
+\begin{manpage}\label{p:3020}
+\item[Name]
+\begin{name}
+        \nat_1 & Strictly positive integers%
+                	\index{integer: strictly positive ($\nat_1$)}%
+			\symdex{$\nat_1$} \\
+        succ & Successor function\index{successor function ($succ$)} \\
+        \upto & Number range\index{number range ($\upto$)}\symdex{$\upto$}
+\end{name}
+
+\item[Definition]
+\begin{zed}
+	\nat_1  ==  \nat \setminus \{0\}
+\end{zed}
+\begin{axdef}
+        succ: \nat \fun \nat \\
+	\_ \upto \_: \num \cross \num \fun \power \num
+\where
+        \forall n: \nat @ succ(n) = n + 1
+\also
+	\forall a, b: \num @ \\
+\t1         a \upto b = \{~k: \num | a \leq k \leq b~\}
+\end{axdef}
+
+\item[Description]
+$\nat_1$ is the set of {\em strictly positive integers}; it contains
+every natural number except $0$. If $n$ is a natural number, $succ(n)$
+is the next one, namely $n+1$. If we take $succ$ as primitive,
+it is possible to describe all the operations on numbers in terms
+of it.
+
+If $a$ and $b$ are integers and $a < b$, then $a \upto b$ is the
+set of integers between $a$ and $b$ inclusive. If $a > b$ then $a
+\upto b$ is empty.
+
+\item[Laws]
+\begin{laws}
+     succ \in \nat \bij \nat_1
+\also
+     a > b \implies a \upto b = \emptyset \\
+     a \upto a = \{a\} \\
+     a \leq b \land c \leq d \implies b \upto c \subseteq a \upto d
+\end{laws}
+\end{manpage}
+%-----------------------------------------------------
+\begin{manpage}\label{p:iter}\label{p:3030}
+\item[Name]
+\begin{name}
+     R^k & Iteration\index{iteration ($R^k$, $iter$)}\symdex{$R^k$}
+\end{name}
+
+\item[Definition]
+\begin{gendef}[X]
+        iter: \num \fun (X \rel X) \fun (X \rel X)
+\where
+        \forall R: X \rel X @ \\
+\t1        iter~0~R = \id X \land \\
+\t1        (\forall k: \nat @ iter~(k+1)~R = %
+                                        R \comp (iter~k~R)) \land \\
+\t1        (\forall k: \nat @ iter~(- k)~R = iter~k~(R\inv))
+\end{gendef}
+
+\item[Notation]
+$iter~k~R$ is usually written $R^k$.
+
+\item[Description]
+Two objects $x$ and $y$ are related by $R^k$, where $k \geq 0$,
+if there are $k+1$ objects $x_0$, $x_1$, \ldots,~$x_k$ with $x = x_0$,
+$\reln{x_i}R{x_{i+1}}$ for each $i$ such that $0 \leq i < k$,
+and $x_k = y$. $R^{- k}$ is defined to be $(R\inv)^k$.
+
+\item[Laws]
+\begin{laws}
+        R^0 = \id X \\
+        R^1 = R \\
+        R^2 = R \comp R \\
+        R^{- 1} = R\inv \\
+        k \geq 0 \implies R^{k+1} = R \comp R^k = R^k \comp R
+\also
+        (R\inv)^a = (R^a)\inv \\
+        R^{a+b} = R^a \comp R^b \\
+        R^{a*b} = (R^a)^b
+\also
+        R \plus = \bigcup \{~k: \nat_1 @ R^k~\} \\
+        R \star = \bigcup \{~k: \nat @ R^k~\}
+\also
+        R \comp S = S \comp R \implies %
+                (R \comp S)^a = R^a \comp S^a
+\end{laws}
+\end{manpage}
+%-----------------------------------------------------
+\begin{manpage}\label{p:3050}
+\item[Name]
+\begin{name}
+     \finset   & Finite sets\index{finite set ($\finset$)}\symdex{$\finset$} \\
+     \finset\!_1 & Non-empty finite sets%
+                \index{finite set: non-empty ($\finset\!_1$)}%
+		\symdex{$\finset\!_1$} \\
+     \#        & Number of members of a set%
+                \index{cardinality ($\#$)}\index{size of a set ($\#$)}%
+		\symdex{$\#$}
+\end{name}
+
+\item[Definition]
+\begin{zed}
+        \finset X  ==  \{~S: \power X | \exists n: \nat @ %
+			\exists f: 1 \upto n \fun S @ \ran f = S~\}
+\also
+        \finset\!_1 X  ==  \finset X \setminus \{\emptyset\}
+\end{zed}
+\begin{gendef}[X]
+        \#: \finset X \fun \nat
+\where
+        \forall S: \finset X @ \\
+\t1         \# S = (\mu n: \nat | 
+			(\exists f: 1 \upto n \inj S @ \ran f = S))
+\end{gendef}
+
+\item[Description]
+A subset $S$ of $X$ is {\em finite\/} ($S \in \finset X$) if and
+only if the members of $S$ can be counted with some natural number.
+In this case, there is a unique natural number which counts the
+members of $S$ without repetition, and this is the {\em size\/}
+$\# S$ of $S$. The sets in $\finset\!_1 X$ are the non-empty members
+of $\finset X$: those finite sets $S$ with $\# S > 0$.
+
+\item[Laws]
+\begin{laws}
+        S \in \finset X \iff (\forall f: S \inj S @ \ran f = S)
+\also
+        \emptyset \in \finset X \\
+        \forall S: \finset X; x: X @ S \cup \{x\} \in \finset X
+\also
+        \# (S \cup T) = \# S + \# T - \# (S \cap T)
+\also
+	\finset\!_1 X = \{~S: \finset X | \#S > 0~\}
+\end{laws}
+\end{manpage}
+%-----------------------------------------------------
+\begin{manpage}\label{p:3060}
+\item[Name]
+\begin{name}
+     \ffun & Finite partial functions%
+		\index{finite function ($\ffun$)}\symdex{$\ffun$} \\
+     \finj & Finite partial injections%
+		\index{finite injection ($\finj$)}\symdex{$\finj$}
+\end{name}
+
+\item[Definition]
+\begin{zed}
+     X \ffun Y  ==  \{~f: X \pfun Y | \dom f \in \finset X~\}
+\also
+     X \finj Y  ==  (X \ffun Y) \cap (X \pinj Y)
+\end{zed}
+
+\item[Description]
+If $X$ and $Y$ are sets, $X \ffun Y$ is the set of {\em finite
+partial functions\/} from $X$ to $Y$. These are partial functions
+from $X$ to $Y$ whose domain is a finite subset of $X$. The set
+of {\em finite partial injections\/} $X \finj Y$ contains those
+finite partial functions which are also injections.
+
+\item[Laws]
+\begin{laws}
+        X \ffun Y = (X \pfun Y) \cap \finset (X \cross Y)
+\end{laws}
+\end{manpage}
+%-----------------------------------------------------
+\begin{manpage}\label{p:3070}
+\item[Name]
+\begin{name}
+        min, max & Minimum\index{minimum ($min$)} and %
+                maximum\index{maximum ($max$)} of a set of numbers
+\end{name}
+
+\item[Definition]
+\begin{axdef}
+        min: \power_1 \num \pfun \num \\
+        max: \power_1 \num \pfun \num
+\where
+        min = \{~S: \power_1 \num; m: \num | \\
+\t2         m \in S \land (\forall n: S @ m \leq n) @ S \mapsto m~\}
+\also
+        max = \{~S: \power_1 \num; m: \num | \\
+\t2         m \in S \land (\forall n: S @ m \geq n) @ S \mapsto m~\}
+\end{axdef}
+
+\item[Description]
+The minimum\index{greatest lower bound} 
+of a set $S$ of integers is that element of $S$ which
+is smaller than any other, if any. 
+The maximum\index{least upper bound} of $S$ is that
+element which is larger than any other, if any.
+
+\item[Laws]
+\begin{laws}
+        \finset\!_1 \num \subseteq \dom min \\
+        \finset\!_1 \num \subseteq \dom max \\
+        (\power \nat) \cap (\dom min) = \power_1 \nat \\
+        (\power \nat) \cap (\dom max) = \finset\!_1 \nat \\
+\also
+        min (S \cup T) = min \{ min~S, min~T \} \\
+        max (S \cup T) = max \{ max~S, max~T \}
+\also
+        min (S \cap T) \geq min~S \\
+        max (S \cap T) \leq max~S
+\also
+        a \leq b \implies min (a \upto b) = a \land max (a \upto b) = b \\
+        (a \upto b) \cap (c \upto d) = max\{a,c\} \upto min\{b,d\}
+\end{laws}
+\end{manpage}
+%-----------------------------------------------------
+\begin{pagestyle}{manpage}
+\paragraph{Proof by induction}\label{p:3080}
+
+Mathematical induction\index{induction: proof by}
+provides a method of proving universal
+properties of natural numbers. To show that a property $P(n)$
+holds of all natural numbers $n$, it is enough to show that
+\begin{oblig}{a}
+\item $P(0)$ holds.
+
+\item If $P(n)$ holds for some $n: \nat$, so does $P(n+1)$:
+        \[ \forall n: \nat @ P(n) \implies P(n+1). \]
+\end{oblig}
+A similar proof method may be used to prove that $P(S)$ holds
+for all finite sets $S: \finset X$. It is enough to show that
+\begin{oblig}{b}
+\item $P(\emptyset)$ holds.
+
+\item If $P(S)$ holds then $P(S \cup \{x\})$ holds also:
+        \[ \forall S: \finset X; x: X @ P(S) 
+		\implies P(S \cup \{x\}). \]
+\end{oblig}
+A more powerful proof method for the natural numbers is to assume
+as hypothesis not just that the immediately preceding number has
+the property $P$, but that all smaller numbers do. To establish
+the theorem $\forall n: \nat @ P(n)$ by
+this method, it is enough to show the single fact
+\begin{oblig}{c}
+\item If for all $k < n, P(k)$ holds, so does $P(n)$:
+        \[ \forall n: \nat @ %
+                (\forall k: \nat | k < n @ P(k)) \implies P(n). \]
+\end{oblig}
+There is no need for a separate case for $n = 0$, because proving
+(c1) entails proving $P(0)$ under no assumptions, for there is
+no natural number $k$ satisfying $k < 0$.
+
+Analogously, a more powerful proof method for sets requires that
+a property $P$ be proved to hold of a finite set under the hypothesis
+that it holds of all {\em proper\/} subsets. To establish
+$\forall S: \finset X @ P(S)$, it is enough to show:
+\begin{oblig}{d}
+\item $\forall S: \finset X @ (\forall T: \finset X | T
+                \subset S @ P(T)) \implies P(S).$
+\end{oblig}
+Again, since the empty set has no 
+proper subsets\index{subset: proper}, there is no
+need for a separate case for $S = \emptyset$.
+\newpage
+\end{pagestyle}
+%-----------------------------------------------------
+\section{Sequences}\label{s:seqlib}
+\begin{manpage}\label{p:seq}\label{p:4010}
+\item[Name]
+\begin{name}
+        \seq  & Finite sequences\index{sequence ($\seq$)} \\
+        \seq_1 & Non-empty finite sequences%
+                \index{sequence: non-empty ($\seq_1$)} \\
+	\iseq & Injective sequences
+\end{name}
+
+\item[Definition]
+% \seq is built in
+%%unchecked
+\begin{zed}
+     \seq X  ==  \{~f: \nat \ffun X | \dom f = 1 \upto \#f~\}
+\also
+     \seq_1 X  ==  \{~f: \seq X | \#f > 0~\}
+\also
+     \iseq X  ==  \seq X \cap (\nat \pinj X)
+\end{zed}
+%% \begin{zed}
+%%      \seq_1 X  ==  \{~f: \seq X | \#f > 0~\}
+%% \also
+%%      \iseq X  ==  \seq X \cap (\nat \pinj X)
+%% \end{zed}
+
+\item[Notation]
+We write $\langle a_1, \ldots, a_n\rangle$%
+\index{sequence: display ($\langle \ldots\rangle$)} as a shorthand for the set
+\[ \{ 1 \mapsto a_1, \ldots, n \mapsto a_n \} \]
+The empty sequence\index{sequence: empty ($\langle \rangle$)}
+$\langle \rangle$ is an alternative notation
+for the empty function $\emptyset$ from $\nat$ to $X$.
+
+\item[Description]
+$\seq X$ is the set of finite sequences over $X$. These are
+finite functions from $\nat$ to $X$ whose domain is a segment
+$1 \upto n$ for some natural number $n$. $\seq_1 X$ is the set of
+all finite sequences over $X$ except the empty sequence $\langle \rangle$.
+
+$\iseq X$ is the set of injective finite sequences over $X$: these are
+precisely the finite sequences over $X$ which contain no repetitions.
+
+\item[Laws]
+\begin{laws}
+	\seq_1 X = \seq X \setminus \{\langle \rangle\}
+\end{laws}
+\end{manpage}
+%-----------------------------------------------------
+\begin{manpage}\label{p:4020}
+\item[Name]
+\begin{name}
+        \cat & Concatenation\index{concatenation ($\cat$)}\symdex{$\cat$} \\
+        rev & Reverse\index{reverse ($rev$)}
+\end{name}
+
+\item[Definition]
+\begin{gendef}[X]
+        \_ \cat \_ :  \seq X \cross \seq X \fun \seq X \\
+        rev: \seq X \fun \seq X
+\where
+        \forall s, t: \seq X @ \\
+\t1	    s \cat t = s \cup \{~n: \dom t @ n + \#s \mapsto t(n)~\}
+\also
+        \forall s: \seq X @ \\
+\t1         rev~s = (\lambda n: \dom s @ s(\#s - n + 1))
+\end{gendef}
+
+\item[Description]
+For sequences $s$ and $t$, $s \cat t$ is the {\em concatenation\/}
+of $s$ and $t$. It contains the elements of $s$ followed by the
+elements of $t$.
+
+If $s$ is a sequence, $rev~s$ is the sequence containing the same
+elements as $s$, but in reverse order.
+
+\item[Laws]
+\begin{laws}
+        (s \cat t) \cat u = s \cat (t \cat u) \\
+        \langle \rangle \cat s = s \\
+        s \cat \langle \rangle = s \\
+        \# (s \cat t) = \#s + \#t
+\also
+        rev~\langle \rangle = \langle \rangle \\
+        rev~\langle x\rangle = \langle x\rangle \\
+        rev (s \cat t) = (rev~t) \cat (rev~s)
+\also
+        rev (rev~s) = s
+\end{laws}
+\end{manpage}
+%-----------------------------------------------------
+\begin{manpage}\label{p:4040}
+\item[Name]
+\begin{name}
+        head\index{$head$}, last\index{$last$}, %
+        tail\index{$tail$}, front\index{$front$} & Sequence decomposition
+\end{name}
+
+\item[Definition]
+
+\begin{gendef}[X]
+        head, last: \seq_1 X \fun X \\
+        tail, front: \seq_1 X \fun \seq X
+\where
+        \forall s: \seq_1 X @ \\
+\t1         head~s = s(1) \land \\
+\t1         last~s = s(\#s) \land \\
+\t1         tail~s = (\lambda n: 1 \upto \#s - 1 @ s(n+1)) \land \\
+\t1         front~s = (1 \upto \#s - 1) \dres s
+\end{gendef}
+
+\item[Description]
+For a non-empty sequence $s$, $head~s$ and $last~s$ are the first
+and last elements of $s$ respectively. The sequences $tail~s$
+and $front~s$ contain all the elements of $s$ except for the first
+and except for the last respectively.
+
+\item[Laws]
+
+\begin{laws}
+	head~\langle x\rangle = last~\langle x\rangle = x \\
+	tail~\langle x\rangle = front~\langle x\rangle = \langle \rangle
+\also
+        s \neq \langle \rangle \implies \\
+\t1		head(s \cat t) = head~s \land \\
+\t1        	tail(s \cat t) = (tail~s) \cat t \\
+        t \neq \langle \rangle \implies \\
+\t1		last(s \cat t) = last~t \land \\
+\t1		front(s \cat t) = s \cat (front~t) \\
+\also
+        s \neq \langle \rangle \implies %
+                \langle head~s\rangle \cat (tail~s) = s \\
+        s \neq \langle \rangle \implies %
+                (front~s) \cat \langle last~s\rangle = s
+\also
+        s \neq \langle \rangle \implies head (rev~s) = last~s 
+					\land tail(rev~s) = front~s \\
+        s \neq \langle \rangle \implies last (rev~s) = head~s
+					\land front(rev~s) = tail~s
+\end{laws}
+\end{manpage}
+%-----------------------------------------------------
+\begin{manpage}\label{p:4060}
+\item[Name]
+\begin{name}
+	\extract & Extraction%
+			\index{extraction ($\extract$)}\symdex{$\extract$} \\
+        \filter & Filtering\index{filtering ($\filter$)}\symdex{$\project$} \\
+	squash & Compaction\index{$squash$}
+\end{name}
+
+\item[Definition]
+\begin{gendef}[X]
+	\_ \extract \_: \power \nat_1 \cross \seq X \fun \seq X \\
+	\_ \filter \_: \seq X \cross \power X \fun \seq X \\
+	squash: (\nat_1 \ffun X) \fun \seq X
+\where
+	\forall U: \power \nat_1; s: \seq X @ \\
+\t1		U \extract s = squash~(U \dres s)
+\also
+	\forall s: \seq X; V: \power X @ \\
+\t1		s \filter V = squash~(s \rres V)
+\also
+	\forall f: \nat_1 \ffun X @ \\
+\t1	    squash~f = f \circ (\mu p: 1 \upto \#~f \bij \dom f |
+			p \circ succ \circ p \inv \subseteq (\_ < \_))
+\end{gendef}
+
+\item[Description]
+If $U$ is a set of indices and $s$ is a sequence, then $U \extract
+s$ is a sequence that contains exactly those elements of $s$ that
+appear at an index in $U$, in the same order as in $s$.
+If $s$ is a sequence over $X$ and $V$ is a subset of $X$, then
+$s \filter V$ is a sequence which contains just those elements of $s$
+which are members of $V$, in the same order as in $s$.
+Both are defined using a function $squash$ that takes a finite
+function defined on the strictly positive integers and compacts it
+into a sequence.
+
+\item[Laws]
+\begin{laws}
+	\langle \rangle \filter V = U \extract \langle \rangle = \langle \rangle \\
+        (s \cat t) \filter V = (s \filter V) \cat (t \filter V)
+\also
+        \ran s \subseteq V \iff s \filter V = s \\
+        s \filter \emptyset = \emptyset \extract s = \langle \rangle \\
+        \# (s \filter V) \leq \# s \\
+        (s \filter V) \filter W = s \filter (V \cap W)
+\end{laws}
+\end{manpage}
+%-----------------------------------------------------
+\begin{manpage}\label{p:4065}
+\item[Name]
+\begin{name}
+	\prefix	& Prefix relation\index{$\prefix$: for sequences} \\
+	\suffix	& Suffix relation\index{$\suffix$: for sequences} \\
+	\inseq	& Segment relation\index{$\IN$: for sequences}%
+				\index{segment ($\inseq$)}
+\end{name}
+
+\item[Definition]
+\begin{gendef}[X]
+	\_\prefix\_~, \_\suffix\_~, \_\inseq\_:
+		\seq X \rel \seq X
+\where
+	\forall s, t: \seq X @ \\
+\t1		s \prefix t \iff (\exists v: \seq X @ s \cat v = t) \land \\
+\t1		s \suffix t \iff (\exists u: \seq X @ u \cat s = t) \land \\
+\t1		s \inseq t \iff (\exists u, v: \seq X @ u \cat s \cat v = t)
+\end{gendef}
+
+\item[Decription]
+These relations hold when one sequence is a contiguous part of
+another, taken either from the front ($\prefix$), from the back
+($\suffix$) or from anywhere ($\inseq$).  They are all partial
+orders on sequences: cf.\ page~\pageref{p:80}\index{partial order}.
+
+\item[Laws]
+\begin{laws}
+	s \prefix t \iff s = (1 \upto \#s) \extract t \\
+	s \suffix t \iff s = (\#t - \#s+1 \upto \#t) \extract t \\
+	s \inseq t \iff
+            (\exists n: 1 \upto \#t @ s = (n \upto n+\#s) \extract t)
+\also
+	s \inseq t \iff
+	    (\exists u: \seq X @ s \suffix u \land u \prefix t) \\
+	s \inseq t \iff
+	    (\exists v: \seq X @ s \prefix v \land v \suffix t)
+\end{laws}
+\end{manpage}
+%-----------------------------------------------------
+\begin{pagestyle}{manpage}\label{p:4090}
+\paragraph{Relational operations on sequences}
+
+Sequences\index{sequence: as function} are a special kind of
+function -- the ones with domain $1 \upto k$ for some $k$ -- and
+functions\index{function: as relation} are a special kind of
+relation, so operations defined on relations may be used on
+sequences.
+
+If $s: \seq X$ and $f: X \fun Y$, then\index{backward composition: on
+sequences} $f \circ s \in \seq Y$ -- it is the sequence with the same
+length as $s$ whose elements are the images of corresponding elements
+of $s$ under $f$:
+\begin{laws}
+        \# (f \circ s) = \# s \\
+        \forall i: 1 \upto \#s @ (f \circ s)(i) = f(s(i))
+\also
+        f \circ \langle \rangle = \langle \rangle \\
+        f \circ \langle x\rangle = \langle f(x)\rangle \\
+        f \circ (s \cat t) = (f \circ s)\cat(f \circ t).
+\end{laws}
+Another useful relational operation for sequences is 
+`$\ran$'\index{range: on sequences}. The
+range $\ran s$ of a sequence $s$ is just the set of objects which
+are elements of the sequence:
+\begin{laws}
+        \ran s = \{~i: 1 \upto \#s @ s(i)~\}
+\also
+        \ran~\langle \rangle = \emptyset \\
+        \ran~\langle x\rangle = \{x\} \\
+        \ran (s \cat t) = (\ran s) \cup (\ran t).
+\end{laws}
+These operations interact with sequence operations such as 
+$rev$ and $\filter$ in the expected way:
+\begin{laws}
+        rev (f \circ s) = f \circ (rev~s) \\
+        \ran (rev~s) = \ran s
+\also
+        (f \circ s) \filter V = f \circ (s \filter f\inv\limg V\rimg) \\
+        \ran (s \filter V) = (\ran s) \cap V.
+\end{laws}
+\newpage
+\end{pagestyle}
+%-----------------------------------------------------
+\begin{manpage}\label{p:4070}
+\item[Name]
+\begin{name}
+        \dcat & Distributed concatenation%
+                \index{distributed concatenation ($\dcat$)}\symdex{$\dcat$}
+\end{name}
+
+\item[Definition]
+\begin{gendef}[X]
+        \dcat: \seq (\seq X) \fun \seq X
+\where
+        \dcat \langle \rangle = \langle \rangle \\
+        \forall s: \seq X @ \dcat \langle s\rangle = s \\
+        \forall q, r: \seq (\seq X) @ \\
+\t1         \dcat (q \cat r) = (\dcat q) \cat (\dcat r)
+\end{gendef}
+
+\item[Description]
+If $q$ is a sequence of sequences, $\dcat q$ is the result of
+concatenating all the elements of $q$, one after another.
+
+\item[Laws]
+\begin{laws}
+        \dcat \langle s, t\rangle = s \cat t. \\
+\end{laws}
+The following four laws show the interaction of $\dcat$ with $rev$,
+$\filter$, $\circ$ and~`$\ran$':
+\begin{laws}
+        rev (\dcat q) = \dcat (rev (rev \circ q)).
+\end{laws}
+The expression on the right of this law can be evaluated by reversing
+each sequence in $q$, reversing the resulting sequence of sequences,
+then concatenating the result with $\dcat$.
+\begin{laws}
+        (\dcat q) \filter V =
+                \dcat ((\lambda s: \seq X @ s \filter V) \circ q).
+\end{laws}
+On the right-hand side, each sequence in $q$ is filtered by $V$, and
+the results are concatenated.
+\begin{laws}
+        f \circ (\dcat q) = 
+                \dcat ((\lambda s: \seq X @ f \circ s) \circ q).
+\end{laws}
+On the right-hand side of this law, $f$ is composed with each sequence
+in $q$, and the results are concatenated.
+\begin{laws}
+        \ran (\dcat q) = \bigcup \{~i: 1 \upto \#q @ \ran (q(i))~\}
+			= \bigcup(\ran(\ran \circ q)).
+\end{laws}
+The middle expression is the union of the ranges of the
+individual elements of $q$. The right-hand expression is a shorter
+way of saying the same thing.
+\end{manpage}
+%-----------------------------------------------------
+\begin{manpage}\label{p:4080}
+\item[Name]
+\begin{name}
+        \disjoint  & Disjointness\index{$\disjoint\unskip$} \\
+        \partition & Partitions\index{$\partition$}
+\end{name}
+
+\item[Definition]
+\begin{gendef}[I,X]
+        \disjoint \_: \power (I \pfun \power X) \\
+        \_ \partition \_: (I \pfun \power X) \rel \power X
+\where
+        \forall S: I \pfun \power X; T: \power X @ \\
+\t1         (\disjoint S \iff \\
+\t2             (\forall i,j: \dom S | i \neq j @ %
+                                        S(i) \cap S(j) = \emptyset)) \land \\
+\t1         (S \partition T \iff \\
+\t2             \disjoint S \land \bigcup \{~i: \dom S @ S(i)~\} = T)
+\end{gendef}
+
+\item[Description]
+An indexed family of sets $S$\index{indexed family of sets}
+is {\em disjoint\/} if and only if
+each pair of sets $S(i)$ and $S(j)$ for $i \neq j$ have empty
+intersection. The family $S$ {\em partitions\/} a set $T$ if, in
+addition, the union of all the sets $S(i)$ is $T$. A particularly
+common example of an indexed family of sets is a 
+sequence\index{sequence: as function} of sets,
+which is at base only a function defined on a subset of $\nat$.
+
+\item[Laws]
+\begin{laws}
+        \disjoint \emptyset \\
+        \disjoint \langle  A \rangle \\
+        \disjoint \langle  A, B \rangle \iff A \cap B = \emptyset
+\also
+        \langle  A, B \rangle \partition C \iff %
+                        A \cap B = \emptyset \land A \cup B = C
+\end{laws}
+\end{manpage}
+%-----------------------------------------------------
+\begin{pagestyle}{manpage}\label{p:4100}
+\paragraph{Induction for sequences}
+
+Proof by induction\index{induction: proof by}
+is valid for natural numbers and for finite
+sets because every natural number can be reached from zero by
+repeatedly adding one, and every finite set can be reached from
+the empty set by repeatedly inserting new members. There are two
+`generation principles'
+like this for sequences, and they correspond
+to two slightly different styles of proof by induction.
+First, any sequence can be reached from the empty sequence by
+repeatedly extending it with new elements. So to prove that a
+property $P(s)$ holds of all finite sequences $s: \seq X$, it is
+enough to show that
+\begin{oblig}{a}
+\item $P(\langle \rangle)$ holds.
+
+\item If $P(s)$ holds for some sequence $s$, then
+        $P(s\cat\langle x\rangle)$ holds also:
+        \[ \forall s: \seq X; x: X @ %
+                P(s) \implies P(s\cat\langle x\rangle). \]
+\end{oblig}
+A variant of this style of induction builds up sequences from
+the back instead of from the front: (a2) may be replaced by
+\begin{oblig}{a}
+\item[($\rm a2'$)] If $P(s)$ holds for some sequence $s$,
+        then $P(\langle x\rangle\cat s)$ holds also:
+        \[ \forall x: X; s: \seq X @ %
+                P(s) \implies P(\langle x\rangle\cat s). \]
+\end{oblig}
+
+A third way of building up sequences is to start with the empty
+sequence $\langle \rangle$ and singleton sequences $\langle x\rangle$,
+and to obtain longer sequences by concatenating shorter ones.
+So to prove $\forall s: \seq X @ P(s)$, it is enough to prove that
+\begin{oblig}{b}
+\item $P(\langle \rangle)$ holds.
+\item $P(\langle x\rangle)$ holds for all $x: X$.
+\item If $P(s)$ and $P(t)$ hold, so does $P(s\cat t)$:
+        \[ \forall s, t: \seq X @ P(s) \land P(t) 
+		\implies P(s \cat t). \]
+\end{oblig}
+
+Although, on the face of it, proofs in this style are more
+long-winded because there are three cases instead of two, in
+practice it often leads to more elegant proofs than the first one.
+The sequence operations $rev$, $\filter$, and $\dcat$ obey laws that
+relate their value on $s \cat t$ to their values on $s$ and $t$, as
+do the actions of $\ran$, and $\circ$ on sequences, so proofs about
+them fit naturally into this style, and there is no need to break
+the symmetry in favour of the first element or the last, as the
+other style would require.
+\newpage
+\end{pagestyle}
+%-----------------------------------------------------
+\section{Bags}\label{s:baglib}
+\begin{manpage}\label{p:bag}\label{p:5010}
+\item[Name]
+\begin{name}
+        \bag   		& Bags\index{bag} \\
+        count, \bcount & Multiplicity\index{$count$}\symdex{$\bcount$} \\
+	\otimes	& Bag scaling%
+		\index{bag: scaling ($\otimes$)}\symdex{$\otimes$}
+\end{name}
+
+\item[Definition]
+% \bag is built in
+%%unchecked
+\begin{zed}
+	\bag X == X \pfun \nat_1
+\end{zed}
+\begin{gendef}[X]
+        count: \bag X \bij (X \fun \nat) \\
+	\_ \bcount \_: \bag X \cross X \fun \nat \\
+	\_ \otimes \_: \nat \cross \bag X \fun \bag X
+\where
+	\forall B: \bag X @ \\
+\t1         count~B = (\lambda x: X @ 0) \oplus B
+\also
+        \forall x: X; B: \bag X @ \\
+\t1	    B \bcount x = count~B~x
+\also
+	\forall n: \nat; B: \bag X; x: X @ \\
+\t1	    (n \otimes B) \bcount x = n * (B \bcount x)
+\end{gendef}
+
+\item[Notation]
+We write $\lbag a_1, \ldots, a_n \rbag$%
+\index{bag: display ($\lbag\ldots\rbag$)} for the bag
+$\{ a_1 \mapsto k_1, \ldots, a_n \mapsto k_n \}$,
+where for each $i$, the element $a_i$ appears $k_i$ times in the
+list $a_1$, \dots,~$a_n$. The empty bag\index{bag: empty
+($\lbag\rbag$)} $\lbag \rbag$ is a notation for the empty function
+$\emptyset$ from $X$ to $\nat$.
+
+\item[Description]
+$\bag X$ is the set of {\em bags\/} of elements of $X$. These are
+collections of elements of $X$ in which the number of times an
+element occurs is significant. The number of times $x$ appears in
+the bag $B$ is $count~B~x$ or $B \bcount x$.
+If $n$ is a natural number, $n \otimes B$ is the bag
+$B$ {\em scaled} by a factor of $n$: any element appears in it $n$
+times as often as it appears in $B$.
+
+\item[Laws]
+\begin{laws}
+        \dom~\lbag a_1, \ldots, a_n\rbag = \{a_1, \ldots, a_n\}
+\also
+	n \otimes \lbag~\rbag = 0 \otimes B = \lbag~\rbag \\
+	1 \otimes B = B \\
+	(n * m) \otimes B = n \otimes (m \otimes B) \\
+\end{laws}
+\end{manpage}
+%-----------------------------------------------------
+\begin{manpage}\label{p:inbag}\label{p:5015}
+\item[Name]
+\begin{name}
+        \inbag 		& Bag membership%
+		  \index{bag: membership ($\inbag$)}\symdex{$\inbag$} \\
+	\subbageq	& Sub-bag relation%
+		  \index{sub-bag ($\subbageq$)}\symdex{$\subbageq$}
+\end{name}
+
+\item[Definition]
+\begin{gendef}[X]
+        \_ \inbag \_: X \rel \bag X \\
+	\_ \subbageq \_: \bag X \rel \bag X
+\where
+        \forall x: X; B: \bag X @ \\
+\t1         (x \inbag B \iff x \in \dom B)
+\also
+	\forall B, C: \bag X @ \\
+\t1	    B \subbageq C \iff
+		(\forall x: X @ B \bcount x \leq C \bcount x)
+\end{gendef}
+
+\item[Description]
+The relationship $x \inbag B$ holds exactly if $x$ appears in $B$ a
+non-zero number of times.  A bag $B$ is a sub-bag of another bag $C$
+($B \subbageq C$) if each element occurs in $B$ no more often than it
+occurs in $C$.
+
+\item[Laws]
+\begin{laws}
+        x \inbag B \iff B \bcount x > 0
+\also
+	B \subbageq C \implies \dom B \subseteq \dom C
+\also
+	\lbag~\rbag \subbageq B \\
+	B \subbageq B \\
+	B \subbageq C \land C \subbageq B \implies B = C \\
+	B \subbageq C \land C \subbageq D \implies B \subbageq D
+\end{laws}
+\end{manpage}
+%-----------------------------------------------------
+\begin{manpage}\label{p:5020}
+\item[Name]
+\begin{name}
+        \uplus & Bag union\index{bag: union ($\uplus$)}\symdex{$\uplus$} \\
+        \uminus & Bag difference%
+		\index{bag: difference ($\uminus$)}\symdex{$\uminus$}
+\end{name}
+
+\item[Definition]
+\begin{gendef}[X]
+        \_ \uplus \_~, \_ \uminus \_: \bag X \cross \bag X \fun \bag X
+\where
+        \forall B, C: \bag X; x: X @ \\
+\t1 	    (B \uplus C) \bcount x = B \bcount x + C \bcount x \land \\
+\t1	    (B \uminus C) \bcount x
+		= max~\{B \bcount x - C \bcount x, 0\}
+\end{gendef}
+
+\item[Description] 
+$B \uplus C$ is the {\em bag union\/} of $B$ and
+$C$: the number of times any object appears in $B \uplus C$ is the
+sum of the number of times it appears in $B$ and in $C$. $B \uminus
+C$ is the {\em bag difference\/} of $B$ and $C$: the number of times
+any object appears in it is the number of times it appears in $B$
+minus the number of times it appears in $C$, or zero if that would
+be negative.
+
+\item[Laws]
+\begin{laws}
+        \dom (B \uplus C) = \dom B \cup \dom C
+\also
+        \lbag~\rbag \uplus B = B \uplus \lbag~\rbag = B \\
+        B \uplus C = C \uplus B \\
+        (B \uplus C) \uplus D = B \uplus (C \uplus D)
+\also
+	B \uminus \lbag~\rbag = B \\
+	\lbag~\rbag \uminus B = \lbag~\rbag \\
+	(B \uplus C) \uminus C = B
+\also
+	(n + m) \otimes B = n \otimes B \uplus m \otimes B \\
+	n \geq m \implies 
+	    (n - m) \otimes B = n \otimes B \uminus m \otimes B \\
+	n \otimes (B \uplus C) = n \otimes B \uplus n \otimes C \\
+	n \otimes (B \uminus C) = n \otimes B \uminus n \otimes C \\
+\end{laws}
+\end{manpage}
+%-----------------------------------------------------
+%\begin{manpage}\label{p:5025}
+%\item[Name]
+%\begin{name}
+%	\biguplus & Generalized bag union%
+%		\index{generalized union: for bags ($\biguplus$)}%
+%		\symdex{$\biguplus$} \\
+%	\sum & Sum of a bag of numbers\index{sum ($\sum$)}\symdex{$\sum$}
+%\end{name}
+%
+%\item[Definition]
+%\begin{gendef}[X]
+%	\biguplus: \bag (\bag X) \fun \bag X
+%\where
+%	\biguplus \lbag~\rbag = \lbag~\rbag
+%\also
+%	\forall B: \bag X @ \biguplus \lbag B \rbag = B
+%\also
+%	\forall BB, CC \bag (\bag X) @ \\
+%\t1		\biguplus (BB \uplus CC) = \biguplus BB \uplus \biguplus CC
+%\end{gendef}
+%
+%\begin{axdef}
+%	\sum: \bag \num \fun \num
+%\where
+%	\sum \lbag~\rbag = 0
+%\also
+%	\forall n: \num @ \sum \lbag n \rbag = n
+%\also
+%	\forall B, C: \bag \num @ \\
+%\t1		\sum (B \uplus C) = \sum B + \sum C
+%\end{axdef}
+%
+%\item[Description]
+%\dots
+%\end{manpage}
+%-----------------------------------------------------
+\begin{manpage}\label{p:5030}
+\item[Name]
+\begin{name}
+        items\index{$items$} & Bag of elements of a sequence
+\end{name}
+
+\item[Definition]
+\begin{gendef}[X]
+        items: \seq X \fun \bag X
+\where
+        \forall s: \seq X; x: X @ \\
+\t1         (items~s) \bcount x = \# \{~i: \dom s | s(i) = x~\}
+\end{gendef}
+
+\item[Description]
+If $s$ is a sequence, $items~s$ is the bag in which each element
+$x$ appears exactly as often as $x$ appears in $s$.
+
+\item[Laws]
+\begin{laws}
+        \dom (items~s) = \ran s
+\also
+        items~\langle a_1, \ldots, a_n\rangle = \lbag a_1, \ldots, a_n\rbag
+\also
+        items (s \cat t) = items~s \uplus items~t
+\also
+	items~s = items~t \iff \\
+\t1     	( \exists f: \dom s \bij \dom t @ s = t \circ f )
+\end{laws}
+\end{manpage}
+

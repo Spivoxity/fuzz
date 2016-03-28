@@ -1,0 +1,392 @@
+%
+% refcard3.tex
+%
+% This file is part of fuzz2000
+% Copyright (c) 1982--2006 J. M. Spivey
+% All rights reserved
+%
+% Redistribution and use in source and binary forms, with or without
+% modification, are permitted provided that the following conditions are met:
+%
+% 1. Redistributions of source code must retain the above copyright notice,
+%    this list of conditions and the following disclaimer.
+% 2. Redistributions in binary form must reproduce the above copyright notice,
+%    this list of conditions and the following disclaimer in the documentation
+%    and/or other materials provided with the distribution.
+% 3. The name of the author may not be used to endorse or promote products
+%    derived from this software without specific prior written permission.
+%
+% THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+% IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+% OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+% IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+% SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+% PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+% OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+% WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+% OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+% ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+% 
+% $Id: refcard3.tex,v 1.3 2007-02-16 12:45:13 mike Exp $
+%
+
+\documentstyle[fuzz209,zrmref]{a5man}
+
+% Lark's vomit: Squirrel away pages in boxes 11, 12, ...
+%\newcount\foo \foo=10
+%\def\squirrel{\global\deadcycles=0 \global\advance\foo by1
+%  \global\setbox\foo=}
+%\let\reallyshipout=\shipout
+%\let\shipout=\squirrel
+
+\overfullrule 5pt
+
+\small % 9/11pt text
+
+% 190mm = 540pt
+% 540pt - 48pt = 492pt
+\headsep 0pt
+\footskip 36pt
+\textheight 492pt
+
+\textwidth 89mm
+
+\pagestyle{plain}
+%\corners
+
+\let\v=\verb
+
+% We let interword spaces in cmtt10 and cmtt9 stretch and shrink a
+% bit (especially shrink!)
+\fontdimen3\tentt=2.63pt
+\fontdimen4\tentt=1.75pt
+\fontdimen3\nintt=2.38pt
+\fontdimen4\nintt=1.59pt
+
+\makeatletter
+
+\def\donobreak{\if@nobreak\nobreak\global\@nobreakfalse\fi}
+
+\def\reflist{\donobreak
+  \def\\{\cr}%
+  \halign to\linewidth\bgroup
+    \hbox to7em{$##$\hfil}\quad&
+    \hbox to8.5em{##\hfil}\hskip.5em&
+    ##\kern-.5em\hfil\tabskip=0pt plus1fil&
+    \setbox0=\hbox{##}\tabskip=0pt\cr}
+\def\endreflist{\unskip\crcr\egroup}
+\def\p#1{\pageref{p:#1}}
+
+\newdimen\littleboxwidth \littleboxwidth=96pt
+\def\boxpream{\offinterlineskip
+	\halign to\littleboxwidth\bgroup
+        \strut\vrule\hskip\zedleftsep$\@lign##$\hfil \tabskip=0pt plus1fil\cr}
+\def\boxtop#1{\omit \hbox to\littleboxwidth{\strut
+	\vrule height0.4pt\hbox to\zedleftsep{\hrulefill\thinspace}%
+	#1\thinspace\hrulefill}\cr}
+\def\boxend{\@zskip\jot	\omit \hbox to\littleboxwidth{\hrulefill}\cr}
+
+% This is ghastly, but necessary because \verb cannot be used in a
+% macro argument.  Note that \afterassignment with a box assignment
+% inserts its token after the {, not after the }.
+\def\twoline{\afterassignment\twoone\setbox0=\hbox}
+\def\twoone{\aftergroup\twotwo}
+\def\twotwo{\afterassignment\twothree\setbox1=\hbox}
+\def\twothree{\aftergroup\twofour}
+\def\twofour{\hbox{%
+  \hbox to0.4\linewidth{\unhbox0\hfil}%
+  \hbox to0.6\linewidth{\unhbox1\hfil}}}
+
+\def\zeditem#1{\hbox{\tensfb #1}\nobreak\twoline}
+
+\def\twobox#1#2{\hbox{\valign{
+  \hrule height0pt width0.##\linewidth&##\cr
+  4&#1\cr 6&#2\cr}}}
+
+% \def\twobox#1#2{\hbox{\valign{##\vfil\cr\onebox4{#1}\cr\onebox6{#2}\cr}}}
+% \def\onebox#1#2{\hbox to0.#1\linewidth{\vbox{#2}\hfil}}
+
+\def\section{\@subhead{section}{2}{\bigskipamount}{24pt}%
+  {\bigskipamount}{\large\twlsfb}}
+
+\makeatother
+
+\begin{document}
+\thispagestyle{copyright}
+\vbox to48pt{\vss\hbox{\huge\sf Z Reference Card\hfil}}
+\vskip24pt
+{\noindent\Large\sf Mike Spivey\\The Spivey Partnership\par}
+%\chapter*{Z Reference Card}
+%\markboth{Z Reference Card}{Z Reference Card}
+\vskip48pt
+\vfill
+
+\section*{Specifications}
+\noindent\par
+\setbox9=\vbox{
+  \hbox{\strut\v/\begin{schema}{Name}[Params]/}
+  \hbox{\v/  Declarations/}
+  \hbox{\v/\where/}
+  \hbox{\v/  Predicates/}
+  \hbox{\v/\end{schema}/\strut}}
+\twobox{\hbox{\strut\tensfb Schema box}
+    \boxpream\boxtop{$Name[Params]$}%
+    Declarations\where Predicates\boxend\egroup
+    \kern\dp\strutbox\vfil}
+  {\unvbox9\vfil}
+\bigskip\bigskip
+\setbox9=\vbox{
+  \hbox{\strut\v/\begin{axdef}/}
+  \hbox{\v/  Declarations/}
+  \hbox{\v/\where/}
+  \hbox{\v/  Predicates/}
+  \hbox{\v/\end{axdef}/\strut}}
+\twobox{\hbox{\strut\tensfb Axiomatic description}
+    \boxpream Declarations\where Predicates\crcr\egroup
+    \kern\dp\strutbox\vfil}
+  {\unvbox9\vfil}
+\bigskip\bigskip
+\setbox9=\vbox{
+  \hbox{\strut\v/\begin{gendef}[Params]/}
+  \hbox{\v/  Declarations/}
+  \hbox{\v/\where/}
+  \hbox{\v/  Predicates/}
+  \hbox{\v/\end{gendef}/\strut}}
+\twobox{\hbox{\strut\tensfb Generic definition}
+    \setbox0=\hbox{$[Params]$}
+    \setbox1=\null \wd1=\wd0
+    \boxpream\boxtop{\box0}
+    \noalign{\kern-\normalbaselineskip\kern-\doublerulesep}
+    \boxtop{\box1} \noalign{\kern\doublerulesep}
+    Declarations\where Predicates\boxend\egroup
+    \kern\dp\strutbox\vfil}
+  {\unvbox9\vfil}
+%\break
+\bigskip\bigskip
+\hbox{\v/\begin{zed} .../}
+\medskip
+\zeditem{Basic type definition}
+  {$[NAME, DATE]$}
+  {\v/[NAME, DATE]/}
+\medskip
+\zeditem{Abbreviation definition}
+  {$DOC == \seq CHAR$}
+  {\v/DOC == \seq CHAR/}
+\medskip
+\zeditem{Constraint}
+  {$n\_disks < 5$}
+  {\v/n\_disks < 5/}
+\medskip
+\zeditem{Schema definition}
+  {$Point \defs [~x, y: \num~]$}
+  {\v/Point \defs [~x, y: \num~]/}
+\medskip
+\zeditem{Free type definition}
+  {$Ans ::= ok\ldata \num \rdata | error$}
+  {\v/Ans ::= ok \ldata\num\rdata/}
+\nobreak
+\twoline{}{\hfill\v/| error/}
+\medskip
+\hbox{\v/... \end{zed}/}
+
+\section*{Logic and schema calculus}
+\begin{reflist}
+true, false&	\v/true, false/&  Logical constants&	\pageref{s:pred}\\
+\lnot P&	\v/\lnot P/&	Negation&		\p{propcon}, 
+							\p{slogic}\\
+P \land Q&	\v/P \land Q/&	Conjunction&		\p{propcon},
+							\p{slogic}\\
+P \lor Q&	\v/P \lor Q/&	Disjunction& 		\p{propcon},
+							\p{slogic}\\
+P \implies Q&	\v/P \implies Q/&  Implication&		\p{propcon},
+							\p{slogic}\\
+P \iff Q&	\v/P \iff Q/&	Equivalence&		\p{propcon},
+							\p{slogic}\\
+\forall x: T | P @ Q&	\v/\forall .../&
+			Universal quantifier& 		\p{quant}, \p{hide}\\
+\exists x: T | P @ Q&	\v/\exists .../&
+			Existential quant.& 		\p{quant}, \p{hide}\\
+\exists_1 x: T | P @ Q&	\v/\exists_1 .../&
+			Unique quantifier& 		\p{quant}, \p{hide}
+\end{reflist}
+
+\section*{Special schema operators}
+\begin{reflist}
+S[y_1/x_1, y_2/x_2]&\v:S[y1/x1, y2/x2]:&Renaming&\pageref{s:schemaref}\\
+S \hide (x_1, x_2)&\v/S \hide (x1, x2)/&Hiding&\p{hide}\\
+S \project T&\v/S \project T/&Projection&\p{hide}\\
+\pre Op&	\v/\pre Op/&	Pre-condition&		\p{pre}\\
+Op1 \semi Op2&	\v/Op1 \semi Op2/&
+		Sequential comp.&			\p{opcomp}\\
+Op1 \pipe Op2&	\v/Op1 \pipe Op2/&	
+		Piping&					\p{opcomp}
+\end{reflist}
+%\break
+
+\section*{Basic expressions}
+\begin{reflist}
+x = y&		\v/x = y/&	Equality& 		\p{eqmem}\\
+x \neq y& 	\v/x \neq y/& 	Inequality& 		\p{10}\\
+\IF P \THEN E_1& \v/\IF P \THEN E_1/& Conditional&	\p{condexp}\\
+\noalign{\nobreak}
+\quad \ELSE E_2& \quad\v/\ELSE E_2/&\quad expression\\
+\theta S&	\v/\theta S/&	Theta-expression&	\p{theta}\\
+E.x&		\v/E.x/&	Selection&		\p{select}\\
+(\mu x{:}T | P @ E)&	\v/(\mu x:T | P @ E)/&
+		Mu-expression&		\p{lambdamu}\\
+(\LET x{==}E_1{@}E_2)\!\!&\v/(\LET x==E1 @ E2)/&
+		Let-expression&		\p{letexp}, \p{letpred}\\
+\end{reflist}
+
+\section*{Sets}
+\begin{reflist}
+x \in S& 	\v/x \in S/& 	Membership& 		\p{eqmem}\\
+x \notin S& 	\v/x \notin S/&	Non-membership& 	\p{10}\\
+\{x_1, \ldots, x_n\}&	\v/\{x_1,...,x_n\}/&
+		Set display&				\p{tuple}\\
+\{~x{:}T | P @ E~\}& 	\v/\{~x:T | P @ E~\}/&
+	 	Set comprehension&			\p{setcomp}\\
+\emptyset& 	\v/\emptyset/& 	Empty set&		\p{20}\\
+S \subseteq T& 	\v/S \subseteq T/&  Subset relation&	\p{20}\\
+S \subset T&	\v/S \subset T/&  Proper subset&  \p{20}\\
+\power S&	\v/\power S/&	Power set&		\p{Pcross}\\
+\power_1 S&	\v/\power_1 S/&	Non-empty subsets&	\p{20}\\
+S \cross T&	\v/S \cross T/&	Cartesian product&	\p{Pcross}\\
+(x, y, z)&	\v/(x, y, z)/&	Tuple&			\p{tuple}\\
+first~p&	\v/first~p/&	First of pair&		\p{70}\\
+second~p&	\v/second~p/&	Second of pair&		\p{70}\\
+S \cup T&	\v/S \cup T/&	Set union&		\p{40}\\
+S \cap T&	\v/S \cap T/&	Set intersection&	\p{40}\\
+S \setminus T&  \v/S \setminus T/&  Set difference&	\p{40}\\
+\bigcup A&	\v/\bigcup A/&	Generalized union&	\p{60}\\
+\bigcap A&	\v/\bigcap A/&	Gen.\ intersection& \p{60}\\
+\finset X&	\v/\finset X/&	Finite sets&		\p{3050}\\
+\finset_1 X&	\v/\finset_1 X/&  Finite sets $\neq \emptyset$&  \p{3050}
+\end{reflist}
+%\break
+
+\section*{Relations}
+\begin{reflist}
+X \rel Y&	\v/X \rel Y/&	Binary relations&	\p{1010}\\
+x \mapsto y&	\v/x \mapsto y/&  Maplet&		\p{1010}\\
+\dom R&		\v/\dom R/&	Domain&			\p{1020}\\
+\ran R&		\v/\ran R/&	Range&			\p{1020}\\
+\id X&		\v/\id X/&	Identity relation&	\p{1030}\\
+Q \comp R&	\v/Q \comp R/&	Composition&		\p{1030}\\
+Q \circ R&	\v/Q \circ R/&	Backwards comp.&	\p{1030}\\
+S \dres R&	\v/S \dres R/&	Domain restriction&	\p{1040}\\
+R \rres S&	\v/R \rres S/&	Range restriction&	\p{1040}\\
+S \ndres R&	\v/S \ndres R/&	Domain anti-res.& \p{1050}\\
+R \nrres S&	\v/R \nrres S/&	Range anti-restrict.&	\p{1050}\\
+R \inv&		\v/R \inv/&	Relational inverse&	\p{1060}\\
+R\limg S\rimg&	\v/R \limg S\rimg/&  Relational image&	\p{1070}\\
+Q \oplus R&	\v/Q \oplus R/&	Overriding&		\p{1075}\\
+R^k&		\v/R^{k}/&  	Iteration&		\p{3030}\\
+R \plus&	\v/R \plus/&	Transitive closure&	\p{1080}\\
+R \star&	\v/R \star/&	Refl.--trans.\ 
+				closure&  		\p{1080}
+\end{reflist}
+
+\section*{Functions}
+\begin{reflist}
+f(x)&		\v/f(x)/&	Application&	\p{apply}\\
+(\lambda x{:}T | P @ E)&	\v/(\lambda ...)/&
+		Lambda-expression&	\p{lambdamu}\\
+X \pfun Y&	\v/X \pfun Y/&	Partial functions&	\p{2010}\\
+X \fun Y&	\v/X \fun Y/&	Total functions&	\p{2010}\\
+X \pinj Y&	\v/X \pinj Y/&	Partial injections&	\p{2010}\\
+X \inj Y&	\v/X \inj Y/&	Total injections&	\p{2010}\\
+X \psurj Y&	\v/X \psurj Y/&	Partial surjections&	\p{2010}\\
+X \surj Y&	\v/X \surj Y/&	Total surjections&	\p{2010}\\
+X \bij Y&	\v/X \bij Y/&	Bijections&		\p{2010}\\
+X \ffun Y&	\v/X \ffun Y/&	Finite functions& 	\p{3060}\\
+X \finj Y&	\v/X \finj Y/&	Finite injections& 	\p{3060}
+\end{reflist}
+%\break
+
+\section*{Numbers and arithmetic}
+\begin{reflist}
+\nat&		\v/\nat/&	Natural numbers&	\p{3010}\\
+\num&		\v/\num/&	Integers&		\p{3010}\\
+\hbox{$+$ $-$ $*$ $\div$ $\mod$}&
+	\v/+ - * \div \mod/&	Operations&		\p{3010}\\
+\hbox{$<$ $\leq$ $\geq$ $>$}&
+	\v/< \leq \geq >/& 	Comparisons&		\p{3010}\\
+\nat_1&		\v/\nat_1/&	Integers $> 0$& 	\p{3020}\\
+succ&		\v/succ/&	Successor function&	\p{3020}\\
+m \upto n&	\v/m \upto n/&	Number range&		\p{3020}\\
+\# S&		\v/\# S/&	Size of a set&		\p{3050}\\
+min~S&		\v/min~S/&	Minimum of a set&	\p{3070}\\
+max~S&		\v/max~S/&	Maximum of a set&	\p{3070}
+\end{reflist}
+
+\section*{Sequences}
+\begin{reflist}
+\seq X&		\v/\seq X/&	Finite sequences&	\p{4010}\\
+\seq_1 X&	\v/\seq_1 X/&	Sequences $\neq \langle \rangle$&\p{4010}\\
+\iseq X&	\v/\iseq X/&	Injective sequences&	\p{4010}\\
+\langle x_1, \ldots, x_n\rangle& \v/\langle \rangle/&
+		Sequence display&			\p{displays}\\
+s \cat t&	\v/s \cat t/&	Concatenation&		\p{4020}\\
+rev~s&		\v/rev~s/&	Reverse&		\p{4020}\\
+head~s&		\v/head~s/&	Head of sequence&	\p{4040}\\
+last~s&		\v/last~s/&	Last element& \p{4040}\\
+tail~s&		\v/tail~s/&	Tail of sequence&	\p{4040}\\
+front~s&	\v/front~s/&	All but last element&	\p{4040}\\
+U \extract s&	\v/U \extract S/&  Extraction&		\p{4060}\\
+s \filter V&	\v/s \filter V/&  Filtering&		\p{4060}\\
+squash~f&	\v/squash~f/&	Compaction&		\p{4060}\\
+s \prefix t&	\v/s \prefix t/&  Prefix relation&	\p{4065}\\
+s \suffix t&	\v/s \suffix t/&  Suffix relation&	\p{4065}\\
+s \inseq t&	\v/s \inseq t/&	Segment relation&	\p{4065}\\
+\cat/ ss&	\v/\dcat ss/&	Distributed concat.& 	\p{4070}\\
+\disjoint SS&	\v/\disjoint SS/&  Disjointness&	\p{4080}\\
+SS \partition T& \v/SS \partition T/&  Partition relation&  \p{4080}
+\end{reflist}
+%\break
+
+\section*{Bags}
+\begin{reflist}
+\bag X&		\v/\bag X/&	Bags&			\p{5010}\\
+\lbag x_1, \ldots, x_n\rbag&	\v/\lbag ... \rbag/&
+		Bag display&				\p{displays}\\
+count~B~x&	\v/count~B~x/&	Count of element&	\p{5010}\\
+B \bcount x&	\v/B \bcount x/&  Infix count operator&	\p{5010}\\
+n \otimes B&	\v/n \otimes B/&  Bag scaling&		\p{5010}\\
+x \inbag B&	\v/x \inbag B/&	Bag membership&		\p{5015}\\
+B \subbageq C&	\v/B \subbageq C/&  Sub-bag relation&	\p{5015}\\
+B \uplus C&	\v/B \uplus C/&	Bag union&		\p{5020}\\
+B \uminus C&	\v/B \uminus C/&  Bag difference&	\p{5020}\\
+items~s&	\v/items~s/&	Items in a sequence&	\p{5030}
+\end{reflist}
+
+\section*{{\Large\it f\kern0.1em}{\sc uzz} flags}
+
+\def\lopt{{\it [\/}}
+\def\ropt{{\it ]\/}}
+Usage: {\tt fuzz \lopt-aqstv\ropt\ \lopt-p {\it prelude\/}\ropt\ 
+                \lopt {\it file\/} \dots\ropt}
+\medskip
+\halign to\linewidth{\quad\tt#\hfil&\quad#\hfil\tabskip=0pt plus1fil\cr
+  -a&Don't use type abbreviations\cr
+  -p {\it predude\/}&Use {\it prelude\/} in place of the standard one\cr
+  -q&Implicit quantifiers\cr
+  -d&Dependency analysis\cr
+  -s&Syntax check only\cr
+  -t&Report types of global definitions\cr
+  -v&Echo formal text as it is parsed\cr}
+
+\clearpage
+
+% Lark's vomit, part 2
+% Output the squirrelled-away material in the correct order: 5 6 1 2 3 4
+%\let\shipout=\reallyshipout
+%\shipout\box15
+%\shipout\box16
+%\shipout\box11
+%\shipout\box12
+%\shipout\box13
+%\shipout\box14
+
+\end{document}
+

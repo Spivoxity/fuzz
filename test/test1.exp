@@ -1,0 +1,1191 @@
+"test1.in", line 488: Adjacent names - possibly missing ~ at symbol
+        "first"
+
+"test1.in", line 488: Adjacent names - possibly missing ~ at symbol
+        "spurns"
+
+"test1.in", line 502: Opening parenthesis expected at symbol "\lambda"
+
+Given NAME
+
+Given DATE
+
+Schema BirthdayBook
+    known: P NAME
+    birthday: NAME -+> DATE
+End
+
+Schema \Delta BirthdayBook
+    known: P NAME
+    birthday: NAME -+> DATE
+    known': P NAME
+    birthday': NAME -+> DATE
+End
+
+Schema AddBirthday
+    known: P NAME
+    birthday: NAME -+> DATE
+    known': P NAME
+    birthday': NAME -+> DATE
+    name?: NAME
+    date?: DATE
+End
+
+Schema \Xi BirthdayBook
+    known: P NAME
+    birthday: NAME -+> DATE
+    known': P NAME
+    birthday': NAME -+> DATE
+End
+
+Schema FindBirthday
+    known: P NAME
+    birthday: NAME -+> DATE
+    known': P NAME
+    birthday': NAME -+> DATE
+    name?: NAME
+    date!: DATE
+End
+
+Schema Remind
+    known: P NAME
+    birthday: NAME -+> DATE
+    known': P NAME
+    birthday': NAME -+> DATE
+    today?: DATE
+    cards!: P NAME
+End
+
+Schema InitBirthdayBook
+    known: P NAME
+    birthday: NAME -+> DATE
+End
+
+Given REPORT
+
+Var ok: REPORT
+
+Var already_known: REPORT
+
+Var not_known: REPORT
+
+Schema Success
+    result!: REPORT
+End
+
+Schema AlreadyKnown
+    known: P NAME
+    birthday: NAME -+> DATE
+    known': P NAME
+    birthday': NAME -+> DATE
+    name?: NAME
+    result!: REPORT
+End
+
+Schema RAddBirthday
+    known: P NAME
+    birthday: NAME -+> DATE
+    known': P NAME
+    birthday': NAME -+> DATE
+    name?: NAME
+    date?: DATE
+    result!: REPORT
+End
+
+"test1.in", line 106: Global name RAddBirthday multiply declared
+
+Schema RAddBirthday
+    known: P NAME
+    birthday: NAME -+> DATE
+    known': P NAME
+    birthday': NAME -+> DATE
+    name?: NAME
+    date?: DATE
+    result!: REPORT
+End
+
+Schema NotKnown
+    known: P NAME
+    birthday: NAME -+> DATE
+    known': P NAME
+    birthday': NAME -+> DATE
+    name?: NAME
+    result!: REPORT
+End
+
+Schema RFindBirthday
+    known: P NAME
+    birthday: NAME -+> DATE
+    known': P NAME
+    birthday': NAME -+> DATE
+    name?: NAME
+    date!: DATE
+    result!: REPORT
+End
+
+Schema RRemind
+    known: P NAME
+    birthday: NAME -+> DATE
+    known': P NAME
+    birthday': NAME -+> DATE
+    today?: DATE
+    cards!: P NAME
+    result!: REPORT
+End
+
+Schema BirthdayBook1
+    names: NN -+> NAME
+    dates: NN -+> DATE
+    hwm: NN
+End
+
+Schema Abs
+    known: P NAME
+    birthday: NAME -+> DATE
+    names: NN -+> NAME
+    dates: NN -+> DATE
+    hwm: NN
+End
+
+Schema \Delta BirthdayBook1
+    names: NN -+> NAME
+    dates: NN -+> DATE
+    hwm: NN
+    names': NN -+> NAME
+    dates': NN -+> DATE
+    hwm': NN
+End
+
+Schema AddBirthday1
+    names: NN -+> NAME
+    dates: NN -+> DATE
+    hwm: NN
+    names': NN -+> NAME
+    dates': NN -+> DATE
+    hwm': NN
+    name?: NAME
+    date?: DATE
+End
+
+Schema \Xi BirthdayBook1
+    names: NN -+> NAME
+    dates: NN -+> DATE
+    hwm: NN
+    names': NN -+> NAME
+    dates': NN -+> DATE
+    hwm': NN
+End
+
+Schema FindBirthday1
+    names: NN -+> NAME
+    dates: NN -+> DATE
+    hwm: NN
+    names': NN -+> NAME
+    dates': NN -+> DATE
+    hwm': NN
+    name?: NAME
+    date!: DATE
+End
+
+Schema AbsCards
+    cards: P NAME
+    cardlist: NN -+> NAME
+    ncards: NN
+End
+
+Schema Remind1
+    names: NN -+> NAME
+    dates: NN -+> DATE
+    hwm: NN
+    names': NN -+> NAME
+    dates': NN -+> DATE
+    hwm': NN
+    today?: DATE
+    cardlist!: NN -+> NAME
+    ncards!: NN
+End
+
+Schema InitBirthdayBook1
+    names: NN -+> NAME
+    dates: NN -+> DATE
+    hwm: NN
+End
+
+Given ADDR
+
+Given PAGE
+
+Abbrev DATABASE: P (ADDR -+> PAGE)
+
+Schema CheckSys
+    working: DATABASE
+    backup: DATABASE
+End
+
+Schema \Xi CheckSys
+    working: DATABASE
+    backup: DATABASE
+    working': DATABASE
+    backup': DATABASE
+End
+
+Schema Access
+    working: DATABASE
+    backup: DATABASE
+    working': DATABASE
+    backup': DATABASE
+    a?: ADDR
+    p!: PAGE
+End
+
+Schema \Delta CheckSys
+    working: DATABASE
+    backup: DATABASE
+    working': DATABASE
+    backup': DATABASE
+End
+
+Schema Update
+    working: DATABASE
+    backup: DATABASE
+    working': DATABASE
+    backup': DATABASE
+    a?: ADDR
+    p?: PAGE
+End
+
+Schema CheckPoint
+    working: DATABASE
+    backup: DATABASE
+    working': DATABASE
+    backup': DATABASE
+End
+
+Schema Restart
+    working: DATABASE
+    backup: DATABASE
+    working': DATABASE
+    backup': DATABASE
+End
+
+Schema Master
+    master: DATABASE
+End
+
+Schema Changes
+    changes: ADDR -+> PAGE
+End
+
+Schema CheckSys1
+    master: DATABASE
+    changes: ADDR -+> PAGE
+End
+
+Schema AbsDB
+    working: DATABASE
+    backup: DATABASE
+    master: DATABASE
+    changes: ADDR -+> PAGE
+End
+
+Schema \Xi CheckSys1
+    master: DATABASE
+    changes: ADDR -+> PAGE
+    master': DATABASE
+    changes': ADDR -+> PAGE
+End
+
+Schema Access1
+    master: DATABASE
+    changes: ADDR -+> PAGE
+    master': DATABASE
+    changes': ADDR -+> PAGE
+    a?: ADDR
+    p!: PAGE
+End
+
+Given RESULT
+
+Var found: RESULT
+
+Var not_present: RESULT
+
+Schema \Xi Changes
+    changes: ADDR -+> PAGE
+    changes': ADDR -+> PAGE
+End
+
+Schema GetChange
+    changes: ADDR -+> PAGE
+    changes': ADDR -+> PAGE
+    a?: ADDR
+    p!: PAGE
+    r!: RESULT
+End
+
+Schema \Xi Master
+    master: DATABASE
+    master': DATABASE
+End
+
+Schema ReadMaster
+    master: DATABASE
+    master': DATABASE
+    a?: ADDR
+    p!: PAGE
+End
+
+Schema \Delta CheckSys1
+    master: DATABASE
+    changes: ADDR -+> PAGE
+    master': DATABASE
+    changes': ADDR -+> PAGE
+End
+
+Schema Update1
+    master: DATABASE
+    changes: ADDR -+> PAGE
+    master': DATABASE
+    changes': ADDR -+> PAGE
+    a?: ADDR
+    p?: PAGE
+End
+
+Schema CheckPoint1
+    master: DATABASE
+    changes: ADDR -+> PAGE
+    master': DATABASE
+    changes': ADDR -+> PAGE
+End
+
+Schema Restart1
+    master: DATABASE
+    changes: ADDR -+> PAGE
+    master': DATABASE
+    changes': ADDR -+> PAGE
+End
+
+Schema STATE
+    value: NN
+    limit: NN
+End
+
+Schema \Delta STATE
+    value: NN
+    limit: NN
+    value': NN
+    limit': NN
+End
+
+Schema INC
+    value: NN
+    limit: NN
+    value': NN
+    limit': NN
+    n?: NN
+End
+
+Schema PreINC
+    value: NN
+    limit: NN
+    n?: NN
+End
+
+Schema \Xi STATE
+    value: NN
+    limit: NN
+    value': NN
+    limit': NN
+End
+
+Schema LOOK
+    value: NN
+    limit: NN
+    value': NN
+    limit': NN
+    out!: NN
+End
+
+Schema INCandLOOK
+    value: NN
+    limit: NN
+    value': NN
+    limit': NN
+    n?: NN
+    out!: NN
+End
+
+Schema SIMPLE
+    value: NN
+End
+
+Schema \Delta SIMPLE
+    value: NN
+    value': NN
+End
+
+Schema SimpleINC
+    value: NN
+    value': NN
+    n?: NN
+End
+
+"test1.in", line 349: Application of a non-function
+> Expression: (3, 4) 5
+> Found type: NN x NN
+
+Var foo: ZZ x P ZZ x ZZ -+> P ZZ
+
+"test1.in", line 355: Argument 2 has wrong type
+> Expression: foo (3, 4, 5)
+> Arg type:   NN
+> Expected:   P ZZ
+
+"test1.in", line 355: Types do not agree in equation
+> Predicate: foo (3, 4, 5) = 6
+> LHS type:  P ZZ
+> RHS type:  NN
+
+"test1.in", line 357: Argument 2 of \cross must be a set
+> Expression: NN cross 3 cross NN
+> Arg 2 type: NN
+
+"test1.in", line 359: Argument of \power must be a set
+> Expression: P (3, 4, 5)
+> Arg type:   NN x NN x NN
+
+"test1.in", line 361: Argument of application has wrong type
+> Expression: foo \empty
+> Arg type:   P ?
+> Expected:   ZZ x P ZZ x ZZ
+
+"test1.in", line 363: Argument of prefix relation has wrong type
+> Predicate: disjoint 3
+> Arg type:  NN
+> Expected:  ? -+> P ?
+
+"test1.in", line 365: Argument of selection must have schema type
+> Expression: (3, \empty, 4).x
+> Arg type:   NN x P ? x NN
+
+Given X
+
+"test1.in", line 369: Basic type X cannot have parameters
+> Expression: X[NN, NN]
+
+"test1.in", line 371: Basic type name Y multiply declared
+
+"test1.in", line 371: Basic type name Y multiply declared
+
+Given Y
+
+"test1.in", line 373: Basic type name X multiply declared
+
+Genconst baz[1]: P @1
+
+Schema Aleph
+    x: NN
+    y: NN
+End
+
+"test1.in", line 379: Decoration ignored in schema reference
+> Expression: Aleph'
+
+"test1.in", line 381: Function expects 3 arguments
+> Expression: foo (3, 4)
+
+Genconst glug[2]: P (@1 x @2)
+
+"test1.in", line 385: Generic constant glug expects 2 parameters
+
+"test1.in", line 385: Types do not agree in equation
+> Predicate: glug[X] = 3
+> LHS type:  P (*errtype* x *errtype*)
+> RHS type:  NN
+
+"test1.in", line 387: Global name baz multiply declared
+
+Var baz: NN
+
+"test1.in", line 389: Hiding non-existent component z
+> Expression: Aleph \ (y, z)
+
+Schema Beth
+    x: NN
+End
+
+"test1.in", line 391: Component y has wrong type in schema reference
+> Predicate:  Aleph
+> Found type: P NN
+> Expected:   NN
+
+"test1.in", line 393: Identifier McCavity is not declared
+
+"test1.in", line 395: Implicit parameters not completely determined
+> Expression: \empty
+
+"test1.in", line 395: Implicit parameters not completely determined
+> Expression: \empty
+
+"test1.in", line 397: Warning - infix relation symbol < is not
+        declared as a binary relation
+> < type: NN
+
+"test1.in", line 397: Infix relation symbol < is not a binary relation
+> Predicate: 3 < 4
+> < type: NN
+
+Schema First
+    x: NN
+    y: NN
+    x': NN
+    y': NN
+End
+
+Schema Second
+    x: NN
+    x': NN
+End
+
+Schema Third
+    x: NN
+    y: NN
+    x': NN
+    y': NN
+End
+
+Schema Fourth
+    x: NN
+    y: NN
+    x': NN
+    y': NN
+End
+
+"test1.in", line 411: Schema \Delta Foo is not defined
+
+Schema Baz
+End
+
+"test1.in", line 413: Warning - prefix relation symbol disjoint is not
+        declared as a set
+> disjoint type: NN
+
+"test1.in", line 413: Prefix relation symbol disjoint is not a set
+> Predicate: disjoint 7
+> disjoint type: NN
+
+Schema Table[2]
+    knives: P @1
+    forks: P @2
+End
+
+"test1.in", line 420: Schema Table expects 2 parameters
+
+Schema Mess
+    knives: P *errtype*
+    forks: P *errtype*
+End
+
+"test1.in", line 422: Selecting non-existent component z
+> Expression: a.z
+> Arg type:   Aleph
+
+"test1.in", line 424: Set-valued expression required in actual generic
+        parameter
+> Expression: 3
+> Type:       NN
+
+Given FOO
+
+"test1.in", line 426: Set-valued expression required in free type
+        definition
+> Expression: 3
+> Type:       NN
+
+Var just: *errtype* -+> FOO
+
+"test1.in", line 428: Set-valued expression required in declaration
+> Expression: 3
+> Type:       NN
+
+"test1.in", line 430: Type abbreviation McCavity has no global
+        definition
+
+"test1.in", line 432: Type abbreviation baz is not a set
+> baz type: NN
+
+"test1.in", line 434: Type mismatch in bag display
+> Expression: {5}
+> Has type:   P NN
+> Expected:   NN
+
+"test1.in", line 436: Type mismatch in sequence display
+> Expression: {5}
+> Has type:   P NN
+> Expected:   NN
+
+"test1.in", line 438: Type mismatch in set display
+> Expression: {5}
+> Has type:   P NN
+> Expected:   NN
+
+"test1.in", line 440: Type mismatch in hiding variable x
+> Expression:    forall x: P NN @ Aleph
+> Previous type: NN
+> Current type:  P NN
+
+Schema Aleph0
+    y: NN
+End
+
+"test1.in", line 442: Type mismatch in left argument of infix relation
+> Predicate: (3, 4) < 5
+> Arg type:  NN x NN
+> Expected:  ZZ
+
+"test1.in", line 444: Type mismatch in right argument of infix
+        relation
+> Predicate: 3 < (4, 5)
+> Arg type:  NN x NN
+> Expected:  ZZ
+
+"test1.in", line 446: Type mismatch in left argument of infix relation
+> Predicate: (3, 4) < (5, 6)
+> Arg type:  NN x NN
+> Expected:  ZZ
+
+"test1.in", line 446: Type mismatch in right argument of infix
+        relation
+> Predicate: (3, 4) < (5, 6)
+> Arg type:  NN x NN
+> Expected:  ZZ
+
+"test1.in", line 448: Type mismatch in declarations of x
+> Previous type: NN
+> Current type:  X
+
+"test1.in", line 450: Global name Fourth multiply declared
+
+Schema Fourth
+    x: NN
+    y: P NN
+    x': NN
+    y': P NN
+End
+
+"test1.in", line 455: Type mismatch in sequential composition
+> Expression: First semi Fourth
+> Type of y' in LHS: NN
+> Type of y in RHS: P NN
+
+Schema Fifth
+    x: NN
+    y: NN
+    x': NN
+    y': P NN
+End
+
+"test1.in", line 457: Types do not agree in equation
+> Predicate: \empty[X] = <>
+> LHS type:  P X
+> RHS type:  seq ?
+
+"test1.in", line 459: Types do not agree in set membership
+> Predicate: \empty in {3}
+> LHS type:  P ?
+> RHS type:  P NN
+
+"test1.in", line 461: Variable baz cannot have parameters
+> Expression: baz[X]
+
+"test1.in", line 463: Identifier x is not declared
+> Expression: Aleph
+
+"test1.in", line 463: Identifier y is not declared
+> Expression: Aleph
+
+"test1.in", line 469: Identifier x is not declared
+
+"test1.in", line 469: Identifier y is not declared
+
+"test1.in", line 469: Identifier z is not declared
+
+"test1.in", line 480: Warning - infix relation symbol spurns is not
+        declared as a binary relation
+> spurns type: P X
+
+Genconst _ spurns _[1]: P @1
+
+"test1.in", line 488: Implicit parameters not completely determined
+> Expression: second
+
+"test1.in", line 488: Implicit parameters not completely determined
+> Expression: first
+
+Var f: NN -+> NN
+
+Var g: NN -+> NN
+
+"test1.in", line 508: Schema Gamma is not defined
+
+Schema Daleth
+End
+
+"test1.in", line 514: Schema NotASChema is not defined
+
+Given LIST
+
+"test1.in", line 520: Identifier CHAR is not declared
+
+"test1.in", line 520: Constructor name cons multiply declared
+
+Var nil: LIST
+
+Var cons: NN x LIST -+> LIST
+
+"test1.in", line 525: Global name Aleph multiply declared
+
+Schema Aleph
+    x: NN
+    y: NN
+    z: NN
+End
+
+Abbrev prod: P NN
+
+Genconst prod'[2]: P (@1 x @2)
+
+Abbrev _ \prod _: P NN
+
+Genconst _ \prod' _[2]: P (@1 x @2)
+
+Genconst \just _[1]: P @1
+
+Genconst \just' _[1]: P (NN x @1)
+
+Genconst _ \prod'' _[2]: P @1
+
+Given EXPR
+
+Var var: NN -+> EXPR
+
+Var _ +_0 _: EXPR x EXPR -+> EXPR
+
+Schema PreFirst
+    x: NN
+    y: NN
+End
+
+"test1.in", line 558: Renamed component baz does not exist
+> Expression: Aleph[z/x, foo/baz]
+
+Schema AAA
+    y: NN
+    z: NN
+End
+
+"test1.in", line 559: Type mismatch in declarations of y
+> Previous type: NN
+> Current type:  P NN
+> Expression: Fourth[y/x]
+
+Schema XYZ
+    y: NN
+    x': NN
+    y': P NN
+End
+
+"test1.in", line 563: Identifier x is not declared
+> Expression: Aleph
+
+"test1.in", line 563: Identifier y is not declared
+> Expression: Aleph
+
+"test1.in", line 563: Identifier z is not declared
+> Expression: Aleph
+
+Abbrev BBB: P Aleph
+
+Abbrev CCC: P (P Aleph)
+
+Schema One
+    x: NN
+End
+
+Schema Two
+    x: NN x NN
+End
+
+"test1.in", line 578: Type mismatch in declarations of x
+> Previous type: NN
+> Current type:  NN x NN
+> Expression: One /\ Two
+
+Schema Three
+    x: NN
+End
+
+Schema \Delta One
+    x: NN
+    x': NN
+End
+
+Schema Four
+    x: NN
+    x': NN
+    x!: NN
+End
+
+Schema Five
+    x: NN
+    x': NN
+    x!: NN x NN
+End
+
+"test1.in", line 581: Type mismatch in declarations of x!
+> Previous type: NN
+> Current type:  NN x NN
+> Expression: Four semi Five
+
+Schema Six
+    x: NN
+    x': NN
+    x!: NN
+End
+
+Schema ABC
+    x: NN
+    x': NN
+    x'': NN
+End
+
+Schema ABCD
+    x: NN
+    x': NN
+    x'': NN
+    x''': NN
+End
+
+Abbrev -': ZZ -+> ZZ
+
+Var -'': ZZ -+> ZZ
+
+Given Z
+
+Schema Fred
+    a: Z
+    f: Z -+> (Z <-> Z)
+    g: Z -+> (Z <-> Z)
+    b: Z
+    z?: Z
+End
+
+Schema Queue[1]
+    queue: seq @1
+End
+
+Schema \Delta Queue[1]
+    queue: seq @1
+    queue': seq @1
+End
+
+Schema Add[1]
+    queue: seq @1
+    queue': seq @1
+    x?: @1
+End
+
+Given Site
+
+Given RscId
+
+Given Attribute
+
+Schema Resource
+    refs: Site <-> RscId
+    attr: Attribute
+End
+
+Var projrefs: Resource -+> (Site -+> RscId)
+
+Schema DistOS
+    sites: P Site
+    resources: P Resource
+    manages: Site -+> P Resource
+End
+
+Schema InitDistOS
+    sites': P Site
+    resources': P Resource
+    manages': Site -+> P Resource
+End
+
+Var identifiedby: Site x RscId -+> Resource
+
+Given Response
+
+Var Ok: Response
+
+Var TooManyReferences: Response
+
+Var AlreadyExists: Response
+
+"test1.in", line 688: Global name Success multiply declared
+
+Schema Success
+    resp!: Response
+End
+
+Schema InitResource
+    refs': Site <-> RscId
+    attr': Attribute
+End
+
+Schema \Delta Resource
+    refs: Site <-> RscId
+    attr: Attribute
+    refs': Site <-> RscId
+    attr': Attribute
+End
+
+Schema \Xi Resource
+    refs: Site <-> RscId
+    attr: Attribute
+    refs': Site <-> RscId
+    attr': Attribute
+End
+
+Schema NoEffectOnResource
+    refs: Site <-> RscId
+    attr: Attribute
+    refs': Site <-> RscId
+    attr': Attribute
+    resp!: Response
+End
+
+Schema AddRef
+    refs: Site <-> RscId
+    attr: Attribute
+    refs': Site <-> RscId
+    attr': Attribute
+    nr?: Site <-> RscId
+    resp!: Response
+End
+
+Schema SubtractRef0
+    refs: Site <-> RscId
+    attr: Attribute
+    refs': Site <-> RscId
+    attr': Attribute
+    tg?: Site <-> RscId
+    resp!: Response
+End
+
+Schema SubtractRefError
+    refs: Site <-> RscId
+    attr: Attribute
+    refs': Site <-> RscId
+    attr': Attribute
+    tg?: Site <-> RscId
+    resp!: Response
+End
+
+Schema SubtractRef
+    refs: Site <-> RscId
+    attr: Attribute
+    refs': Site <-> RscId
+    attr': Attribute
+    tg?: Site <-> RscId
+    resp!: Response
+End
+
+Schema NewAttribute
+    refs: Site <-> RscId
+    attr: Attribute
+    refs': Site <-> RscId
+    attr': Attribute
+    na?: Attribute
+    resp!: Response
+End
+
+Schema NewResource
+    refs': Site <-> RscId
+    attr': Attribute
+    nr?: Site <-> RscId
+    na?: Attribute
+    resp!: Response
+End
+
+Var ResourceInstance: (Site <-> RscId) -+> (Attribute -+> Resource)
+
+Schema \Delta DistOS
+    sites: P Site
+    resources: P Resource
+    manages: Site -+> P Resource
+    sites': P Site
+    resources': P Resource
+    manages': Site -+> P Resource
+End
+
+Schema \Xi DistOS
+    sites: P Site
+    resources: P Resource
+    manages: Site -+> P Resource
+    sites': P Site
+    resources': P Resource
+    manages': Site -+> P Resource
+End
+
+Schema NoEffectOnDistOS
+    sites: P Site
+    resources: P Resource
+    manages: Site -+> P Resource
+    sites': P Site
+    resources': P Resource
+    manages': Site -+> P Resource
+    resp!: Response
+End
+
+"test1.in", line 779: Right argument of operator \oplus has wrong type
+> Expression: manages \oplus (m? |-> (manages m? \cup
+        {ResourceInstance nr? na?}))
+> Arg type:   Site x P Resource
+> Expected:   Site <-> P Resource
+
+Schema CreateResource0
+    sites: P Site
+    resources: P Resource
+    manages: Site -+> P Resource
+    refs': Site <-> RscId
+    attr': Attribute
+    sites': P Site
+    resources': P Resource
+    manages': Site -+> P Resource
+    nr?: Site <-> RscId
+    na?: Attribute
+    m?: Site
+    resp!: Response
+End
+
+"test1.in", line 791: Generic constant <-> expects 2 parameters
+
+Given Class
+
+Given Inumber
+
+Given FtabI
+
+Given ClInum
+
+Var file: Class x Inumber -+> ClInum
+
+Given ClFtabI
+
+Var table: Class x FtabI -+> ClFtabI
+
+Abbrev funs1: P (P (ZZ x ZZ))
+
+Abbrev funs2: P (NN -+> NN)
+
+Abbrev funs3: P (P (NN x NN))
+
+Var R: ZZ <-> ZZ
+
+Genconst all[1]: @1 -+> P @1
+
+Abbrev bug2: P ZZ
+
+Abbrev bug3: P ZZ
+
+Abbrev bug4: P NN
+
+Schema Mercury
+    x: NN
+    y: NN
+End
+
+Schema Venus
+    y: NN
+    z: NN
+End
+
+Schema Mars
+    x: ZZ
+    y: NN
+    z: ZZ
+End
+
+"test1.in", line 846: Global name Aleph multiply declared
+
+Schema Aleph
+    x: ZZ
+    y: ZZ
+End
+
+Schema Gimel
+    y: NN
+    z: NN -+> NN
+End
+
+Schema Example1
+    x: ZZ
+    y: ZZ
+    z: NN -+> NN
+End
+
+Schema Example2
+    y: ZZ
+    z: P (ZZ x ZZ)
+End
+
+Schema Example3
+    y: NN
+End
+
+Schema Example4
+    z: NN -+> NN
+End
+
+Schema xyyx
+    x: NN
+    y: NN
+End
+
+Abbrev four: ZZ
+
+Abbrev pred: ZZ <-> ZZ
+
+Abbrev minus6: ZZ
+
+Schema Hayes1
+    x: NN
+End
+
+Schema Hayes2
+    y: NN -+> Hayes1
+    y': NN -+> Hayes1
+    x?: NN
+End
+
+Schema Trevor1[1]
+    x: @1
+End
+
+Var trevor: P ZZ
+
+Schema Trevor2
+    a: <| x: ZZ |>
+End
+
+"test1.in", line 912: Identifier known is not declared
+> Expression: pre AddBirthday
+
+"test1.in", line 912: Identifier birthday is not declared
+> Expression: pre AddBirthday
+
+"test1.in", line 912: Identifier name? is not declared
+> Expression: pre AddBirthday
+
+"test1.in", line 912: Identifier date? is not declared
+> Expression: pre AddBirthday
+

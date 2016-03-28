@@ -1,0 +1,60 @@
+%
+% oxsz.mf
+%
+% This file is part of fuzz2000
+% Copyright (c) 1982--2006 J. M. Spivey
+% All rights reserved
+%
+% Redistribution and use in source and binary forms, with or without
+% modification, are permitted provided that the following conditions are met:
+%
+% 1. Redistributions of source code must retain the above copyright notice,
+%    this list of conditions and the following disclaimer.
+% 2. Redistributions in binary form must reproduce the above copyright notice,
+%    this list of conditions and the following disclaimer in the documentation
+%    and/or other materials provided with the distribution.
+% 3. The name of the author may not be used to endorse or promote products
+%    derived from this software without specific prior written permission.
+%
+% THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+% IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+% OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+% IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+% SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+% PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+% OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+% WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+% OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+% ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+% 
+% $Id: oxsz.mf,v 1.2 2007-02-16 13:22:02 mike Exp $
+%
+
+% The Oxford Z Symbols family (after D. E. Knuth)
+ 
+font_coding_scheme:="TeX Z symbols V2";
+mode_setup; font_setup;
+
+autorounding:=0;
+ 
+font_slant slant; font_x_height x_height#;
+font_quad 18u# if not monospace:+4letter_fit# fi;
+% (The spacing is zero so that \TeX\ will always add the italic correction.)
+% (The calling file should give the other math symbol font parameters.)
+ 
+slant:=mono_charic#:=0;  % the remaining characters will not be slanted
+currenttransform:=identity yscaled aspect_ratio scaled granularity;
+
+val=1; project=2; restrict=3; corestrict=4; anti_restrict=5;
+anti_corestrict=6; sq_sub=7; este=8; ltracket=9; rtracket=10;
+power=11; finset=12; nat=13; lsem=14; rsem=15; limage=16; rimage=17;
+ldata=18; rdata=19; par_fun=20; fin_fun=21; tot_surj=22;
+par_surj=23; tot_inj=24; par_inj=25; fin_inj=26; tot_bij=27;
+fat_semi=28; zed=29; empty_set=30; cat=31;
+% chars added in V2:
+extract=32; uminus=33; tot_fun=34; rel_arrow=35;
+
+input zsymbol;  % the symbols
+input zletter;  % the letters
+input zarrow;  % the arrows
+bye.
