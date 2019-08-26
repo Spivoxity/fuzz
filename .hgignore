@@ -1,0 +1,21 @@
+syntax: glob
+src/absyn.h
+src/alloc.o
+src/dict.o
+src/dump.o
+src/error.o
+src/expr.o
+src/frame.o
+src/main.o
+src/param.o
+src/pretty.o
+src/sched.o
+src/schema.o
+src/spec.o
+src/symbol.h
+src/type.o
+src/unify.o
+src/y.output
+src/zparse.c
+src/zparse.o
+src/zscan.o

@@ -283,7 +283,7 @@ EXTERN int aflag, dflag, lflag, pflag, qflag, sflag, tflag, vflag;
 EXTERN bool debugging;
 EXTERN int dcode[26];
 #define debflag(c) dcode[c - 'a']
-#define debug(c) (debugging && debflag(c))
+#define debug(c) (debugging ? debflag(c) : 0)
 
 EXTERN char *file_name;
 EXTERN int n_errors;
