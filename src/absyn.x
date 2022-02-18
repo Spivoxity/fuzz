@@ -27,8 +27,6 @@
 # OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
 # ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 # 
-# $Id: absyn.x,v 1.2 2007-02-16 12:45:13 mike Exp $
-#
 
 > para	::=	GIVEN [ident] | AXDEF schema | SDEF shead schema
 >		| DEFEQ shead sexp | PRED pred

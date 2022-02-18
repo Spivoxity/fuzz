@@ -26,12 +26,10 @@
  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- * 
- * $Id: dict.c,v 1.2 2007-02-16 12:45:13 mike Exp $
  */
 
 #include "fuzz.h"
-#include "symbol.h"
+#include "zparse.h"
 
 /* The global environment is represented using the s_glodef fields in the
    symbol table. Other environments are extensions of this, and are

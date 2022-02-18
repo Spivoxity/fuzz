@@ -26,8 +26,6 @@
  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- * 
- * $Id: main.c,v 1.2 2007-02-16 12:45:13 mike Exp $
  */
 
 #define EXTERN
@@ -35,13 +33,13 @@
 #include <ctype.h>
 #include <string.h>
 
-extern char *prelude;
 extern FILE *yyin;
 extern int line_count, yylloc;
 
 char *fuzz_banner = "The fuzz type-checker for Z  ($Revision: 1.2 $)";
-char *fuzz_rcsid = "$Id: main.c,v 1.2 2007-02-16 12:45:13 mike Exp $";
 char *fuzz_copyright = "Copyright (C) J.M. Spivey 1989, 1992";
+
+char *prelude = LIBDIR "/fuzzlib";
 
 PRIVATE void do_flags(char *flags);
 PRIVATE void usage(void);
@@ -70,8 +68,8 @@ PUBLIC int main(int ac, char **av)
      n_files = argc;
 
      if (debflag('v')) {
-	  fprintf(errout, "%s\n%s\n%s\n", 
-		  fuzz_banner, fuzz_rcsid, fuzz_copyright);
+	  fprintf(errout, "%s\nVersion %s\n%s\n", 
+		  fuzz_banner, fuzz_version, fuzz_copyright);
 	  fflush(errout);
      }
 
@@ -188,16 +186,14 @@ PRIVATE char *perm_copy(char *s)
 PRIVATE void open_prelude(void)
 {
      char *fn;
-     extern char *envname;
      extern char *getenv();
      
      if (pflag)
 	  fn = prelude;
      else {
-	  fn = getenv(envname);
-	  if (fn == NULL) {
-	       fn = prelude;
-	  }
+	  fn = getenv("FUZZLIB");
+	  if (fn == NULL)
+               fn = prelude;
      }
 
      if (fn == NULL || (yyin = fopen(fn, "r")) == NULL) {

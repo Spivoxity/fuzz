@@ -27,12 +27,10 @@
  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- * 
- * $Id: zscan.l,v 1.3 2007-02-16 12:45:13 mike Exp $
  */
 
 #include "fuzz.h"
-#include "symbol.h"
+#include "zparse.h"
 #include <string.h>
 #include <unistd.h>
 

@@ -26,8 +26,6 @@
 # WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
 # OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
 # ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-# 
-# $Id: fuzzlib.k,v 1.2 2007-02-16 12:45:13 mike Exp $
 #
 
 #
@@ -57,8 +55,7 @@
 
 { print; }
 
-func char_val(c)
-{
+func char_val(c) {
     for (cc = 0; cc < 128; cc++)
 	if (c == sprintf("'%c'", cc))
 	    return cc;
