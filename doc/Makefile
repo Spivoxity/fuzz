@@ -27,8 +27,6 @@
 # OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
 # ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 # 
-# $Id: Makefile,v 1.5 2007-02-16 12:45:13 mike Exp $
-#
 
 all: fuzzman.pdf fuzzman-2up.pdf refcard.pdf refcard-2up.pdf refcard-3up.pdf
 
