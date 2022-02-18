@@ -48,3 +48,13 @@ config.h
 config.log
 config.status
 configure
+autom4te.cache
+doc/fuzzman-2up.pdf
+doc/fuzzman.pdf
+doc/refcard-2up.pdf
+doc/refcard-3up.pdf
+doc/refcard.pdf
+src/fuzz
+src/fuzzlib
+src/minilib
+src/zscan.c

@@ -1,10 +1,10 @@
-"test1.in", line 488: Adjacent names - possibly missing ~ at symbol
+"test1.in", line 486: Adjacent names - possibly missing ~ at symbol
         "first"
 
-"test1.in", line 488: Adjacent names - possibly missing ~ at symbol
+"test1.in", line 486: Adjacent names - possibly missing ~ at symbol
         "spurns"
 
-"test1.in", line 502: Opening parenthesis expected at symbol "\lambda"
+"test1.in", line 500: Opening parenthesis expected at symbol "\lambda"
 
 Given NAME
 
@@ -92,7 +92,7 @@ Schema RAddBirthday
     result!: REPORT
 End
 
-"test1.in", line 106: Global name RAddBirthday multiply declared
+"test1.in", line 104: Global name RAddBirthday multiply declared
 
 Schema RAddBirthday
     known: P NAME
@@ -430,56 +430,56 @@ Schema SimpleINC
     n?: NN
 End
 
-"test1.in", line 349: Application of a non-function
+"test1.in", line 347: Application of a non-function
 > Expression: (3, 4) 5
 > Found type: NN x NN
 
 Var foo: ZZ x P ZZ x ZZ -+> P ZZ
 
-"test1.in", line 355: Argument 2 has wrong type
+"test1.in", line 353: Argument 2 has wrong type
 > Expression: foo (3, 4, 5)
 > Arg type:   NN
 > Expected:   P ZZ
 
-"test1.in", line 355: Types do not agree in equation
+"test1.in", line 353: Types do not agree in equation
 > Predicate: foo (3, 4, 5) = 6
 > LHS type:  P ZZ
 > RHS type:  NN
 
-"test1.in", line 357: Argument 2 of \cross must be a set
+"test1.in", line 355: Argument 2 of \cross must be a set
 > Expression: NN cross 3 cross NN
 > Arg 2 type: NN
 
-"test1.in", line 359: Argument of \power must be a set
+"test1.in", line 357: Argument of \power must be a set
 > Expression: P (3, 4, 5)
 > Arg type:   NN x NN x NN
 
-"test1.in", line 361: Argument of application has wrong type
+"test1.in", line 359: Argument of application has wrong type
 > Expression: foo \empty
 > Arg type:   P ?
 > Expected:   ZZ x P ZZ x ZZ
 
-"test1.in", line 363: Argument of prefix relation has wrong type
+"test1.in", line 361: Argument of prefix relation has wrong type
 > Predicate: disjoint 3
 > Arg type:  NN
 > Expected:  ? -+> P ?
 
-"test1.in", line 365: Argument of selection must have schema type
+"test1.in", line 363: Argument of selection must have schema type
 > Expression: (3, \empty, 4).x
 > Arg type:   NN x P ? x NN
 
 Given X
 
-"test1.in", line 369: Basic type X cannot have parameters
+"test1.in", line 367: Basic type X cannot have parameters
 > Expression: X[NN, NN]
 
-"test1.in", line 371: Basic type name Y multiply declared
+"test1.in", line 369: Basic type name Y multiply declared
 
-"test1.in", line 371: Basic type name Y multiply declared
+"test1.in", line 369: Basic type name Y multiply declared
 
 Given Y
 
-"test1.in", line 373: Basic type name X multiply declared
+"test1.in", line 371: Basic type name X multiply declared
 
 Genconst baz[1]: P @1
 
@@ -488,50 +488,50 @@ Schema Aleph
     y: NN
 End
 
-"test1.in", line 379: Decoration ignored in schema reference
+"test1.in", line 377: Decoration ignored in schema reference
 > Expression: Aleph'
 
-"test1.in", line 381: Function expects 3 arguments
+"test1.in", line 379: Function expects 3 arguments
 > Expression: foo (3, 4)
 
 Genconst glug[2]: P (@1 x @2)
 
-"test1.in", line 385: Generic constant glug expects 2 parameters
+"test1.in", line 383: Generic constant glug expects 2 parameters
 
-"test1.in", line 385: Types do not agree in equation
+"test1.in", line 383: Types do not agree in equation
 > Predicate: glug[X] = 3
 > LHS type:  P (*errtype* x *errtype*)
 > RHS type:  NN
 
-"test1.in", line 387: Global name baz multiply declared
+"test1.in", line 385: Global name baz multiply declared
 
 Var baz: NN
 
-"test1.in", line 389: Hiding non-existent component z
+"test1.in", line 387: Hiding non-existent component z
 > Expression: Aleph \ (y, z)
 
 Schema Beth
     x: NN
 End
 
-"test1.in", line 391: Component y has wrong type in schema reference
+"test1.in", line 389: Component y has wrong type in schema reference
 > Predicate:  Aleph
 > Found type: P NN
 > Expected:   NN
 
-"test1.in", line 393: Identifier McCavity is not declared
+"test1.in", line 391: Identifier McCavity is not declared
 
-"test1.in", line 395: Implicit parameters not completely determined
+"test1.in", line 393: Implicit parameters not completely determined
 > Expression: \empty
 
-"test1.in", line 395: Implicit parameters not completely determined
+"test1.in", line 393: Implicit parameters not completely determined
 > Expression: \empty
 
-"test1.in", line 397: Warning - infix relation symbol < is not
+"test1.in", line 395: Warning - infix relation symbol < is not
         declared as a binary relation
 > < type: NN
 
-"test1.in", line 397: Infix relation symbol < is not a binary relation
+"test1.in", line 395: Infix relation symbol < is not a binary relation
 > Predicate: 3 < 4
 > < type: NN
 
@@ -561,16 +561,16 @@ Schema Fourth
     y': NN
 End
 
-"test1.in", line 411: Schema \Delta Foo is not defined
+"test1.in", line 409: Schema \Delta Foo is not defined
 
 Schema Baz
 End
 
-"test1.in", line 413: Warning - prefix relation symbol disjoint is not
+"test1.in", line 411: Warning - prefix relation symbol disjoint is not
         declared as a set
 > disjoint type: NN
 
-"test1.in", line 413: Prefix relation symbol disjoint is not a set
+"test1.in", line 411: Prefix relation symbol disjoint is not a set
 > Predicate: disjoint 7
 > disjoint type: NN
 
@@ -579,57 +579,57 @@ Schema Table[2]
     forks: P @2
 End
 
-"test1.in", line 420: Schema Table expects 2 parameters
+"test1.in", line 418: Schema Table expects 2 parameters
 
 Schema Mess
     knives: P *errtype*
     forks: P *errtype*
 End
 
-"test1.in", line 422: Selecting non-existent component z
+"test1.in", line 420: Selecting non-existent component z
 > Expression: a.z
 > Arg type:   Aleph
 
-"test1.in", line 424: Set-valued expression required in actual generic
+"test1.in", line 422: Set-valued expression required in actual generic
         parameter
 > Expression: 3
 > Type:       NN
 
 Given FOO
 
-"test1.in", line 426: Set-valued expression required in free type
+"test1.in", line 424: Set-valued expression required in free type
         definition
 > Expression: 3
 > Type:       NN
 
 Var just: *errtype* -+> FOO
 
-"test1.in", line 428: Set-valued expression required in declaration
+"test1.in", line 426: Set-valued expression required in declaration
 > Expression: 3
 > Type:       NN
 
-"test1.in", line 430: Type abbreviation McCavity has no global
+"test1.in", line 428: Type abbreviation McCavity has no global
         definition
 
-"test1.in", line 432: Type abbreviation baz is not a set
+"test1.in", line 430: Type abbreviation baz is not a set
 > baz type: NN
 
-"test1.in", line 434: Type mismatch in bag display
+"test1.in", line 432: Type mismatch in bag display
 > Expression: {5}
 > Has type:   P NN
 > Expected:   NN
 
-"test1.in", line 436: Type mismatch in sequence display
+"test1.in", line 434: Type mismatch in sequence display
 > Expression: {5}
 > Has type:   P NN
 > Expected:   NN
 
-"test1.in", line 438: Type mismatch in set display
+"test1.in", line 436: Type mismatch in set display
 > Expression: {5}
 > Has type:   P NN
 > Expected:   NN
 
-"test1.in", line 440: Type mismatch in hiding variable x
+"test1.in", line 438: Type mismatch in hiding variable x
 > Expression:    forall x: P NN @ Aleph
 > Previous type: NN
 > Current type:  P NN
@@ -638,33 +638,33 @@ Schema Aleph0
     y: NN
 End
 
-"test1.in", line 442: Type mismatch in left argument of infix relation
+"test1.in", line 440: Type mismatch in left argument of infix relation
 > Predicate: (3, 4) < 5
 > Arg type:  NN x NN
 > Expected:  ZZ
 
-"test1.in", line 444: Type mismatch in right argument of infix
+"test1.in", line 442: Type mismatch in right argument of infix
         relation
 > Predicate: 3 < (4, 5)
 > Arg type:  NN x NN
 > Expected:  ZZ
 
-"test1.in", line 446: Type mismatch in left argument of infix relation
+"test1.in", line 444: Type mismatch in left argument of infix relation
 > Predicate: (3, 4) < (5, 6)
 > Arg type:  NN x NN
 > Expected:  ZZ
 
-"test1.in", line 446: Type mismatch in right argument of infix
+"test1.in", line 444: Type mismatch in right argument of infix
         relation
 > Predicate: (3, 4) < (5, 6)
 > Arg type:  NN x NN
 > Expected:  ZZ
 
-"test1.in", line 448: Type mismatch in declarations of x
+"test1.in", line 446: Type mismatch in declarations of x
 > Previous type: NN
 > Current type:  X
 
-"test1.in", line 450: Global name Fourth multiply declared
+"test1.in", line 448: Global name Fourth multiply declared
 
 Schema Fourth
     x: NN
@@ -673,7 +673,7 @@ Schema Fourth
     y': P NN
 End
 
-"test1.in", line 455: Type mismatch in sequential composition
+"test1.in", line 453: Type mismatch in sequential composition
 > Expression: First semi Fourth
 > Type of y' in LHS: NN
 > Type of y in RHS: P NN
@@ -685,65 +685,65 @@ Schema Fifth
     y': P NN
 End
 
-"test1.in", line 457: Types do not agree in equation
+"test1.in", line 455: Types do not agree in equation
 > Predicate: \empty[X] = <>
 > LHS type:  P X
 > RHS type:  seq ?
 
-"test1.in", line 459: Types do not agree in set membership
+"test1.in", line 457: Types do not agree in set membership
 > Predicate: \empty in {3}
 > LHS type:  P ?
 > RHS type:  P NN
 
-"test1.in", line 461: Variable baz cannot have parameters
+"test1.in", line 459: Variable baz cannot have parameters
 > Expression: baz[X]
 
-"test1.in", line 463: Identifier x is not declared
+"test1.in", line 461: Identifier x is not declared
 > Expression: Aleph
 
-"test1.in", line 463: Identifier y is not declared
+"test1.in", line 461: Identifier y is not declared
 > Expression: Aleph
 
-"test1.in", line 469: Identifier x is not declared
+"test1.in", line 467: Identifier x is not declared
 
-"test1.in", line 469: Identifier y is not declared
+"test1.in", line 467: Identifier y is not declared
 
-"test1.in", line 469: Identifier z is not declared
+"test1.in", line 467: Identifier z is not declared
 
-"test1.in", line 480: Warning - infix relation symbol spurns is not
+"test1.in", line 478: Warning - infix relation symbol spurns is not
         declared as a binary relation
 > spurns type: P X
 
 Genconst _ spurns _[1]: P @1
 
-"test1.in", line 488: Implicit parameters not completely determined
+"test1.in", line 486: Implicit parameters not completely determined
 > Expression: second
 
-"test1.in", line 488: Implicit parameters not completely determined
+"test1.in", line 486: Implicit parameters not completely determined
 > Expression: first
 
 Var f: NN -+> NN
 
 Var g: NN -+> NN
 
-"test1.in", line 508: Schema Gamma is not defined
+"test1.in", line 506: Schema Gamma is not defined
 
 Schema Daleth
 End
 
-"test1.in", line 514: Schema NotASChema is not defined
+"test1.in", line 512: Schema NotASChema is not defined
 
 Given LIST
 
-"test1.in", line 520: Identifier CHAR is not declared
+"test1.in", line 518: Identifier CHAR is not declared
 
-"test1.in", line 520: Constructor name cons multiply declared
+"test1.in", line 518: Constructor name cons multiply declared
 
 Var nil: LIST
 
 Var cons: NN x LIST -+> LIST
 
-"test1.in", line 525: Global name Aleph multiply declared
+"test1.in", line 523: Global name Aleph multiply declared
 
 Schema Aleph
     x: NN
@@ -776,7 +776,7 @@ Schema PreFirst
     y: NN
 End
 
-"test1.in", line 558: Renamed component baz does not exist
+"test1.in", line 556: Renamed component baz does not exist
 > Expression: Aleph[z/x, foo/baz]
 
 Schema AAA
@@ -784,7 +784,7 @@ Schema AAA
     z: NN
 End
 
-"test1.in", line 559: Type mismatch in declarations of y
+"test1.in", line 557: Type mismatch in declarations of y
 > Previous type: NN
 > Current type:  P NN
 > Expression: Fourth[y/x]
@@ -795,13 +795,13 @@ Schema XYZ
     y': P NN
 End
 
-"test1.in", line 563: Identifier x is not declared
+"test1.in", line 561: Identifier x is not declared
 > Expression: Aleph
 
-"test1.in", line 563: Identifier y is not declared
+"test1.in", line 561: Identifier y is not declared
 > Expression: Aleph
 
-"test1.in", line 563: Identifier z is not declared
+"test1.in", line 561: Identifier z is not declared
 > Expression: Aleph
 
 Abbrev BBB: P Aleph
@@ -816,7 +816,7 @@ Schema Two
     x: NN x NN
 End
 
-"test1.in", line 578: Type mismatch in declarations of x
+"test1.in", line 576: Type mismatch in declarations of x
 > Previous type: NN
 > Current type:  NN x NN
 > Expression: One /\ Two
@@ -842,7 +842,7 @@ Schema Five
     x!: NN x NN
 End
 
-"test1.in", line 581: Type mismatch in declarations of x!
+"test1.in", line 579: Type mismatch in declarations of x!
 > Previous type: NN
 > Current type:  NN x NN
 > Expression: Four semi Five
@@ -930,7 +930,7 @@ Var TooManyReferences: Response
 
 Var AlreadyExists: Response
 
-"test1.in", line 688: Global name Success multiply declared
+"test1.in", line 686: Global name Success multiply declared
 
 Schema Success
     resp!: Response
@@ -1046,7 +1046,7 @@ Schema NoEffectOnDistOS
     resp!: Response
 End
 
-"test1.in", line 779: Right argument of operator \oplus has wrong type
+"test1.in", line 777: Right argument of operator \oplus has wrong type
 > Expression: manages \oplus (m? |-> (manages m? \cup
         {ResourceInstance nr? na?}))
 > Arg type:   Site x P Resource
@@ -1067,7 +1067,7 @@ Schema CreateResource0
     resp!: Response
 End
 
-"test1.in", line 791: Generic constant <-> expects 2 parameters
+"test1.in", line 789: Generic constant <-> expects 2 parameters
 
 Given Class
 
@@ -1115,7 +1115,7 @@ Schema Mars
     z: ZZ
 End
 
-"test1.in", line 846: Global name Aleph multiply declared
+"test1.in", line 844: Global name Aleph multiply declared
 
 Schema Aleph
     x: ZZ
@@ -1177,15 +1177,15 @@ Schema Trevor2
     a: <| x: ZZ |>
 End
 
-"test1.in", line 912: Identifier known is not declared
+"test1.in", line 910: Identifier known is not declared
 > Expression: pre AddBirthday
 
-"test1.in", line 912: Identifier birthday is not declared
+"test1.in", line 910: Identifier birthday is not declared
 > Expression: pre AddBirthday
 
-"test1.in", line 912: Identifier name? is not declared
+"test1.in", line 910: Identifier name? is not declared
 > Expression: pre AddBirthday
 
-"test1.in", line 912: Identifier date? is not declared
+"test1.in", line 910: Identifier date? is not declared
 > Expression: pre AddBirthday
 
