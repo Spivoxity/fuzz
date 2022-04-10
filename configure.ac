@@ -6,5 +6,6 @@ AC_CONFIG_SRCDIR(src/main.c)
 AC_CONFIG_FILES(Makefile src/Makefile)
 
 AC_PROG_AWK
+AC_PROG_INSTALL
 
 AC_OUTPUT
