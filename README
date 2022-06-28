@@ -19,16 +19,16 @@ there's some hope it is fairly robust.
 
 To build and install:
 
-	1. Edit the top level Makefile to set the installation
-           directories.  Also edit the pathname contained in
-           src/param.c.
+	1. The package comes with a 'configure' script created with
+           GNU Autoconf: say './configure' to run it (or 'autoconf'
+           to regenerate it from 'configure.ac'.
 
 	2. Say 'make' at the top level (or in the src subdirectory) to
            build the type-checker.
 
 	3. (Optional) Say 'make test' to run some regression tests.
 
-	4. Say 'su -c "make install"' to install all the bits and
+	4. Say 'sudo make install' to install all the bits and
            pieces.
 
 	5. If your TeX implementation needs it, run 'texhash' to

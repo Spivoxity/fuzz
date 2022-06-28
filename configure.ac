@@ -7,5 +7,6 @@ AC_CONFIG_FILES(Makefile src/Makefile)
 
 AC_PROG_AWK
 AC_PROG_INSTALL
+AC_PATH_PROG(CPP, cpp, [AC_MSG_ERROR([no cpp found])], $PATH:/lib:/usr/lib)
 
 AC_OUTPUT

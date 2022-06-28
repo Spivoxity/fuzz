@@ -34,6 +34,7 @@ exec_prefix = @exec_prefix@
 libdir = @libdir@
 VERSION = @PACKAGE_VERSION@
 AWK = @AWK@
+CPP = @CPP@
 # End of config
 
 all: fuzz fuzzlib
@@ -44,7 +45,6 @@ GEN = y.output zparse.c symbol.h absyn.h zscan.c
 
 LFLAGS = -s
 CC=gcc
-CPP=/lib/cpp
 DEFINES = -DDEBUG -DANSI -DASSUME
 
 main.o : DEFINES += -DLIBDIR=\"$(libdir)\" -Dfuzz_version=\"$(VERSION)\"
@@ -54,7 +54,7 @@ fuzz: $(FUZZ)
 	$(CC) $(CFLAGS) -o fuzz $(FUZZ)
 
 clean:
-	rm -f *.o $(GEN)
+	rm -f *.o $(GEN) symdef.i
 
 distclean: clean
 	rm -f fuzz fuzzlib minilib
@@ -70,11 +70,12 @@ zscan.c : zscan.l
 absyn.h: absyn.x absyn.k
 	$(AWK) -f absyn.k absyn.x >absyn.h
 
-fuzzlib: symdef.x fuzzlib.k fuzzlib.x minilib.x opdef.x zparse.h
-	$(CPP) $(DEFINES) symdef.x >symdef.i
+fuzzlib: symdef.i fuzzlib.k fuzzlib.x minilib.x opdef.x zparse.h
 	$(AWK) -f fuzzlib.k output=fuzzlib fuzzlib.x >fuzzlib
 	$(AWK) -f fuzzlib.k output=minilib minilib.x >minilib
-	rm symdef.i
+
+symdef.i: symdef.x
+	$(CPP) $(DEFINES) symdef.x >symdef.i
 
 $(FUZZ): fuzz.h proto.h zparse.h absyn.h
 

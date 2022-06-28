@@ -1,4 +1,3 @@
-syntax: glob
 src/absyn.h
 src/alloc.o
 src/dict.o
