@@ -31,11 +31,11 @@ in the last commercial version of fuzz:
 The source of the type-checker is in the `src` directory, and builds
 without problem on many common platforms.  To build and install on Linux:
 
-# The package comes with a 'configure' script created with GNU Autoconf: say `./configure` to run it (or `autoconf` to regenerate it from `configure.ac`.
-# Say `make` at the top level (or in the src subdirectory) to build the type-checker.
-# (Optional) Say `make test` to run some regression tests.  No output is expected from the `diff` comparisons.
-# Say `sudo make install` to install all the bits and pieces.
-# If your TeX implementation needs it, run `texhash` to update TeX's directory information.
+1. The package comes with a 'configure' script created with GNU Autoconf: say `./configure` to run it (or `autoconf` to regenerate it from `configure.ac`.
+2. Say `make` at the top level (or in the src subdirectory) to build the type-checker.
+3. (Optional) Say `make test` to run some regression tests.  No output is expected from the `diff` comparisons.
+4. Say `sudo make install` to install all the bits and pieces.
+5. If your TeX implementation needs it, run `texhash` to update TeX's directory information.
 
 That's all!
 
@@ -45,9 +45,9 @@ Manual and software copyright &copy; 1988&ndash;20007 J. M. Spivey.
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are met:
-# Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
-# Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
-# The name of the author may not be used to endorse or promote products derived from this software without specific prior written permission.
+1. Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
+2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
+3. The name of the author may not be used to endorse or promote products derived from this software without specific prior written permission.
 <b>This software is provided by the author "as is" and any express or
 implied warranties, including, but not limited to, the implied warranties
 of merchantability and fitness for a particular purpose are disclaimed.
