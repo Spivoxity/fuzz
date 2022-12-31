@@ -59,3 +59,5 @@ src/fuzzlib
 src/minilib
 src/zscan.c
 src/symdef.i
+doc/refcard3-3up.dvi
+doc/refcard3-3up.pdf

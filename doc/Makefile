@@ -28,10 +28,11 @@
 # ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 # 
 
-all: fuzzman.pdf fuzzman-2up.pdf refcard.pdf refcard-2up.pdf refcard-3up.pdf
+all: fuzzman.pdf fuzzman-2up.pdf refcard.pdf refcard-2up.pdf refcard3-3up.pdf
 
 clean:
 	rm -f *.aux *.dvi *.ps *.log *.toc *.idx index.tex
+	rm -f fuzzman.pdf fuzzman-2up.pdf refcard-2up.pdf refcard3-3up.pdf
 	rm -f *.o mkindex
 
 distclean: clean
@@ -68,15 +69,15 @@ tut.dvi: tut.tex
 fuzzman-2up.dvi: blank.dvi fuzzman.dvi
 	# Adjust so odd-numbered pages fall on a recto
 	dviconcat blank.dvi fuzzman.dvi >tmp.dvi
-	dvitodvi '2:0,1(149mm,0)' tmp.dvi >$@
+	dvitodvi '2:0+1(149mm,0)' tmp.dvi >$@
 	@echo
 	@rm tmp.dvi
 
 refcard-2up.dvi: refcard.dvi
-	dvitodvi '2:0,1(149mm,0)' $< >$@
+	dvitodvi '2:0+1(149mm,0)' $< >$@
 	@echo
 
-refcard-3up.dvi: refcard3.dvi
+refcard3-3up.dvi: refcard3.dvi
 	dvitodvi '6:4+5(99mm,0)+0(198mm,0),1+2(99mm,0)+3(198mm,0)' $< >$@
 
 ### DVI -> PS

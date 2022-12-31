@@ -1,4 +1,6 @@
-The fuzz manual and reference card are written with LaTeX 2.09.
-Good luck unearthing a copy of that if you want to reformat it.
+The fuzz manual and reference card are written with LaTeX 2.09, so for
+convenience PDF files fuzzman-pub.pdf, fuzzman-2up-pub.pdf,
+refcard-pub.pdf and refcard3-pub.pdf are provided.  Good luck
+unearthing a copy of LaTex 2.09 if you want to reformat them!
 
 -- Mike
