@@ -15,9 +15,9 @@ Documentation can be found in the 'doc' subdirectory of the
 repository.  Generating the documents from the LaTeX input requires
 LaTeX 2.09, so I've included PDF files for convenience.
 
-* Fuzz manual: [fuzzman-pub.pdf](https://github.com/Spivoxity/fuzz/blob/master/doc/fuzzman-pub.pdf), and a 2-up version for printing on A4: [fuzzman-2up-pub.pdf](https://github.com/Spivoxity/fuzz/blob/master/doc/fuzzman-2up-pub.pdf).
-* A Z reference card: [refcard-pub.pdf](https://github.com/Spivoxity/fuzz/blob/master/doc/refcard-pub.pdf).
-* A slightly different reference card that fits on one double-sided sheet of A4: [refcard3-pub.pdf](https://github.com/Spivoxity/fuzz/blob/master/doc/refcard3-pub.pdf).
+* Fuzz manual: [fuzzman-pub.pdf](https://github.com/Spivoxity/fuzz/raw/master/doc/fuzzman-pub.pdf), and a 2-up version for printing on A4: [fuzzman-2up-pub.pdf](https://github.com/Spivoxity/fuzz/raw/master/doc/fuzzman-2up-pub.pdf).
+* A Z reference card: [refcard-pub.pdf](https://github.com/Spivoxity/fuzz/raw/master/doc/refcard-pub.pdf).
+* A slightly different reference card that fits on one double-sided sheet of A4: [refcard3-pub.pdf](https://github.com/Spivoxity/fuzz/raw/master/doc/refcard3-pub.pdf).
 
 ## New Features ##
 
