@@ -41,7 +41,7 @@ That's all!
 
 ## Software Licence ##
 
-Manual and software copyright &copy; 1988&ndash;20007 J. M. Spivey.
+Manual and software copyright &copy; 1988&ndash;2007 J. M. Spivey.
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are met:
